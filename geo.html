@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misión: Arquitecto del Orden Global</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06090f;
+  --bg2: #0d1320;
+  --bg3: #111827;
+  --surface: #161f2e;
+  --surface2: #1e2d42;
+  --border: #243347;
+  --accent: #00d4ff;
+  --accent2: #ff6b35;
+  --accent3: #39d97a;
+  --accent4: #ffd166;
+  --text: #e8f0fe;
+  --text2: #8ba4c0;
+  --text3: #4a6080;
+  --danger: #ff4757;
+  --gold: #ffd700;
+  --xp-color: #a78bfa;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Source Serif 4',serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.mono{font-family:'JetBrains Mono',monospace;}
+.rajdhani{font-family:'Rajdhani',sans-serif;}
+
+/* ===== BACKGROUND ===== */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+  background-size:50px 50px;
+  pointer-events:none;
+}
+.bg-orb{
+  position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;
+}
+.orb1{width:600px;height:600px;background:rgba(0,100,180,0.12);top:-200px;right:-200px;}
+.orb2{width:400px;height:400px;background:rgba(255,107,53,0.07);bottom:100px;left:-100px;}
+
+/* ===== HEADER ===== */
+#header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(6,9,15,0.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.logo-mark{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;
+  color:var(--accent);letter-spacing:2px;text-transform:uppercase;
+  white-space:nowrap;
+}
+.logo-icon{
+  width:32px;height:32px;border:2px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--accent);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  background:rgba(0,212,255,0.1);
+}
+.xp-display{
+  display:flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  color:var(--xp-color);
+  background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);
+  padding:6px 14px;border-radius:4px;
+}
+.xp-val{font-weight:600;font-size:16px;}
+.badge-row{display:flex;gap:6px;align-items:center;}
+.badge{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;opacity:0.3;transition:opacity 0.3s,transform 0.3s;
+  border:1px solid var(--border);background:var(--surface);
+}
+.badge.earned{opacity:1;transform:scale(1.1);}
+.badge.b1{border-color:var(--accent3);}
+.badge.b2{border-color:var(--accent2);}
+.badge.b3{border-color:var(--gold);}
+
+/* ===== GLOBAL PROGRESS ===== */
+.global-progress{
+  height:3px;background:var(--surface);position:relative;
+  margin-top:8px;border-radius:2px;overflow:hidden;
+}
+.global-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--accent),var(--xp-color));
+  transition:width 0.8s cubic-bezier(0.4,0,0.2,1);
+  border-radius:2px;
+}
+
+/* ===== MAIN LAYOUT ===== */
+#app{position:relative;z-index:1;padding-top:80px;}
+
+/* ===== SCREENS ===== */
+.screen{display:none;min-height:calc(100vh - 80px);padding:40px 24px;}
+.screen.active{display:block;}
+
+/* ===== LANDING ===== */
+#screen-landing{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:60px 24px;
+}
+.mission-tag{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--accent);letter-spacing:4px;text-transform:uppercase;
+  border:1px solid rgba(0,212,255,0.3);padding:6px 16px;border-radius:2px;
+  margin-bottom:24px;animation:pulse-border 3s ease infinite;
+}
+@keyframes pulse-border{
+  0%,100%{border-color:rgba(0,212,255,0.3);}
+  50%{border-color:rgba(0,212,255,0.8);}
+}
+.mission-title{
+  font-family:'Rajdhani',sans-serif;font-size:clamp(36px,7vw,72px);
+  font-weight:700;line-height:1;letter-spacing:-1px;
+  margin-bottom:16px;
+}
+.title-line1{color:var(--text);}
+.title-line2{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.mission-subtitle{
+  font-size:18px;color:var(--text2);max-width:560px;
+  line-height:1.7;margin-bottom:40px;font-weight:300;
+}
+.mission-cards{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;max-width:780px;width:100%;margin-bottom:48px;
+}
+.m-card{
+  background:var(--surface);border:1px solid var(--border);
+  padding:24px 20px;border-radius:8px;text-align:left;
+  position:relative;overflow:hidden;
+  transition:transform 0.2s,border-color 0.2s;
+}
+.m-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--card-accent,var(--accent));
+}
+.m-card:hover{transform:translateY(-3px);border-color:var(--card-accent,var(--accent));}
+.m-card-num{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--text3);margin-bottom:8px;
+}
+.m-card-title{
+  font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;
+  color:var(--text);margin-bottom:6px;
+}
+.m-card-desc{font-size:13px;color:var(--text2);line-height:1.5;}
+
+/* ===== BUTTONS ===== */
+.btn{
+  font-family:'Rajdhani',sans-serif;font-weight:600;font-size:16px;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+  border:none;outline:none;transition:all 0.2s;display:inline-flex;
+  align-items:center;gap:8px;padding:14px 32px;border-radius:4px;
+  text-decoration:none;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),#0099cc);
+  color:var(--bg);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,255,0.3);}
+.btn-secondary{
+  background:transparent;color:var(--accent);
+  border:1px solid var(--accent);
+}
+.btn-secondary:hover{background:rgba(0,212,255,0.08);}
+.btn-success{
+  background:linear-gradient(135deg,var(--accent3),#22a85a);
+  color:#000;
+}
+.btn-success:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(57,217,122,0.3);}
+.btn-warning{
+  background:linear-gradient(135deg,var(--accent2),#cc4400);
+  color:#fff;
+}
+.btn-sm{padding:8px 20px;font-size:14px;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none!important;}
+
+/* ===== CONTENT LAYOUT ===== */
+.content-wrap{max-width:900px;margin:0 auto;}
+.section-header{
+  display:flex;align-items:flex-start;gap:20px;
+  padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px;
+}
+.section-num{
+  font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:600;
+  color:rgba(0,212,255,0.15);line-height:1;flex-shrink:0;
+}
+.section-meta{}
+.section-label{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;
+}
+.section-title{
+  font-family:'Rajdhani',sans-serif;font-size:clamp(26px,5vw,40px);
+  font-weight:700;line-height:1.1;color:var(--text);
+}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:24px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+}
+.card-accent-left{border-left:3px solid var(--accent);}
+.card-accent-orange{border-left:3px solid var(--accent2);}
+.card-accent-green{border-left:3px solid var(--accent3);}
+.card-accent-gold{border-left:3px solid var(--gold);}
+.card h3{
+  font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:600;
+  color:var(--text);margin-bottom:12px;
+}
+.card h4{
+  font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;
+  color:var(--accent);margin-bottom:8px;
+}
+.card p{color:var(--text2);line-height:1.8;font-size:15px;margin-bottom:12px;}
+.card p:last-child{margin-bottom:0;}
+.card ul{color:var(--text2);line-height:1.8;font-size:15px;padding-left:20px;}
+.card ul li{margin-bottom:6px;}
+
+/* ===== GRID LAYOUTS ===== */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:20px;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px;}
+
+/* ===== HIGHLIGHT BOXES ===== */
+.highlight-box{
+  border:1px solid;border-radius:6px;padding:20px 22px;
+  margin-bottom:20px;position:relative;
+}
+.highlight-box.info{border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.04);}
+.highlight-box.warning{border-color:rgba(255,107,53,0.3);background:rgba(255,107,53,0.04);}
+.highlight-box.success{border-color:rgba(57,217,122,0.3);background:rgba(57,217,122,0.04);}
+.highlight-box.gold{border-color:rgba(255,215,0,0.3);background:rgba(255,215,0,0.04);}
+.hb-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;
+}
+.info .hb-title{color:var(--accent);}
+.warning .hb-title{color:var(--accent2);}
+.success .hb-title{color:var(--accent3);}
+.gold .hb-title{color:var(--gold);}
+.highlight-box p{color:var(--text2);font-size:14px;line-height:1.7;}
+
+/* ===== TIMELINE ===== */
+.timeline{position:relative;padding-left:32px;margin-bottom:20px;}
+.timeline::before{
+  content:'';position:absolute;left:8px;top:8px;bottom:8px;
+  width:1px;background:linear-gradient(to bottom,var(--accent),var(--accent2));
+}
+.tl-item{position:relative;margin-bottom:24px;}
+.tl-dot{
+  position:absolute;left:-28px;top:4px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--accent);border:2px solid var(--bg);
+}
+.tl-year{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--accent);margin-bottom:4px;
+}
+.tl-text{font-size:14px;color:var(--text2);line-height:1.6;}
+
+/* ===== STAT BOXES ===== */
+.stat-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+.stat-box{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:6px;padding:16px 20px;flex:1;min-width:140px;
+}
+.stat-num{
+  font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;
+  line-height:1;margin-bottom:4px;
+}
+.stat-label{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+
+/* ===== DIVIDER ===== */
+.divider{
+  height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:32px 0;
+}
+.sub-heading{
+  font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:600;
+  color:var(--text);margin:28px 0 16px;display:flex;align-items:center;gap:10px;
+}
+.sub-heading::before{
+  content:'';width:4px;height:22px;background:var(--accent2);border-radius:2px;flex-shrink:0;
+}
+
+/* ===== CHALLENGE ZONE ===== */
+.challenge-zone{
+  background:var(--bg2);border:1px solid var(--border);
+  border-top:3px solid var(--accent2);
+  border-radius:8px;padding:32px;margin-top:40px;
+}
+.challenge-header{
+  display:flex;align-items:center;gap:16px;margin-bottom:24px;
+}
+.challenge-icon{
+  width:48px;height:48px;background:rgba(255,107,53,0.1);
+  border:1px solid var(--accent2);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.challenge-meta{}
+.challenge-label{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;
+}
+.challenge-title{
+  font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--text);
+}
+.challenge-desc{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:24px;}
+
+/* ===== PUZZLE GAME ===== */
+.puzzle-container{margin-bottom:20px;}
+.resource-items{
+  display:flex;flex-wrap:wrap;gap:8px;
+  padding:16px;background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;min-height:60px;margin-bottom:16px;
+}
+.resource-item{
+  padding:8px 14px;border-radius:4px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  cursor:grab;border:1px solid var(--border);background:var(--surface2);
+  color:var(--text);transition:all 0.2s;user-select:none;
+  display:flex;align-items:center;gap:6px;
+}
+.resource-item:hover{border-color:var(--accent);color:var(--accent);}
+.resource-item.dragging{opacity:0.5;cursor:grabbing;}
+.drop-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.drop-zone{
+  min-height:120px;border:2px dashed var(--border);
+  border-radius:6px;padding:12px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.drop-zone.drag-over{border-color:var(--accent);background:rgba(0,212,255,0.05);}
+.drop-zone-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;
+}
+.dz-renovable .drop-zone-title{color:var(--accent3);}
+.dz-no-renovable .drop-zone-title{color:var(--danger);}
+.dz-perpetuo .drop-zone-title{color:var(--accent);}
+.dz-potencial .drop-zone-title{color:var(--gold);}
+.drop-zone .resource-items{min-height:50px;padding:8px;background:transparent;border:none;flex-direction:column;gap:4px;}
+.drop-zone .resource-item{cursor:default;}
+
+/* ===== TIMER ===== */
+.timer-bar{
+  height:8px;background:var(--surface);border-radius:4px;margin-bottom:16px;overflow:hidden;
+}
+.timer-fill{
+  height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));
+  border-radius:4px;transition:width 1s linear;
+}
+.timer-fill.warning{background:linear-gradient(90deg,var(--accent4),var(--accent2));}
+.timer-fill.danger{background:var(--danger);}
+.timer-label{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text2);margin-bottom:8px;text-align:right;
+}
+
+/* ===== KRUGMAN SIMULATOR ===== */
+.krugman-map{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;
+}
+.k-region{
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:8px;padding:16px;cursor:pointer;
+  transition:all 0.2s;position:relative;text-align:center;
+}
+.k-region:hover{border-color:var(--accent);background:rgba(0,212,255,0.05);}
+.k-region.selected{border-color:var(--accent2);background:rgba(255,107,53,0.1);}
+.k-region.correct{border-color:var(--accent3);background:rgba(57,217,122,0.1);}
+.k-region-name{
+  font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;
+  color:var(--text);margin-bottom:6px;
+}
+.k-stat{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);margin:2px 0;}
+.k-stat span{color:var(--text2);}
+.k-icon{font-size:24px;margin-bottom:8px;}
+
+/* ===== OMC TRIBUNAL ===== */
+.case-file{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;padding:20px;margin-bottom:16px;
+  border-left:4px solid var(--gold);
+}
+.case-title{
+  font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;
+  color:var(--gold);margin-bottom:8px;
+}
+.case-body{font-size:14px;color:var(--text2);line-height:1.7;}
+.verdict-options{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.verdict-option{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;padding:16px;cursor:pointer;
+  transition:all 0.2s;display:flex;align-items:flex-start;gap:12px;
+}
+.verdict-option:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.verdict-option.selected{border-color:var(--accent2);}
+.verdict-option.correct{border-color:var(--accent3);background:rgba(57,217,122,0.06);}
+.verdict-option.wrong{border-color:var(--danger);background:rgba(255,71,87,0.06);}
+.vo-letter{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;
+  color:var(--accent);background:rgba(0,212,255,0.1);
+  border:1px solid rgba(0,212,255,0.2);border-radius:4px;
+  padding:2px 8px;flex-shrink:0;margin-top:2px;
+}
+.vo-text{font-size:14px;color:var(--text2);line-height:1.6;}
+
+/* ===== FEEDBACK ===== */
+.feedback-panel{
+  border-radius:6px;padding:20px;margin-top:16px;
+  display:none;animation:slideIn 0.3s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.feedback-panel.success{background:rgba(57,217,122,0.08);border:1px solid rgba(57,217,122,0.3);}
+.feedback-panel.error{background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.3);}
+.feedback-panel.show{display:block;}
+.fp-title{
+  font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;
+  margin-bottom:8px;
+}
+.success .fp-title{color:var(--accent3);}
+.error .fp-title{color:var(--danger);}
+.fp-body{font-size:14px;color:var(--text2);line-height:1.7;}
+
+/* ===== BOT ASSISTANT ===== */
+#bot{
+  position:fixed;bottom:24px;right:24px;z-index:200;
+}
+.bot-btn{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--xp-color));
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;box-shadow:0 4px 20px rgba(0,212,255,0.3);
+  transition:transform 0.2s;
+}
+.bot-btn:hover{transform:scale(1.1);}
+.bot-panel{
+  position:absolute;bottom:64px;right:0;
+  width:300px;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;
+  padding:20px;display:none;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.bot-panel.open{display:block;animation:slideIn 0.3s ease;}
+.bot-name{
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;
+  color:var(--accent);display:flex;align-items:center;gap:6px;margin-bottom:12px;
+}
+.bot-dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);animation:blink 1.5s ease infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3};}
+.bot-msg{font-size:13px;color:var(--text2);line-height:1.7;}
+.bot-tip{
+  margin-top:12px;padding:10px 12px;
+  background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);
+  border-radius:6px;font-size:12px;color:var(--text2);line-height:1.6;
+}
+
+/* ===== NAV CONTROLS ===== */
+.nav-controls{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:32px 0 48px;margin-top:20px;border-top:1px solid var(--border);
+}
+
+/* ===== MISSION COMPLETE ===== */
+#screen-complete{
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;padding:80px 24px;
+}
+#screen-complete.active{display:flex;}
+.complete-badge{
+  width:120px;height:120px;margin:0 auto 32px;
+  background:radial-gradient(circle,rgba(255,215,0,0.2),transparent);
+  border:2px solid var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;
+  animation:glow-pulse 2s ease infinite;
+}
+@keyframes glow-pulse{
+  0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.2);}
+  50%{box-shadow:0 0 60px rgba(255,215,0,0.5);}
+}
+.complete-title{
+  font-family:'Rajdhani',sans-serif;font-size:clamp(32px,6vw,56px);
+  font-weight:700;color:var(--gold);margin-bottom:12px;
+}
+.complete-sub{font-size:18px;color:var(--text2);margin-bottom:32px;max-width:500px;}
+.final-stats{
+  display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin-bottom:40px;
+}
+.final-stat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:20px 28px;text-align:center;
+}
+.fs-num{
+  font-family:'Rajdhani',sans-serif;font-size:40px;font-weight:700;
+  color:var(--accent);
+}
+.fs-label{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:4px;}
+.badges-final{display:flex;gap:16px;justify-content:center;margin-bottom:32px;}
+.badge-final{
+  width:64px;height:64px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;border:2px solid;
+}
+.badge-final.b1{border-color:var(--accent3);background:rgba(57,217,122,0.1);}
+.badge-final.b2{border-color:var(--accent2);background:rgba(255,107,53,0.1);}
+.badge-final.b3{border-color:var(--gold);background:rgba(255,215,0,0.1);}
+
+/* ===== XP POPUP ===== */
+.xp-popup{
+  position:fixed;top:90px;right:24px;z-index:300;
+  background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.4);
+  border-radius:8px;padding:12px 20px;
+  font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;
+  color:var(--xp-color);pointer-events:none;
+  animation:xpFloat 2s ease forwards;display:none;
+}
+@keyframes xpFloat{
+  0%{opacity:0;transform:translateY(10px);}
+  20%{opacity:1;transform:translateY(0);}
+  80%{opacity:1;}
+  100%{opacity:0;transform:translateY(-20px);}
+}
+
+/* ===== NAV TABS ===== */
+.nav-tabs{
+  display:flex;gap:4px;background:var(--surface);
+  border:1px solid var(--border);border-radius:6px;padding:4px;
+  margin-bottom:32px;flex-wrap:wrap;
+}
+.nav-tab{
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;
+  letter-spacing:0.5px;padding:8px 16px;border-radius:4px;
+  cursor:pointer;transition:all 0.2s;color:var(--text3);border:none;
+  background:transparent;
+}
+.nav-tab:hover{color:var(--text2);}
+.nav-tab.active{background:var(--bg);color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.nav-tab.locked{cursor:not-allowed;opacity:0.4;}
+
+/* ===== TABLE ===== */
+.data-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;}
+.data-table th{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:1px;text-transform:uppercase;color:var(--text3);
+  padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);
+}
+.data-table td{
+  padding:12px 16px;border-bottom:1px solid rgba(36,51,71,0.5);
+  color:var(--text2);line-height:1.5;vertical-align:top;
+}
+.data-table tr:hover td{background:rgba(255,255,255,0.01);}
+
+/* ===== SCROLL HINT ===== */
+.scroll-hint{
+  text-align:center;padding:8px;margin-bottom:8px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  .section-num{font-size:32px;}
+  .krugman-map{grid-template-columns:1fr 1fr;}
+  .nav-controls{flex-direction:column;gap:12px;}
+  .logo-mark span{display:none;}
+}
+
+/* ===== SKILL CHECK ===== */
+.skill-check{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:6px;padding:16px 20px;margin:12px 0;
+}
+.skill-check-q{
+  font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;
+  color:var(--text);margin-bottom:10px;
+}
+.skill-options{display:flex;flex-direction:column;gap:6px;}
+.skill-opt{
+  padding:10px 14px;background:var(--surface);border:1px solid var(--border);
+  border-radius:4px;cursor:pointer;font-size:14px;color:var(--text2);
+  transition:all 0.15s;
+}
+.skill-opt:hover{border-color:var(--accent);color:var(--text);}
+.skill-opt.correct{border-color:var(--accent3);background:rgba(57,217,122,0.08);color:var(--accent3);}
+.skill-opt.wrong{border-color:var(--danger);background:rgba(255,71,87,0.08);color:var(--danger);}
+
+/* === TOPIC NAV === */
+.topic-progress{
+  display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;
+}
+.tp-item{
+  flex:1;min-width:80px;padding:8px 12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:4px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--text3);transition:all 0.2s;
+}
+.tp-item.done{border-color:var(--accent3);color:var(--accent3);}
+.tp-item.current{border-color:var(--accent);color:var(--accent);}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+
+<!-- XP Popup -->
+<div class="xp-popup" id="xpPopup">+150 XP</div>
+
+<!-- Header -->
+<div id="header">
+  <div class="logo-mark">
+    <div class="logo-icon">◆</div>
+    <span>Orden Global</span>
+  </div>
+  <div style="flex:1;max-width:300px;">
+    <div class="global-progress">
+      <div class="global-progress-fill" id="globalBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <div class="badge-row">
+      <div class="badge b1" id="badge1" title="Insignia de Sostenibilidad">🌿</div>
+      <div class="badge b2" id="badge2" title="Arquitecto Económico">⚙️</div>
+      <div class="badge b3" id="badge3" title="Diplomático Senior">🏛️</div>
+    </div>
+    <div class="xp-display">
+      <span>XP</span>
+      <span class="xp-val" id="xpDisplay">0</span>
+    </div>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+
+<!-- ==================== LANDING ==================== -->
+<div id="screen-landing" class="screen active">
+  <div class="mission-tag">🛰 Misión Iniciada · Bloque 1</div>
+  <div class="mission-title">
+    <div class="title-line1">Misión:</div>
+    <div class="title-line2">Arquitecto del Orden Global</div>
+  </div>
+  <p class="mission-subtitle">
+    Domina los fundamentos de la geografía económica, los organismos internacionales y la regulación del comercio global. Supera 3 desafíos para convertirte en <strong style="color:var(--accent)">Diplomático Senior</strong>.
+  </p>
+  <div class="mission-cards">
+    <div class="m-card" style="--card-accent:var(--accent3);">
+      <div class="m-card-num">TEMA 01</div>
+      <div class="m-card-title">Fundamentos y Geografía Física</div>
+      <div class="m-card-desc">Recursos naturales, OI y cooperación global. Reto: Puzzle de Clasificación.</div>
+    </div>
+    <div class="m-card" style="--card-accent:var(--accent);">
+      <div class="m-card-num">TEMA 02</div>
+      <div class="m-card-title">Modelos Económicos y Población</div>
+      <div class="m-card-desc">Krugman, Malthus y tendencias demográficas. Reto: Simulador Krugman.</div>
+    </div>
+    <div class="m-card" style="--card-accent:var(--gold);">
+      <div class="m-card-num">TEMA 03</div>
+      <div class="m-card-title">Regulación y Comercio Global</div>
+      <div class="m-card-desc">GATT → OMC, México y T-MEC. Reto: Tribunal OMC.</div>
+    </div>
+  </div>
+  <button class="btn btn-primary" onclick="startMission()">
+    ▶ Iniciar Misión
+  </button>
+</div>
+
+<!-- ==================== TEMA 1 ==================== -->
+<div id="screen-t1" class="screen">
+  <div class="content-wrap">
+    <div class="topic-progress">
+      <div class="tp-item current">T1: Fundamentos</div>
+      <div class="tp-item locked">T2: Economía</div>
+      <div class="tp-item locked">T3: Comercio</div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-meta">
+        <div class="section-label">Tema Uno</div>
+        <div class="section-title">Fundamentos y Geografía Física</div>
+      </div>
+    </div>
+
+    <!-- 1.1 Geografía -->
+    <div class="card card-accent-left">
+      <h3>🌍 ¿Qué es la Geografía y por qué importa?</h3>
+      <p>La <strong style="color:var(--accent)">geografía</strong> es la ciencia que estudia los hechos y fenómenos físicos, biológicos y humanos de la superficie terrestre, considerando su localización, causas y relaciones entre sí. Es una <em>ciencia mixta</em> que se divide en dos grandes ramas:</p>
+      <div class="grid-2" style="margin-top:16px">
+        <div class="highlight-box info">
+          <div class="hb-title">🏔 Geografía Física</div>
+          <p>Estudia la estructura del planeta: litosfera, hidrosfera, atmósfera y biosfera. Incluye Geomorfología, Hidrografía, Climatología, Edafología y Biogeografía.</p>
+        </div>
+        <div class="highlight-box success">
+          <div class="hb-title">👥 Geografía Humana</div>
+          <p>Analiza cómo se distribuyen los seres humanos y sus actividades. Abarca la geografía social, política y económica. También conocida como geografía social.</p>
+        </div>
+      </div>
+      <p>La <strong style="color:var(--accent2)">geografía económica</strong> es el subcampo que interpreta la distribución espacial de actividades productivas y flujos comerciales: explica por qué la riqueza se concentra en ciertos lugares y cómo eso genera desigualdad.</p>
+    </div>
+
+    <!-- Herramientas -->
+    <div class="sub-heading">Herramientas del Geógrafo</div>
+    <div class="grid-3">
+      <div class="card" style="background:var(--bg2);text-align:center;">
+        <div style="font-size:28px;margin-bottom:10px;">🗺</div>
+        <h4>Mapas</h4>
+        <p>Representaciones gráficas elaboradas con fotografías aéreas y SIG (Sistemas de Información Geográfica).</p>
+      </div>
+      <div class="card" style="background:var(--bg2);text-align:center;">
+        <div style="font-size:28px;margin-bottom:10px;">📊</div>
+        <h4>Estadísticas y Censos</h4>
+        <p>Datos cuantitativos de Naciones Unidas, Banco Mundial, OIT y organismos nacionales como el INEGI.</p>
+      </div>
+      <div class="card" style="background:var(--bg2);text-align:center;">
+        <div style="font-size:28px;margin-bottom:10px;">🧭</div>
+        <h4>Cartografía</h4>
+        <p>Proyecciones cartográficas cilíndricas, cónicas y acimutales. Escala, simbología y red geográfica.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 1.2 Recursos Naturales -->
+    <div class="sub-heading">1.2 Recursos Naturales: Clasificación Estratégica</div>
+    <div class="card card-accent-green">
+      <h3>🌱 ¿Qué son los Recursos Naturales?</h3>
+      <p>Son elementos y procesos de la naturaleza que el ser humano usa para satisfacer necesidades (alimentación, vivienda, energía) y sostener actividades productivas. Su valoración es <strong style="color:var(--accent3)">dinámica</strong>: depende de los cambios tecnológicos, culturales y económicos de cada época.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card card-accent-green">
+        <h4>♻️ Renovables</h4>
+        <p>Ciclo de regeneración corto. Sostenibles si la tasa de explotación no supera la de renovación.</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);">Ej: flora, fauna, agua dulce, suelos fértiles</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--danger);">
+        <h4 style="color:var(--danger);">⛏ No Renovables</h4>
+        <p>Formación geológica de millones de años. Tasa de regeneración nula o extremadamente lenta.</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);">Ej: petróleo, gas natural, carbón, minerales</p>
+      </div>
+      <div class="card card-accent-left">
+        <h4>☀️ Perpetuos</h4>
+        <p>Disponibilidad no afectada por el uso humano. Son técnicamente inagotables, pero requieren tecnología para aprovecharlos.</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);">Ej: energía solar, viento, mareas</p>
+      </div>
+      <div class="card card-accent-gold">
+        <h4 style="color:var(--gold);">💡 Potenciales</h4>
+        <p>Elementos naturales aún no aprovechados generalizadamente. Adquirirán valor según el desarrollo tecnológico futuro.</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);">Ej: hidrógeno, geotermia profunda, metano</p>
+      </div>
+    </div>
+
+    <!-- Caso Ucrania -->
+    <div class="highlight-box warning">
+      <div class="hb-title">⚔️ Caso de Estudio: Guerra en Ucrania (2022-presente)</div>
+      <p>La guerra en Ucrania demostró en tiempo real la fragilidad de los recursos estratégicos. Ucrania y Rusia son proveedores del <strong>28% del trigo mundial</strong> y <strong>15% del maíz</strong>. El conflicto generó:</p>
+      <ul style="color:var(--text2);font-size:14px;padding-left:16px;margin-top:8px;line-height:1.9;">
+        <li>Colapso en el abastecimiento de fertilizantes (Rusia = 13% global)</li>
+        <li>Crisis energética en Europa por dependencia del gas ruso (Nord Stream)</li>
+        <li>Inflación alimentaria global: +20% en precios básicos (FAO, 2022)</li>
+        <li>Reconfiguración de alianzas geopolíticas y sanciones económicas</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Importancia de los OI -->
+    <div class="sub-heading">1.3 Organismos Internacionales: Sujetos del Derecho Internacional</div>
+    <div class="card card-accent-orange">
+      <h3>🌐 ¿Por qué existen los Organismos Internacionales?</h3>
+      <p>Los OI promueven la <strong style="color:var(--accent2)">cooperación global</strong> en paz, economía, salud y medio ambiente. Son sujetos del Derecho Internacional con <em>personalidad jurídica propia</em>: pueden firmar tratados, establecer relaciones diplomáticas y poseer derechos e inmunidades.</p>
+    </div>
+
+    <div class="card">
+      <h3>Comunidad vs. Sociedad Internacional</h3>
+      <div class="grid-2" style="margin-top:12px;">
+        <div class="highlight-box info">
+          <div class="hb-title">Comunidad</div>
+          <p>Lazos cercanos, cooperación espontánea basada en afinidad cultural, lingüística o histórica. No necesariamente regulada.</p>
+        </div>
+        <div class="highlight-box success">
+          <div class="hb-title">Sociedad Internacional</div>
+          <p>Regulada por normas, reglas y principios comunes. La ONU es el ejemplo paradigmático: gobernada por la Carta de San Francisco (1945).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clasificación OI -->
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Clasificación</th>
+          <th>Tipo</th>
+          <th>Ejemplo</th>
+          <th>Función Principal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Por naturaleza</td>
+          <td style="color:var(--accent);">Intergubernamental</td>
+          <td>ONU, OMC, FMI</td>
+          <td>Estados como miembros</td>
+        </tr>
+        <tr>
+          <td>Por naturaleza</td>
+          <td style="color:var(--accent2);">No Gubernamental (ONG)</td>
+          <td>Greenpeace, Amnistía</td>
+          <td>Sociedad civil</td>
+        </tr>
+        <tr>
+          <td>Por función</td>
+          <td style="color:var(--accent3);">Político-seguridad</td>
+          <td>ONU, OTAN</td>
+          <td>Paz y estabilidad</td>
+        </tr>
+        <tr>
+          <td>Por función</td>
+          <td style="color:var(--gold);">Económico-financiero</td>
+          <td>FMI, Banco Mundial</td>
+          <td>Estabilidad monetaria</td>
+        </tr>
+        <tr>
+          <td>Por función</td>
+          <td style="color:var(--xp-color);">Ambiental</td>
+          <td>PNUMA, Greenpeace</td>
+          <td>Protección ecológica</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Post-COVID -->
+    <div class="highlight-box success">
+      <div class="hb-title">🦠 Caso: Recuperación Post-Pandemia COVID-19</div>
+      <p>La pandemia (2020-2022) puso a prueba la arquitectura de los OI. La <strong>OMS</strong> coordinó la distribución global de vacunas a través del mecanismo COVAX. El <strong>FMI</strong> aprobó $650 mil millones en DEG (Derechos Especiales de Giro) para liquidez global. La recuperación fue asimétrica: economías avanzadas rebotaron en 2021, mientras países de bajos ingresos tardaron hasta 2023, evidenciando las fallas de gobernanza global.</p>
+    </div>
+
+    <!-- CHALLENGE 1 -->
+    <div class="challenge-zone" id="challenge1">
+      <div class="challenge-header">
+        <div class="challenge-icon">🧩</div>
+        <div class="challenge-meta">
+          <div class="challenge-label">🎯 Desafío de Evaluación · Reto 1</div>
+          <div class="challenge-title">Puzzle de Recursos Estratégicos</div>
+        </div>
+      </div>
+      <div class="challenge-desc">
+        <strong style="color:var(--accent);">Misión:</strong> Tienes <strong style="color:var(--accent2)">90 segundos</strong> para clasificar los 8 recursos estratégicos en sus categorías correctas. Arrastra cada recurso a la zona correspondiente. ¡Cada error resta 10 XP! Completa el puzzle para ganar la <strong style="color:var(--accent3);">🌿 Insignia de Sostenibilidad</strong>.
+      </div>
+      <div class="timer-label"><span id="t1Timer">90</span>s restantes</div>
+      <div class="timer-bar"><div class="timer-fill" id="t1TimerBar" style="width:100%"></div></div>
+
+      <div class="resource-items" id="t1Items">
+        <div class="resource-item" draggable="true" data-resource="Petróleo" data-cat="no-renovable">🛢 Petróleo</div>
+        <div class="resource-item" draggable="true" data-resource="Energía Solar" data-cat="perpetuo">☀️ Energía Solar</div>
+        <div class="resource-item" draggable="true" data-resource="Bosques" data-cat="renovable">🌲 Bosques</div>
+        <div class="resource-item" draggable="true" data-resource="Gas Natural" data-cat="no-renovable">💨 Gas Natural</div>
+        <div class="resource-item" draggable="true" data-resource="Hidrógeno Verde" data-cat="potencial">⚗️ Hidrógeno Verde</div>
+        <div class="resource-item" draggable="true" data-resource="Mareas" data-cat="perpetuo">🌊 Mareas</div>
+        <div class="resource-item" draggable="true" data-resource="Fauna" data-cat="renovable">🐾 Fauna</div>
+        <div class="resource-item" draggable="true" data-resource="Carbón Mineral" data-cat="no-renovable">🪨 Carbón Mineral</div>
+      </div>
+
+      <div class="drop-zones">
+        <div class="drop-zone dz-renovable" data-cat="renovable">
+          <div class="drop-zone-title">♻️ Renovables</div>
+          <div class="resource-items" id="dz-renovable"></div>
+        </div>
+        <div class="drop-zone dz-no-renovable" data-cat="no-renovable">
+          <div class="drop-zone-title">⛏ No Renovables</div>
+          <div class="resource-items" id="dz-no-renovable"></div>
+        </div>
+        <div class="drop-zone dz-perpetuo" data-cat="perpetuo">
+          <div class="drop-zone-title">☀️ Perpetuos</div>
+          <div class="resource-items" id="dz-perpetuo"></div>
+        </div>
+        <div class="drop-zone dz-potencial" data-cat="potencial">
+          <div class="drop-zone-title">💡 Potenciales</div>
+          <div class="resource-items" id="dz-potencial"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-warning btn-sm" onclick="startT1Timer()">▶ Iniciar Temporizador</button>
+        <button class="btn btn-success btn-sm" onclick="checkPuzzle()">✓ Verificar Clasificación</button>
+        <button class="btn btn-secondary btn-sm" onclick="resetPuzzle()">↺ Reiniciar</button>
+      </div>
+
+      <div class="feedback-panel" id="t1Feedback"></div>
+    </div>
+
+    <div class="nav-controls">
+      <button class="btn btn-secondary" onclick="goTo('screen-landing')">← Volver</button>
+      <button class="btn btn-primary" id="btn-to-t2" onclick="goTo('screen-t2')" disabled>Continuar: Tema 2 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TEMA 2 ==================== -->
+<div id="screen-t2" class="screen">
+  <div class="content-wrap">
+    <div class="topic-progress">
+      <div class="tp-item done">✓ T1: Fundamentos</div>
+      <div class="tp-item current">T2: Economía</div>
+      <div class="tp-item locked">T3: Comercio</div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-meta">
+        <div class="section-label">Tema Dos</div>
+        <div class="section-title">Modelos Económicos y Población</div>
+      </div>
+    </div>
+
+    <!-- Nuevos Modelos -->
+    <div class="card card-accent-left">
+      <h3>📍 Nueva Geografía Económica: El Modelo Krugman</h3>
+      <p>En los años 90, Paul Krugman ganó el <strong style="color:var(--gold)">Premio Nobel de Economía 2008</strong> por su modelo de la <em>Nueva Geografía Económica</em>. La pregunta central: <strong style="color:var(--accent)">¿Por qué las actividades económicas se concentran en ciertos lugares y no en otros?</strong></p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card" style="background:var(--bg2);">
+        <h4>Modelo de Equilibrio General</h4>
+        <p>Describe cómo los mercados de bienes, servicios y factores interactúan simultáneamente. Supone competencia perfecta, información completa y precios que se ajustan automáticamente a la oferta y demanda.</p>
+      </div>
+      <div class="card" style="background:var(--bg2);">
+        <h4>Modelo de Competencia Monopolística</h4>
+        <p>Propuesto por Dixit y Stiglitz. Introduce economías de escala, preferencias por variedad y competencia diferenciada. Base del análisis de Krugman sobre concentración industrial.</p>
+      </div>
+    </div>
+
+    <!-- Variables Krugman -->
+    <div class="card card-accent-orange">
+      <h3>⚙️ Variables del Modelo Krugman</h3>
+      <div class="stat-row" style="margin-top:12px;">
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--accent);">🚚</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:var(--text);margin:4px 0;">Costos de Transporte</div>
+          <div class="stat-label">Determinan localización</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--accent2);">📈</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:var(--text);margin:4px 0;">Economías de Escala</div>
+          <div class="stat-label">Producir más = menor costo unitario</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--accent3);">👷</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:var(--text);margin:4px 0;">Movilidad Laboral</div>
+          <div class="stat-label">Flujo de trabajadores</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--gold);">💱</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:var(--text);margin:4px 0;">Diferenciación de Costo</div>
+          <div class="stat-label">Ventaja competitiva</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Silicon Valley -->
+    <div class="highlight-box info">
+      <div class="hb-title">💡 Geografía Económica Regional</div>
+      <p>La teoría más reciente se centra en regiones de alto dinamismo: <strong>Silicon Valley</strong> (California) y los <strong>distritos industriales del norte de Italia</strong> son exemplos de cómo la aglomeración de industrias genera externalidades positivas que retroalimentan el crecimiento regional, demostrando las predicciones de Krugman.</p>
+    </div>
+
+    <div class="highlight-box warning">
+      <div class="hb-title">⚠️ Pensamiento Relacional: La Crítica al Modelo</div>
+      <p>El <em>pensamiento relacional</em> surge como respuesta a la globalización y la economía del conocimiento. Pone más atención en los <strong>individuos como actores sociales clave</strong> dentro de las empresas. Critica que los modelos de Krugman no capturan las relaciones de poder, las redes informales y los factores institucionales que también explican la localización económica.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Tendencias Poblacionales -->
+    <div class="sub-heading">2.2 Malthus vs. Realidad Demográfica Actual</div>
+
+    <div class="card card-accent-left">
+      <h3>📊 Thomas Malthus y la Bomba Demográfica</h3>
+      <p>Thomas Malthus (1766-1834), considerado <strong style="color:var(--accent)">fundador de la demografía</strong>, propuso que la producción de alimentos crece de manera <em>aritmética</em> (1, 2, 3, 4...) mientras la población crece de manera <em>geométrica</em> (1, 2, 4, 8...). Esta desproporción generaría inevitablemente hambre, guerras y epidemias como "frenos preventivos".</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="highlight-box warning">
+        <div class="hb-title">📉 Predicción Malthusiana</div>
+        <p>La sobrepoblación llevaría al colapso de los recursos. La población sería regulada por la miseria y los vicios. El crecimiento económico sería insostenible a largo plazo.</p>
+      </div>
+      <div class="highlight-box success">
+        <div class="hb-title">📈 Realidad 2024</div>
+        <p>La Revolución Verde, la tecnología agrícola y los anticonceptivos alteraron el modelo. La tasa de fertilidad global cayó a <strong>2.3 nacimientos por mujer</strong>. La esperanza de vida alcanzó <strong>73.3 años</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Indicadores clave -->
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--accent);">8.1B</div>
+        <div class="stat-label">Población mundial 2024</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--accent3);">2.3</div>
+        <div class="stat-label">Tasa fertilidad global</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--gold);">73.3</div>
+        <div class="stat-label">Esperanza de vida (años)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--xp-color);">3%</div>
+        <div class="stat-label">Migrantes del total global</div>
+      </div>
+    </div>
+
+    <div class="card card-accent-green">
+      <h3>🌏 Tendencias por Región</h3>
+      <ul>
+        <li><strong style="color:var(--accent);">Asia:</strong> 60% de la población mundial (~4,400M). China (1,400M) e India (1,300M) son los países más poblados. China enfrenta envejecimiento acelerado post política del hijo único.</li>
+        <li><strong style="color:var(--accent2);">Europa:</strong> 48 países reducirán su población para 2050. Tasa de fecundidad muy por debajo del nivel de reemplazo (2.1).</li>
+        <li><strong style="color:var(--accent3);">África Subsahariana:</strong> Mayor crecimiento demográfico. Angola, R.D. del Congo y Níger lideran el aumento. 60% de la población futura global.</li>
+        <li><strong style="color:var(--gold);">América Latina:</strong> Transición demográfica en curso: cae la natalidad pero envejece la población. Bono demográfico en declive.</li>
+      </ul>
+    </div>
+
+    <!-- COVID impacto poblacional -->
+    <div class="highlight-box warning">
+      <div class="hb-title">🦠 COVID-19: Impacto Demográfico Global</div>
+      <p>La pandemia generó un retroceso en la esperanza de vida de hasta <strong>2 años</strong> en algunos países (EUA, México). Interrumpió cadenas de suministro globales, afectó la producción industrial y evidenció la dependencia excesiva de insumos extranjeros, especialmente con China como proveedor global. La recuperación económica fue asimétrica: las economías avanzadas usaron deuda soberana masiva para rescatar sectores, mientras los países emergentes tuvieron acceso limitado a vacunas y estímulos.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CHALLENGE 2 -->
+    <div class="challenge-zone" id="challenge2">
+      <div class="challenge-header">
+        <div class="challenge-icon">🏭</div>
+        <div class="challenge-meta">
+          <div class="challenge-label">🎯 Desafío de Evaluación · Reto 2</div>
+          <div class="challenge-title">Simulador Krugman: Decisión de Localización</div>
+        </div>
+      </div>
+      <div class="challenge-desc">
+        <strong style="color:var(--accent);">Misión:</strong> Eres el CEO de <strong>TechSemiconductors Global</strong>. Debes elegir dónde instalar tu planta de producción de microchips para Latinoamérica. Analiza los datos de cada región y elige la localización óptima según el modelo de Krugman. ¡Gana <strong style="color:var(--xp-color)">+200 XP</strong> si tomas la decisión correcta!
+      </div>
+
+      <div class="case-file" style="border-left-color:var(--accent);margin-bottom:20px;">
+        <div class="case-title" style="color:var(--accent);">📋 Briefing Ejecutivo</div>
+        <div class="case-body">
+          Producción: 500,000 microchips/año. Mercado objetivo: Brasil, México, Colombia y Chile. La planta necesita: alta disponibilidad de ingenieros, puerto de exportación, estabilidad regulatoria y acceso a energía eléctrica barata. El modelo de Krugman indica que debes minimizar los costos de transporte al mercado y maximizar las economías de escala a través de aglomeración industrial existente.
+        </div>
+      </div>
+
+      <div class="krugman-map" id="krugmanMap">
+        <div class="k-region" data-region="A" onclick="selectRegion('A')">
+          <div class="k-icon">🌴</div>
+          <div class="k-region-name">Región A: Manaos, Brasil</div>
+          <div class="k-stat">🚢 Distancia al mercado: <span>Alta</span></div>
+          <div class="k-stat">⚡ Costo energía: <span style="color:var(--accent3)">Muy bajo (hidroelétrica)</span></div>
+          <div class="k-stat">👷 Ingenieros: <span>Moderado</span></div>
+          <div class="k-stat">🏭 Clusters tech: <span style="color:var(--accent3)">Zona Franca establecida</span></div>
+          <div class="k-stat">📋 Estabilidad: <span>Moderada</span></div>
+        </div>
+        <div class="k-region" data-region="B" onclick="selectRegion('B')">
+          <div class="k-icon">🌆</div>
+          <div class="k-region-name">Región B: Guadalajara, México</div>
+          <div class="k-stat">🚢 Distancia al mercado: <span style="color:var(--accent3)">Baja (T-MEC)</span></div>
+          <div class="k-stat">⚡ Costo energía: <span>Moderado</span></div>
+          <div class="k-stat">👷 Ingenieros: <span style="color:var(--accent3)">Alto (Silicon Valley MX)</span></div>
+          <div class="k-stat">🏭 Clusters tech: <span style="color:var(--accent3)">Ecosystem maduro</span></div>
+          <div class="k-stat">📋 Estabilidad: <span style="color:var(--accent3)">Alta (marco T-MEC)</span></div>
+        </div>
+        <div class="k-region" data-region="C" onclick="selectRegion('C')">
+          <div class="k-icon">⛰</div>
+          <div class="k-region-name">Región C: Bogotá, Colombia</div>
+          <div class="k-stat">🚢 Distancia al mercado: <span>Media</span></div>
+          <div class="k-stat">⚡ Costo energía: <span>Moderado</span></div>
+          <div class="k-stat">👷 Ingenieros: <span>Moderado-bajo</span></div>
+          <div class="k-stat">🏭 Clusters tech: <span>Emergente</span></div>
+          <div class="k-stat">📋 Estabilidad: <span>Moderada</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-success btn-sm" onclick="checkKrugman()">📍 Confirmar Localización</button>
+      </div>
+      <div class="feedback-panel" id="t2Feedback"></div>
+    </div>
+
+    <div class="nav-controls">
+      <button class="btn btn-secondary" onclick="goTo('screen-t1')">← Tema 1</button>
+      <button class="btn btn-primary" id="btn-to-t3" onclick="goTo('screen-t3')" disabled>Continuar: Tema 3 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TEMA 3 ==================== -->
+<div id="screen-t3" class="screen">
+  <div class="content-wrap">
+    <div class="topic-progress">
+      <div class="tp-item done">✓ T1: Fundamentos</div>
+      <div class="tp-item done">✓ T2: Economía</div>
+      <div class="tp-item current">T3: Comercio</div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-meta">
+        <div class="section-label">Tema Tres</div>
+        <div class="section-title">Regulación y Comercio Global</div>
+      </div>
+    </div>
+
+    <!-- Naturaleza Jurídica -->
+    <div class="card card-accent-gold">
+      <h3>⚖️ Naturaleza Jurídica de los Organismos Internacionales</h3>
+      <p>Los OI poseen <strong style="color:var(--gold)">personalidad jurídica internacional</strong>, lo que les otorga capacidad para:</p>
+      <ul>
+        <li>Firmar tratados y acuerdos con estados y otros OI</li>
+        <li>Establecer relaciones diplomáticas en calidad de entidades autónomas</li>
+        <li>Poseer derechos e inmunidades (no están sujetos a la jurisdicción de ningún Estado)</li>
+        <li>Ser responsables internacionalmente por sus actos</li>
+      </ul>
+      <p style="margin-top:12px;"><strong style="color:var(--accent2);">Ejemplo clave:</strong> La Unión Europea firma acuerdos comerciales en nombre de sus 27 estados miembros. El T-MEC fue negociado por México como un actor jurídico pleno en el escenario internacional.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Historia GATT-OMC -->
+    <div class="sub-heading">3.1 Del GATT a la OMC: Arquitectura del Comercio Global</div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1947 — Creación del GATT</div>
+        <div class="tl-text">El <strong>Acuerdo General sobre Aranceles Aduaneros y Comercio</strong> fue firmado por 23 países. Surge en el contexto post-WWII para evitar el proteccionismo que agravó la Gran Depresión. Principios fundamentales: no discriminación, transparencia y reducción arancelaria progresiva.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1947-1993 — Las 8 Rondas de Negociación</div>
+        <div class="tl-text">Ginebra, Annecy, Torquay, Ginebra II, Dillon, Kennedy, Tokio y <strong style="color:var(--accent2);">Ronda de Uruguay (1986-1994)</strong>. Esta última fue la más ambiciosa: incorporó servicios, propiedad intelectual (TRIPS) y agricultura. Sentó las bases de la OMC.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent2);"></div>
+        <div class="tl-year">1986 — México se une al GATT</div>
+        <div class="tl-text">Adhesión histórica que marcó el abandono del modelo de <em>sustitución de importaciones</em>. México se comprometió a abrir su economía, reducir aranceles y modernizar sus instituciones comerciales. Inicio de la transformación hacia economía exportadora.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent3);"></div>
+        <div class="tl-year">1994 — Firma del TLCAN</div>
+        <div class="tl-text">El Tratado de Libre Comercio de América del Norte entre México, Estados Unidos y Canadá entró en vigor el 1 de enero de 1994. Transformó radicalmente la estructura exportadora de México.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--gold);"></div>
+        <div class="tl-year">1995 — Nacimiento de la OMC</div>
+        <div class="tl-text">La <strong style="color:var(--gold)">Organización Mundial del Comercio</strong> reemplaza al GATT. Con sede en Ginebra, regula bienes, servicios y propiedad intelectual. Su estructura incluye el <em>Consejo Ministerial</em> (máxima autoridad), el <em>Consejo General</em> y el <em>Órgano de Solución de Diferencias (OSD)</em>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent);"></div>
+        <div class="tl-year">2020 — T-MEC (USMCA)</div>
+        <div class="tl-text">El T-MEC modernizó el TLCAN incorporando reglas sobre comercio digital, propiedad intelectual, derechos laborales y reglas de origen más estrictas para el sector automotriz. México se consolidó como la segunda potencia exportadora a EUA.</div>
+      </div>
+    </div>
+
+    <!-- Principios GATT/OMC -->
+    <div class="grid-2">
+      <div class="card card-accent-left">
+        <h3>📜 Principios Fundamentales del GATT/OMC</h3>
+        <ul>
+          <li><strong style="color:var(--accent);">Nación Más Favorecida (NMF):</strong> Si concedes un beneficio a un país, debes extenderlo a todos.</li>
+          <li><strong style="color:var(--accent2);">Trato Nacional:</strong> Las importaciones deben recibir el mismo trato que los productos nacionales.</li>
+          <li><strong style="color:var(--accent3);">Reciprocidad:</strong> Las concesiones arancelarias son negociadas bilateralmente.</li>
+          <li><strong style="color:var(--gold);">Transparencia:</strong> Las reglas deben ser públicas y predecibles.</li>
+          <li><strong style="color:var(--xp-color);">No discriminación:</strong> Base de todo el sistema multilateral.</li>
+        </ul>
+      </div>
+      <div class="card card-accent-orange">
+        <h3>🏛 Estructura de la OMC</h3>
+        <ul>
+          <li><strong style="color:var(--accent2);">Consejo Ministerial:</strong> Máxima autoridad, reúne a todos los ministros de comercio.</li>
+          <li><strong style="color:var(--accent);">Consejo General:</strong> Gestión diaria, aprueba acuerdos y políticas.</li>
+          <li><strong style="color:var(--accent3);">OSD:</strong> Órgano de Solución de Diferencias. Árbitro neutral en disputas.</li>
+          <li><strong style="color:var(--gold);">Grupos de Trabajo:</strong> Bienes, Servicios (GATS), Propiedad Intelectual (TRIPS).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Mexico y el comercio -->
+    <div class="sub-heading">3.2 México: De la Sustitución de Importaciones a Potencia Exportadora</div>
+    <div class="card card-accent-green">
+      <h3>🇲🇽 La Transformación Exportadora de México</h3>
+      <p>Antes de 1986, México protegía su industria con altos aranceles (hasta 100%) bajo el modelo de Industrialización por Sustitución de Importaciones (ISI). La adhesión al GATT marcó un punto de inflexión:</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--accent);">#2</div>
+        <div class="stat-label">Socio exportador de EUA (post T-MEC)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--accent3);">14</div>
+        <div class="stat-label">TLCs vigentes (más que cualquier país)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--gold);">$593B</div>
+        <div class="stat-label">Exportaciones totales 2023</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--accent2);">80%</div>
+        <div class="stat-label">Exportaciones van a EUA y Canadá</div>
+      </div>
+    </div>
+
+    <!-- Nuevo Orden Mundial -->
+    <div class="highlight-box warning">
+      <div class="hb-title">🌐 El Nuevo Orden Mundial y la Fragmentación del Comercio</div>
+      <p>El orden liberal establecido post-WWII enfrenta su mayor crisis. La <strong>guerra comercial EEUU-China</strong> (aranceles de hasta 145%), el auge del proteccionismo neotrumpista, la guerra en Ucrania y la pandemia han fragmentado las cadenas de valor globales. México enfrenta el fenómeno del <strong style="color:var(--accent2)">"nearshoring"</strong>: empresas que reubican producción de Asia a México para aprovechar el T-MEC y reducir riesgos geopolíticos. Esto representa una oportunidad histórica estimada en <strong>+$50,000M USD</strong> de inversión adicional.</p>
+    </div>
+
+    <!-- OMC y disputas -->
+    <div class="card card-accent-gold">
+      <h3>⚖️ El OSD: Árbitro del Comercio Global</h3>
+      <p>El Órgano de Solución de Diferencias de la OMC ha resuelto más de <strong style="color:var(--gold)">600 disputas</strong> desde 1995. Funciona en 3 fases:</p>
+      <div class="grid-3" style="margin-top:12px;">
+        <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:6px;">
+          <div style="font-size:24px;margin-bottom:8px;">1️⃣</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--text);">Consultas</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">60 días para negociación bilateral</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:6px;">
+          <div style="font-size:24px;margin-bottom:8px;">2️⃣</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--text);">Panel Arbitral</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">3 expertos independientes dictaminan</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:6px;">
+          <div style="font-size:24px;margin-bottom:8px;">3️⃣</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--text);">Órgano de Apelación</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">Revisión jurídica (paralizado desde 2019)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CHALLENGE 3 -->
+    <div class="challenge-zone" id="challenge3">
+      <div class="challenge-header">
+        <div class="challenge-icon">🏛</div>
+        <div class="challenge-meta">
+          <div class="challenge-label">🎯 Desafío de Evaluación · Reto 3</div>
+          <div class="challenge-title">Tribunal OMC: Disputa México vs. EUA</div>
+        </div>
+      </div>
+      <div class="challenge-desc">
+        <strong style="color:var(--accent);">Misión:</strong> Eres el representante legal de México ante el OSD de la OMC. Debes resolver una disputa comercial real basada en un caso ficticio de arbitraje. Lee el expediente, analiza los principios del GATT/OMC y elige la estrategia legal correcta para obtener la <strong style="color:var(--gold)">🏛️ Insignia de Diplomático Senior</strong>.
+      </div>
+
+      <div class="case-file">
+        <div class="case-title">📁 EXPEDIENTE DS-MX-23: México vs. Estados Unidos</div>
+        <div class="case-body">
+          <strong>Hechos:</strong> En marzo de 2024, EUA impuso un arancel del <strong>25% adicional</strong> a las importaciones de acero mexicano, alegando razones de "seguridad nacional" (Sección 232). México exporta $4,200 millones USD en acero anualmente. El gobierno estadounidense argumenta que el acero "transshiped" de China atraviesa México para evadir aranceles a China.<br><br>
+          <strong>Posición de México:</strong> El acero es producido genuinamente en México (Ternium, AHMSA). El arancel viola el principio de No Discriminación del T-MEC y el principio de Nación Más Favorecida de la OMC. México ya coopera con EUA en reglas de origen del T-MEC.<br><br>
+          <strong>Tu misión como representante:</strong> ¿Cuál es la estrategia legal más sólida para que México gane esta disputa?
+        </div>
+      </div>
+
+      <div class="verdict-options" id="verdictOptions">
+        <div class="verdict-option" data-opt="A" onclick="selectVerdict('A')">
+          <div class="vo-letter">A</div>
+          <div class="vo-text"><strong>Invocar artículo XXI del GATT</strong> (Excepciones de Seguridad): Aceptar el argumento de seguridad nacional de EUA y negociar cuotas de exportación voluntarias a cambio de la reducción del arancel.</div>
+        </div>
+        <div class="verdict-option" data-opt="B" onclick="selectVerdict('B')">
+          <div class="vo-letter">B</div>
+          <div class="vo-text"><strong>Presentar Panel ante el OSD + Capítulo 10 del T-MEC</strong>: Presentar evidencia de origen genuino del acero mexicano, invocar el principio de Nación Más Favorecida (NMF) y el trato nacional. Solicitar paralelamente arbitraje bajo el T-MEC ya que el arancel discrimina específicamente a México.</div>
+        </div>
+        <div class="verdict-option" data-opt="C" onclick="selectVerdict('C')">
+          <div class="vo-letter">C</div>
+          <div class="vo-text"><strong>Retaliación inmediata</strong>: Imponer aranceles equivalentes al maíz y trigo estadounidense. Amenazar con suspender el T-MEC si EUA no retira el arancel en 30 días.</div>
+        </div>
+        <div class="verdict-option" data-opt="D" onclick="selectVerdict('D')">
+          <div class="vo-letter">D</div>
+          <div class="vo-text"><strong>Solicitar consultas bilaterales</strong>: Iniciar el proceso de consultas del OSD (primera fase), presentar la documentación de cadenas de origen y proponer un mecanismo de verificación conjunta de acero origen-México.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-warning btn-sm" onclick="checkVerdict()">⚖️ Presentar Estrategia Legal</button>
+      </div>
+      <div class="feedback-panel" id="t3Feedback"></div>
+    </div>
+
+    <div class="nav-controls">
+      <button class="btn btn-secondary" onclick="goTo('screen-t2')">← Tema 2</button>
+      <button class="btn btn-primary" id="btn-to-complete" onclick="completeMission()" disabled>🎓 Completar Misión →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== COMPLETE ==================== -->
+<div id="screen-complete" class="screen">
+  <div class="complete-badge">🌐</div>
+  <div class="complete-title">¡Misión Completada!</div>
+  <p class="complete-sub">Has completado los tres temas de <em>Organismos y Regulación Internacional</em> y superado todos los desafíos. Eres oficialmente un <strong style="color:var(--gold)">Arquitecto del Orden Global</strong>.</p>
+  <div class="badges-final">
+    <div class="badge-final b1" title="Insignia de Sostenibilidad">🌿</div>
+    <div class="badge-final b2" title="Arquitecto Económico">⚙️</div>
+    <div class="badge-final b3" title="Diplomático Senior">🏛️</div>
+  </div>
+  <div class="final-stats">
+    <div class="final-stat">
+      <div class="fs-num" id="finalXP">0</div>
+      <div class="fs-label">XP TOTAL GANADO</div>
+    </div>
+    <div class="final-stat">
+      <div class="fs-num" id="finalTime">—</div>
+      <div class="fs-label">TIEMPO DE SESIÓN</div>
+    </div>
+    <div class="final-stat">
+      <div class="fs-num">3/3</div>
+      <div class="fs-label">RETOS COMPLETADOS</div>
+    </div>
+    <div class="final-stat">
+      <div class="fs-num">3/3</div>
+      <div class="fs-label">INSIGNIAS OBTENIDAS</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+    <button class="btn btn-secondary" onclick="restartMission()">↺ Repetir Misión</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨 Descargar Certificado</button>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- Bot Asistente -->
+<div id="bot">
+  <div class="bot-panel" id="botPanel">
+    <div class="bot-name">
+      <div class="bot-dot"></div>
+      NEXUS — Asistente Virtual
+    </div>
+    <div class="bot-msg" id="botMsg">¡Hola, agente! Soy NEXUS, tu asistente de misión. Estoy aquí para darte pistas cuando las necesites. ¿En qué puedo ayudarte?</div>
+    <div class="bot-tip" id="botTip" style="display:none;"></div>
+  </div>
+  <button class="bot-btn" onclick="toggleBot()" title="Asistente NEXUS">🤖</button>
+</div>
+
+<script>
+// ===== STATE =====
+const state = {
+  xp: 0,
+  badges: [false, false, false],
+  t1Done: false,
+  t2Done: false,
+  t3Done: false,
+  t1TimerInterval: null,
+  t1TimerSeconds: 90,
+  t1TimerStarted: false,
+  draggedItem: null,
+  krugmanSelected: null,
+  verdictSelected: null,
+  startTime: Date.now(),
+  botOpen: false,
+  currentScreen: 'landing'
+};
+
+// ===== NAVIGATION =====
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const screen = document.getElementById(screenId);
+  screen.classList.add('active');
+  state.currentScreen = screenId.replace('screen-','');
+  updateProgress();
+  updateBotContext();
+  window.scrollTo(0, 0);
+}
+
+function startMission() {
+  goTo('screen-t1');
+}
+
+function restartMission() {
+  state.xp = 0; state.badges = [false,false,false];
+  state.t1Done = false; state.t2Done = false; state.t3Done = false;
+  state.t1TimerStarted = false;
+  clearInterval(state.t1TimerInterval);
+  state.t1TimerSeconds = 90;
+  resetPuzzle();
+  document.getElementById('xpDisplay').textContent = '0';
+  document.getElementById('globalBar').style.width = '0%';
+  ['badge1','badge2','badge3'].forEach(b => document.getElementById(b).classList.remove('earned'));
+  document.getElementById('btn-to-t2').disabled = true;
+  document.getElementById('btn-to-t3').disabled = true;
+  document.getElementById('btn-to-complete').disabled = true;
+  document.getElementById('t1Feedback').className = 'feedback-panel';
+  document.getElementById('t2Feedback').className = 'feedback-panel';
+  document.getElementById('t3Feedback').className = 'feedback-panel';
+  document.querySelectorAll('.verdict-option').forEach(v => v.className='verdict-option');
+  document.querySelectorAll('.k-region').forEach(r => r.className='k-region');
+  state.krugmanSelected = null; state.verdictSelected = null;
+  goTo('screen-landing');
+}
+
+function updateProgress() {
+  const done = (state.t1Done?1:0) + (state.t2Done?1:0) + (state.t3Done?1:0);
+  const pct = (done / 3) * 100;
+  document.getElementById('globalBar').style.width = pct + '%';
+}
+
+// ===== XP SYSTEM =====
+function addXP(amount) {
+  state.xp += amount;
+  document.getElementById('xpDisplay').textContent = state.xp;
+  showXPPopup(amount);
+}
+
+function showXPPopup(amount) {
+  const popup = document.getElementById('xpPopup');
+  popup.textContent = '+' + amount + ' XP';
+  popup.style.display = 'block';
+  popup.style.animation = 'none';
+  setTimeout(() => {
+    popup.style.animation = 'xpFloat 2s ease forwards';
+  }, 10);
+  setTimeout(() => { popup.style.display = 'none'; }, 2000);
+}
+
+function earnBadge(index) {
+  if (state.badges[index]) return;
+  state.badges[index] = true;
+  const bid = 'badge' + (index + 1);
+  document.getElementById(bid).classList.add('earned');
+}
+
+// ===== PUZZLE (RETO 1) =====
+let draggedEl = null;
+
+function initDragDrop() {
+  document.querySelectorAll('#t1Items .resource-item').forEach(item => {
+    item.addEventListener('dragstart', e => {
+      draggedEl = item;
+      item.classList.add('dragging');
+    });
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+    });
+  });
+
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      zone.classList.add('drag-over');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      if (draggedEl) {
+        const catId = 'dz-' + zone.dataset.cat;
+        document.getElementById(catId).appendChild(draggedEl);
+        draggedEl = null;
+      }
+    });
+  });
+}
+
+function startT1Timer() {
+  if (state.t1TimerStarted) return;
+  state.t1TimerStarted = true;
+  state.t1TimerSeconds = 90;
+  const bar = document.getElementById('t1TimerBar');
+  const label = document.getElementById('t1Timer');
+  state.t1TimerInterval = setInterval(() => {
+    state.t1TimerSeconds--;
+    const pct = (state.t1TimerSeconds / 90) * 100;
+    bar.style.width = pct + '%';
+    label.textContent = state.t1TimerSeconds;
+    if (state.t1TimerSeconds <= 30) bar.className = 'timer-fill warning';
+    if (state.t1TimerSeconds <= 10) bar.className = 'timer-fill danger';
+    if (state.t1TimerSeconds <= 0) {
+      clearInterval(state.t1TimerInterval);
+      showFeedback('t1Feedback', false, '⏱ Tiempo agotado', 'Se acabó el tiempo. Recuerda: los recursos renovables (flora, fauna) se regeneran rápido; los no renovables (petróleo, gas, carbón) tardan millones de años; los perpetuos (solar, mareas) nunca se agotan; los potenciales (hidrógeno verde) aún no se usan masivamente. ¡Inténtalo de nuevo!');
+    }
+  }, 1000);
+}
+
+function checkPuzzle() {
+  const correct = {
+    'Petróleo': 'no-renovable',
+    'Energía Solar': 'perpetuo',
+    'Bosques': 'renovable',
+    'Gas Natural': 'no-renovable',
+    'Hidrógeno Verde': 'potencial',
+    'Mareas': 'perpetuo',
+    'Fauna': 'renovable',
+    'Carbón Mineral': 'no-renovable'
+  };
+
+  let score = 0; let total = 8; let wrong = [];
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    const cat = zone.dataset.cat;
+    zone.querySelectorAll('.resource-item').forEach(item => {
+      const res = item.dataset.resource;
+      if (correct[res] === cat) score++;
+      else wrong.push(res + ' → debería ir en: ' + correct[res]);
+    });
+  });
+
+  // count items not dropped
+  const remaining = document.querySelectorAll('#t1Items .resource-item').length;
+
+  if (score === total && remaining === 0) {
+    clearInterval(state.t1TimerInterval);
+    const timeBonus = state.t1TimerSeconds > 60 ? 100 : state.t1TimerSeconds > 30 ? 50 : 0;
+    addXP(150 + timeBonus);
+    earnBadge(0);
+    state.t1Done = true;
+    document.getElementById('btn-to-t2').disabled = false;
+    showFeedback('t1Feedback', true, '🌿 ¡Clasificación perfecta! Insignia de Sostenibilidad desbloqueada', 
+      `Clasificaste correctamente los 8 recursos estratégicos.${timeBonus > 0 ? ' ¡Bonus de velocidad: +' + timeBonus + ' XP adicionales!' : ''} Los recursos energéticos no renovables (petróleo, gas, carbón) son el eje del conflicto geopolítico global, como vimos con la guerra en Ucrania. La transición hacia perpetuos y potenciales es la clave de la sostenibilidad del siglo XXI.`);
+  } else {
+    const penalty = wrong.length * 10;
+    state.xp = Math.max(0, state.xp - penalty);
+    document.getElementById('xpDisplay').textContent = state.xp;
+    const hint = wrong.length > 0 ? 'Errores: ' + wrong.join('; ') : 'Aún hay ' + remaining + ' recursos sin clasificar.';
+    showFeedback('t1Feedback', false, `❌ ${score}/8 correctos | -${penalty} XP`, hint + ' NEXUS te recomienda: revisa la diferencia entre renovables (ciclo corto natural) y perpetuos (fenómeno físico inagotable).');
+  }
+}
+
+function resetPuzzle() {
+  clearInterval(state.t1TimerInterval);
+  state.t1TimerStarted = false;
+  state.t1TimerSeconds = 90;
+  document.getElementById('t1Timer').textContent = '90';
+  document.getElementById('t1TimerBar').style.width = '100%';
+  document.getElementById('t1TimerBar').className = 'timer-fill';
+
+  const items = document.getElementById('t1Items');
+  const resources = [
+    {res:'Petróleo', cat:'no-renovable', icon:'🛢'},
+    {res:'Energía Solar', cat:'perpetuo', icon:'☀️'},
+    {res:'Bosques', cat:'renovable', icon:'🌲'},
+    {res:'Gas Natural', cat:'no-renovable', icon:'💨'},
+    {res:'Hidrógeno Verde', cat:'potencial', icon:'⚗️'},
+    {res:'Mareas', cat:'perpetuo', icon:'🌊'},
+    {res:'Fauna', cat:'renovable', icon:'🐾'},
+    {res:'Carbón Mineral', cat:'no-renovable', icon:'🪨'}
+  ];
+  items.innerHTML = '';
+  resources.forEach(r => {
+    const el = document.createElement('div');
+    el.className = 'resource-item';
+    el.draggable = true;
+    el.dataset.resource = r.res;
+    el.dataset.cat = r.cat;
+    el.innerHTML = r.icon + ' ' + r.res;
+    items.appendChild(el);
+  });
+  ['renovable','no-renovable','perpetuo','potencial'].forEach(cat => {
+    document.getElementById('dz-' + cat).innerHTML = '';
+  });
+  document.getElementById('t1Feedback').className = 'feedback-panel';
+  initDragDrop();
+}
+
+// ===== KRUGMAN SIMULATOR (RETO 2) =====
+function selectRegion(region) {
+  document.querySelectorAll('.k-region').forEach(r => r.classList.remove('selected'));
+  document.querySelector('[data-region="' + region + '"]').classList.add('selected');
+  state.krugmanSelected = region;
+}
+
+function checkKrugman() {
+  if (!state.krugmanSelected) {
+    showFeedback('t2Feedback', false, '⚠️ Selecciona una región primero', 'Haz clic sobre una de las tres regiones del mapa para seleccionarla antes de confirmar.');
+    return;
+  }
+  if (state.krugmanSelected === 'B') {
+    document.querySelector('[data-region="B"]').classList.add('correct');
+    addXP(200);
+    earnBadge(1);
+    state.t2Done = true;
+    document.getElementById('btn-to-t3').disabled = false;
+    showFeedback('t2Feedback', true, '⚙️ ¡Decisión estratégica perfecta! +200 XP', 
+      'Guadalajara, México es la localización óptima según el modelo Krugman. El Silicon Valley Mexicano tiene: (1) Costos de transporte mínimos al mercado norteamericano gracias al T-MEC, (2) Economías de escala por ecosystem tecnológico maduro (Intel, IBM, HP operan ahí), (3) Alta disponibilidad de ingenieros (ITESO, UdeG), (4) Estabilidad regulatoria bajo el marco del T-MEC. Manaos tiene energía barata pero alta distancia al mercado; Bogotá carece del ecosystem maduro. ¡Insignia de Arquitecto Económico desbloqueada!');
+  } else {
+    const penalty = 30;
+    state.xp = Math.max(0, state.xp - penalty);
+    document.getElementById('xpDisplay').textContent = state.xp;
+    const hints = {
+      'A': 'Manaos tiene energía barata pero el costo de transporte al mercado es alto (Amazonía). Krugman enfatiza que la proximidad al mercado es crítica. Además, aunque tiene Zona Franca, el ecosystem tecnológico es mucho más incipiente que en Guadalajara.',
+      'C': 'Bogotá es un mercado emergente interesante pero carece del ecosystem maduro de Guadalajara. El modelo Krugman predice que la aglomeración previa atrae más industria: el Silicon Valley Mexicano ya tiene décadas de ventaja competitiva acumulada. -30 XP.'
+    };
+    showFeedback('t2Feedback', false, '❌ Localización subóptima | -30 XP', hints[state.krugmanSelected] || 'Analiza de nuevo los factores del modelo Krugman: minimizar costos de transporte y maximizar economías de escala por aglomeración.');
+  }
+}
+
+// ===== OMC TRIBUNAL (RETO 3) =====
+function selectVerdict(opt) {
+  document.querySelectorAll('.verdict-option').forEach(v => v.classList.remove('selected'));
+  document.querySelector('[data-opt="' + opt + '"]').classList.add('selected');
+  state.verdictSelected = opt;
+}
+
+function checkVerdict() {
+  if (!state.verdictSelected) {
+    showFeedback('t3Feedback', false, '⚠️ Elige una estrategia legal primero', 'Lee las cuatro opciones y selecciona la que consideres más sólida jurídicamente.');
+    return;
+  }
+
+  const correct = 'B';
+  // D is also partially correct (consultation phase), but B is the complete strategy
+  if (state.verdictSelected === correct) {
+    document.querySelector('[data-opt="B"]').classList.add('correct');
+    addXP(250);
+    earnBadge(2);
+    state.t3Done = true;
+    document.getElementById('btn-to-complete').disabled = false;
+    showFeedback('t3Feedback', true, '🏛️ ¡Estrategia legal ganadora! +250 XP | Diplomático Senior desbloqueado', 
+      'La estrategia B es la más sólida: combina el Panel del OSD (presenta evidencia objetiva de origen) con el T-MEC (más ágil que la OMC para disputas regionales). Los principios de NMF y Trato Nacional son los pilares del derecho comercial internacional. La opción A (aceptar seguridad nacional) sería ceder sin batalla y crear precedente negativo. La C (retaliar) escalaría la disputa comercial dañando la relación bilateral. La D (solo consultas) es correcta como primera fase pero incompleta como estrategia integral.');
+  } else if (state.verdictSelected === 'D') {
+    document.querySelector('[data-opt="D"]').classList.add('correct');
+    addXP(100);
+    showFeedback('t3Feedback', false, '⚖️ Estrategia parcialmente correcta | +100 XP', 
+      'Las consultas bilaterales son el primer paso correcto del proceso OSD. Sin embargo, la estrategia completa (opción B) incluye también la presentación paralela de un panel formal y el uso del T-MEC, que tiene mecanismos más rápidos y específicos para disputas entre los tres países. La opción B integra todas las herramientas disponibles. Continúa al siguiente tema.');
+    state.t3Done = true;
+    document.getElementById('btn-to-complete').disabled = false;
+  } else {
+    const penalty = 40;
+    state.xp = Math.max(0, state.xp - penalty);
+    document.getElementById('xpDisplay').textContent = state.xp;
+    const hints = {
+      'A': 'Invocar la excepción de seguridad nacional (Art. XXI) en nombre del país infractor es un error estratégico: México no impone el arancel, EUA sí. México debe refutar ese argumento presentando evidencia de que el acero es genuinamente mexicano, no "transshipped". -40 XP.',
+      'C': 'La retalición inmediata sin agotar los mecanismos multilaterales viola el espíritu del GATT/OMC y del T-MEC. Además, México exporta más a EUA de lo que importa, por lo que una guerra arancelaria sería asimétrica y dañina para México. -40 XP.'
+    };
+    document.querySelector('[data-opt="' + state.verdictSelected + '"]').classList.add('wrong');
+    showFeedback('t3Feedback', false, '❌ Estrategia incorrecta | -40 XP', hints[state.verdictSelected] || 'Analiza los principios fundamentales de la OMC: NMF, transparencia y solución pacífica de controversias.');
+  }
+}
+
+// ===== FEEDBACK =====
+function showFeedback(id, success, title, body) {
+  const panel = document.getElementById(id);
+  panel.className = 'feedback-panel ' + (success ? 'success' : 'error') + ' show';
+  panel.innerHTML = `<div class="fp-title">${title}</div><div class="fp-body">${body}</div>`;
+}
+
+// ===== MISSION COMPLETE =====
+function completeMission() {
+  const elapsed = Math.floor((Date.now() - state.startTime) / 60000);
+  document.getElementById('finalXP').textContent = state.xp;
+  document.getElementById('finalTime').textContent = elapsed + ' min';
+  goTo('screen-complete');
+}
+
+// ===== BOT =====
+const botContexts = {
+  'landing': '¡Bienvenido, agente! Esta misión tiene 3 temas y 3 desafíos. Gana XP en cada reto y colecciona las 3 insignias para el rango de Diplomático Senior.',
+  't1': 'Estás en el Tema 1. Para el Puzzle de Recursos, recuerda: RENOVABLES se regeneran rápido (flora, fauna), NO RENOVABLES tardan millones de años (fósiles), PERPETUOS son fenómenos físicos inagotables (sol, mareas), POTENCIALES aún no se usan masivamente.',
+  't2': 'En el Simulador Krugman, piensa en dos factores clave: ¿Dónde están mis clientes? (minimizar transporte) y ¿Hay ya un ecosystem industrial que me dé economías de escala? La aglomeración previa es ventaja futura.',
+  't3': 'Para el Tribunal OMC, recuerda los 3 principios fundamentales: Nación Más Favorecida (NMF), Trato Nacional y Transparencia. La estrategia legal más fuerte usa múltiples mecanismos simultáneamente (OMC + T-MEC).',
+  'complete': '¡Misión completada! Has demostrado dominio en geografía económica, organismos internacionales y regulación del comercio global. ¡Excelente trabajo, Arquitecto del Orden Global!'
+};
+
+function toggleBot() {
+  state.botOpen = !state.botOpen;
+  const panel = document.getElementById('botPanel');
+  if (state.botOpen) {
+    panel.classList.add('open');
+    updateBotContext();
+  } else {
+    panel.classList.remove('open');
+  }
+}
+
+function updateBotContext() {
+  const ctx = botContexts[state.currentScreen] || botContexts['landing'];
+  document.getElementById('botMsg').textContent = ctx;
+  const tip = document.getElementById('botTip');
+  if (state.xp === 0 && state.currentScreen === 't1') {
+    tip.style.display = 'block';
+    tip.textContent = '💡 Tip: Inicia el temporizador antes de hacer drag & drop para maximizar el bonus de velocidad.';
+  } else {
+    tip.style.display = 'none';
+  }
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  initDragDrop();
+  updateBotContext();
+});
+</script>
+</body>
+</html>
