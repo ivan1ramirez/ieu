@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introducción a Ventas y Comercialización | Misión Comercial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1b2a;
+  --navy2: #1b2d42;
+  --cream: #f5f0e8;
+  --gold: #c9a84c;
+  --gold-light: #e8c96a;
+  --red: #c0392b;
+  --red-light: #e74c3c;
+  --teal: #1a7a6e;
+  --teal-light: #27ae96;
+  --white: #ffffff;
+  --gray-light: #f0ece4;
+  --gray-mid: #9ca3af;
+  --text-dark: #1a1a2e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+/* HEADER */
+#app-header {
+  background: var(--navy);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid var(--gold);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.header-title span { color: var(--white); font-size: 0.75rem; display: block; font-family: 'DM Sans', sans-serif; font-weight: 300; letter-spacing: 1px; text-transform: uppercase; }
+
+.xp-badge {
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: transform 0.3s;
+}
+.xp-badge.pop { animation: xpPop 0.4s ease; }
+@keyframes xpPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.badges-row { display: flex; gap: 8px; align-items: center; }
+.badge-icon {
+  font-size: 1.4rem;
+  opacity: 0.25;
+  transition: opacity 0.4s, transform 0.4s;
+  cursor: default;
+  filter: grayscale(1);
+}
+.badge-icon.earned {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.15);
+  animation: badgePop 0.5s ease;
+}
+@keyframes badgePop {
+  0% { transform: scale(0.5) rotate(-15deg); }
+  70% { transform: scale(1.3) rotate(5deg); }
+  100% { transform: scale(1.15) rotate(0); }
+}
+
+/* PROGRESS BAR */
+#progress-bar-wrap {
+  background: var(--navy2);
+  height: 6px;
+}
+#progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: 0%;
+  transition: width 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+/* MODULE TABS */
+.module-tabs {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid #d6cfc2;
+  background: var(--cream);
+}
+.tab-btn {
+  padding: 14px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-mid);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--gold); }
+.tab-btn.locked { cursor: not-allowed; opacity: 0.5; }
+.tab-btn .tab-num {
+  display: inline-flex;
+  width: 20px; height: 20px;
+  background: var(--navy);
+  color: var(--gold);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+}
+.tab-btn.locked .tab-num { background: var(--gray-mid); color: #fff; }
+.tab-btn.done .tab-num { background: var(--teal); color: #fff; }
+
+/* SCREENS */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* LANDING */
+.landing-hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: 80px 24px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.landing-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 30%, rgba(201,168,76,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(26,122,110,0.1) 0%, transparent 50%);
+}
+.landing-hero-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.mission-tag {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 2px;
+  margin-bottom: 24px;
+  animation: fadeSlideDown 0.6s ease both;
+}
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.landing-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.15;
+  margin-bottom: 20px;
+  animation: fadeSlideDown 0.6s 0.1s ease both;
+}
+.landing-hero h1 em { font-style: italic; color: var(--gold-light); }
+.landing-hero p {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.75);
+  max-width: 560px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+  animation: fadeSlideDown 0.6s 0.2s ease both;
+}
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeSlideDown 0.6s 0.3s ease both;
+}
+.hero-stat { text-align: center; }
+.hero-stat .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--gold);
+  display: block;
+}
+.hero-stat .lbl {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* MODULE CARDS on landing */
+.module-cards {
+  max-width: 1100px;
+  margin: -40px auto 60px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+.mod-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(13,27,42,0.12);
+  border-top: 4px solid var(--gold);
+  transition: transform 0.25s, box-shadow 0.25s;
+  cursor: default;
+}
+.mod-card:nth-child(2) { border-top-color: var(--teal); }
+.mod-card:nth-child(3) { border-top-color: var(--red); }
+.mod-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(13,27,42,0.18); }
+.mod-card-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--gray-mid);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.mod-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.mod-card p { font-size: 0.9rem; color: #6b7280; line-height: 1.6; margin-bottom: 16px; }
+.mod-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--gray-mid);
+}
+.mod-card-badge { background: var(--gray-light); padding: 4px 10px; border-radius: 10px; }
+
+.start-btn {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 60px;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 16px rgba(201,168,76,0.4);
+}
+.start-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+/* CONTENT AREA */
+.content-area {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+/* SECTION BLOCK */
+.section-block {
+  margin-bottom: 48px;
+  animation: fadeIn 0.5s ease both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  color: var(--navy);
+  margin-bottom: 16px;
+  line-height: 1.25;
+}
+.section-text {
+  font-size: 0.97rem;
+  color: #374151;
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+
+/* INFO CARDS */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.info-card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 20px;
+  border-left: 4px solid var(--teal);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}
+.info-card.gold-border { border-left-color: var(--gold); }
+.info-card.red-border { border-left-color: var(--red); }
+.info-card-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.info-card-title { font-weight: 700; font-size: 0.9rem; color: var(--navy); margin-bottom: 6px; }
+.info-card-text { font-size: 0.85rem; color: #6b7280; line-height: 1.6; }
+
+/* TIMELINE */
+.timeline { position: relative; margin: 24px 0; padding-left: 28px; }
+.timeline::before {
+  content: '';
+  position: absolute; left: 8px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold), var(--teal));
+}
+.timeline-item { position: relative; margin-bottom: 24px; }
+.timeline-dot {
+  position: absolute;
+  left: -24px; top: 4px;
+  width: 12px; height: 12px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 2px solid var(--cream);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+.timeline-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.timeline-content { font-size: 0.9rem; color: #374151; line-height: 1.6; }
+.timeline-content strong { color: var(--navy); }
+
+/* HIGHLIGHT BOX */
+.highlight-box {
+  background: var(--navy);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 24px 0;
+  position: relative;
+  overflow: hidden;
+}
+.highlight-box::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%);
+}
+.highlight-box-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.highlight-box p { font-size: 0.95rem; line-height: 1.7; color: rgba(255,255,255,0.85); }
+.highlight-box strong { color: var(--gold-light); }
+
+/* PRINCIPLES LIST */
+.principles-list { list-style: none; margin: 16px 0; }
+.principles-list li {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid #e5e0d5;
+  align-items: flex-start;
+}
+.principles-list li:last-child { border-bottom: none; }
+.principle-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: var(--navy);
+  color: var(--gold);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.principle-body { flex: 1; }
+.principle-title { font-weight: 700; font-size: 0.9rem; color: var(--navy); margin-bottom: 3px; }
+.principle-desc { font-size: 0.85rem; color: #6b7280; line-height: 1.55; }
+
+/* RETO / CHALLENGE SECTION */
+.reto-section {
+  background: var(--navy);
+  border-radius: 16px;
+  padding: 40px 36px;
+  margin: 48px 0 20px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.reto-section::after {
+  content: '';
+  position: absolute; bottom: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border: 40px solid rgba(201,168,76,0.08);
+  border-radius: 50%;
+}
+.reto-tag {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 2px;
+  margin-bottom: 14px;
+}
+.reto-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: var(--white);
+}
+.reto-desc {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 28px;
+  line-height: 1.65;
+}
+.reto-xp {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+/* DRAG & DROP */
+.dnd-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media(max-width:600px) { .dnd-wrapper { grid-template-columns: 1fr; } }
+
+.dnd-source-pool {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 16px;
+  min-height: 160px;
+}
+.dnd-source-pool h4 {
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 12px;
+}
+
+.dnd-item {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 7px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  cursor: grab;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  user-select: none;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dnd-item:hover { background: rgba(255,255,255,0.2); transform: translateX(4px); }
+.dnd-item.dragging { opacity: 0.5; cursor: grabbing; }
+.dnd-item .item-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--gold);
+  flex-shrink: 0;
+  min-width: 50px;
+}
+
+.dnd-drop-zones { display: flex; flex-direction: column; gap: 8px; }
+.drop-zone {
+  background: rgba(255,255,255,0.05);
+  border: 2px dashed rgba(201,168,76,0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  min-height: 52px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  transition: background 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.drop-zone.drag-over { background: rgba(201,168,76,0.12); border-color: var(--gold); }
+.drop-zone .slot-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--gold-light);
+  flex-shrink: 0;
+  min-width: 24px;
+}
+.drop-zone.has-item {
+  background: rgba(201,168,76,0.08);
+  border-style: solid;
+  border-color: rgba(201,168,76,0.5);
+  color: var(--white);
+}
+
+/* COMPLIANCE SIMULATOR */
+.scenario-card {
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 20px;
+  border-left: 3px solid var(--gold);
+}
+.scenario-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+.scenario-desc { font-size: 0.88rem; color: rgba(255,255,255,0.72); line-height: 1.6; margin-bottom: 16px; }
+
+.compliance-options { display: grid; gap: 12px; }
+.comp-opt {
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 9px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+}
+.comp-opt:hover { background: rgba(255,255,255,0.13); transform: translateX(4px); }
+.comp-opt.selected { border-color: var(--gold); background: rgba(201,168,76,0.12); }
+.comp-opt.correct { border-color: #27ae60; background: rgba(39,174,96,0.15); }
+.comp-opt.wrong { border-color: var(--red); background: rgba(192,57,43,0.15); }
+.opt-letter {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: var(--gold);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+}
+.comp-opt.correct .opt-letter { background: #27ae60; color: #fff; }
+.comp-opt.wrong .opt-letter { background: var(--red); color: #fff; }
+.opt-text { font-size: 0.88rem; line-height: 1.55; color: rgba(255,255,255,0.85); }
+.opt-text strong { color: var(--white); display: block; margin-bottom: 3px; }
+
+/* CRISIS SCENARIO */
+.crisis-scene {
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.crisis-scene p { font-size: 0.92rem; line-height: 1.7; color: rgba(255,255,255,0.85); }
+.crisis-scene .crisis-tag {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin-bottom: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.crisis-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+@media(max-width:560px) { .crisis-paths { grid-template-columns: 1fr; } }
+.crisis-path {
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+.crisis-path:hover { background: rgba(255,255,255,0.13); transform: translateY(-2px); }
+.crisis-path.selected-path { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+.crisis-path-icon { font-size: 1.6rem; margin-bottom: 8px; }
+.crisis-path-title { font-weight: 700; font-size: 0.9rem; color: var(--white); margin-bottom: 5px; }
+.crisis-path-desc { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+.crisis-outcome {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 16px;
+  border-left: 4px solid var(--teal-light);
+  display: none;
+}
+.crisis-outcome.show { display: block; animation: fadeIn 0.4s ease; }
+.crisis-outcome h5 { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: var(--teal-light); }
+.crisis-outcome p { font-size: 0.88rem; color: rgba(255,255,255,0.8); line-height: 1.6; }
+
+/* FEEDBACK PANEL */
+.feedback-panel {
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-top: 16px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.feedback-panel.show { display: block; }
+.feedback-panel.success { background: rgba(39,174,96,0.15); border: 1px solid #27ae60; }
+.feedback-panel.error { background: rgba(192,57,43,0.15); border: 1px solid var(--red); }
+.feedback-panel h5 { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+.feedback-panel.success h5 { color: #2ecc71; }
+.feedback-panel.error h5 { color: #e74c3c; }
+.feedback-panel p { font-size: 0.88rem; color: rgba(255,255,255,0.8); line-height: 1.6; }
+
+/* ACTION BTNS */
+.action-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 11px 28px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-primary:disabled { background: rgba(201,168,76,0.3); color: rgba(13,27,42,0.5); cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: rgba(255,255,255,0.1);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 11px 28px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.18); }
+
+.btn-continue {
+  background: var(--teal);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-continue:hover { background: var(--teal-light); transform: translateX(4px); }
+.btn-continue:disabled { background: rgba(26,122,110,0.3); color: rgba(255,255,255,0.4); cursor: not-allowed; transform: none; }
+
+.nav-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* COMPLETION SCREEN */
+.completion-screen {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 0 24px 80px;
+  text-align: center;
+}
+.completion-icon { font-size: 5rem; margin-bottom: 24px; animation: spinIn 0.6s ease; }
+@keyframes spinIn {
+  from { transform: scale(0) rotate(-90deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+.completion-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+.completion-subtitle { font-size: 1rem; color: #6b7280; line-height: 1.7; margin-bottom: 40px; }
+
+.completion-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+@media(max-width:520px) { .completion-stats { grid-template-columns: 1fr; } }
+
+.stat-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 22px 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.stat-card .big { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 4px; }
+.stat-card .label { font-size: 0.8rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
+
+.completion-badges {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.comp-badge { text-align: center; }
+.comp-badge-icon { font-size: 3rem; margin-bottom: 6px; display: block; animation: badgePop 0.5s ease both; }
+.comp-badge:nth-child(2) .comp-badge-icon { animation-delay: 0.15s; }
+.comp-badge:nth-child(3) .comp-badge-icon { animation-delay: 0.3s; }
+.comp-badge-name { font-size: 0.8rem; color: #6b7280; font-weight: 600; }
+
+.restart-btn {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 13px 36px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.restart-btn:hover { background: var(--navy2); }
+
+/* XP FLOAT */
+.xp-float {
+  position: fixed;
+  top: 70px; right: 24px;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 8px 18px;
+  border-radius: 24px;
+  z-index: 999;
+  pointer-events: none;
+  animation: xpFloatAnim 1.5s ease forwards;
+}
+@keyframes xpFloatAnim {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-60px); }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* MODULE HEADER */
+.module-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  padding: 50px 24px 40px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.module-header::before {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: 300px;
+  background: radial-gradient(circle at right center, rgba(201,168,76,0.12), transparent 60%);
+}
+.module-header-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.module-header-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.module-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin-bottom: 10px;
+}
+.module-header p { font-size: 0.9rem; color: rgba(255,255,255,0.65); max-width: 560px; line-height: 1.65; }
+
+/* RESPONSIVE */
+@media(max-width:600px) {
+  .header-title { font-size: 0.9rem; }
+  .module-cards { margin-top: -20px; }
+  .reto-section { padding: 28px 20px; }
+  .dnd-wrapper { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- XP FLOAT CONTAINER -->
+<div id="xp-float-container"></div>
+
+<!-- HEADER -->
+<header id="app-header">
+  <div class="header-inner">
+    <div class="header-title">
+      <span>Misión Comercial</span>
+      IVC — Bloque 1
+    </div>
+    <div class="badges-row">
+      <span class="badge-icon" id="badge-0" title="Cronista del Comercio">🏺</span>
+      <span class="badge-icon" id="badge-1" title="Diplomático de Ventas">🤝</span>
+      <span class="badge-icon" id="badge-2" title="Estratega Global">🌐</span>
+    </div>
+    <div class="xp-badge" id="xp-display">0 XP</div>
+  </div>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+</header>
+
+<!-- MODULE TABS -->
+<nav>
+  <div class="module-tabs">
+    <button class="tab-btn active" id="tab-0" onclick="goToScreen('landing')">
+      <span class="tab-num">★</span> Inicio
+    </button>
+    <button class="tab-btn locked" id="tab-1" onclick="goToModule(1)">
+      <span class="tab-num">1</span> Orígenes
+    </button>
+    <button class="tab-btn locked" id="tab-2" onclick="goToModule(2)">
+      <span class="tab-num">2</span> Marco Regulatorio
+    </button>
+    <button class="tab-btn locked" id="tab-3" onclick="goToModule(3)">
+      <span class="tab-num">3</span> Tendencias
+    </button>
+    <button class="tab-btn locked" id="tab-4" onclick="goToScreen('complete')">
+      <span class="tab-num">✓</span> Certificado
+    </button>
+  </div>
+</nav>
+
+<!-- ======================== LANDING SCREEN ======================== -->
+<div class="screen active" id="screen-landing">
+  <div class="landing-hero">
+    <div class="landing-hero-inner">
+      <div class="mission-tag">🚀 Misión Académica Activa</div>
+      <h1>Administración de Ventas &amp; <em>Gobernanza Global</em></h1>
+      <p>Explora la evolución del comercio desde el trueque hasta la OMC, domina las funciones de la gerencia moderna y aplica tus conocimientos en retos gamificados de nivel universitario.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="num">3</span><span class="lbl">Módulos</span></div>
+        <div class="hero-stat"><span class="num">3</span><span class="lbl">Retos</span></div>
+        <div class="hero-stat"><span class="num">600</span><span class="lbl">XP totales</span></div>
+        <div class="hero-stat"><span class="num">60'</span><span class="lbl">Duración</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="module-cards">
+    <div class="mod-card">
+      <div class="mod-card-num">Módulo 01 · 20 min</div>
+      <h3>Orígenes y Evolución</h3>
+      <p>Del trueque en Mesopotamia (3000 a.C.) al surgimiento de la ONU y el GATT post-Segunda Guerra Mundial. La historia que conecta el comercio con el orden internacional.</p>
+      <div class="mod-card-footer">
+        <span class="mod-card-badge">🏺 Cronista del Comercio</span>
+        <span>200 XP</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-card-num">Módulo 02 · 20 min</div>
+      <h3>Marco Regulatorio y Estrategia</h3>
+      <p>Funciones de la administración de ventas dentro del ecosistema normativo global. La personalidad jurídica de los Organismos Internacionales y su impacto en las estrategias comerciales.</p>
+      <div class="mod-card-footer">
+        <span class="mod-card-badge">🤝 Diplomático de Ventas</span>
+        <span>200 XP</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-card-num">Módulo 03 · 20 min</div>
+      <h3>Tendencias y Casos Actuales</h3>
+      <p>Gerencia moderna, comercio digital, impacto de la Guerra en Ucrania sobre cadenas de suministro y la reinvención del proceso de ventas en la era post-COVID-19.</p>
+      <div class="mod-card-footer">
+        <span class="mod-card-badge">🌐 Estratega Global</span>
+        <span>200 XP</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startMission()">Iniciar Misión →</button>
+</div>
+
+<!-- ======================== MODULE 1 SCREEN ======================== -->
+<div class="screen" id="screen-m1">
+  <div class="module-header">
+    <div class="module-header-inner">
+      <div class="module-header-num">Módulo 01 / Orígenes y Evolución</div>
+      <h2>Del Trueque al Orden Comercial Internacional</h2>
+      <p>Comprende cómo la actividad comercial humana evolucionó paralelamente con la construcción de un marco institucional global.</p>
+    </div>
+  </div>
+
+  <div class="content-area">
+
+    <div class="section-block">
+      <div class="section-label">1.1 · Antecedentes históricos</div>
+      <h2 class="section-title">Los Cimientos del Comercio</h2>
+      <p class="section-text">La comercialización es un proceso que se remonta a tiempos ancestrales. El <strong>trueque</strong> —primer sistema de comercialización— surgió en las plazas de los pueblos hacia el <strong>año 3000 a.C. en Mesopotamia Asiática</strong>, donde se realizaba el canje de barras de oro y plata, así como de otros metales. Su objetivo central era generar convivencia armónica por medio del intercambio de bienes, tomando como referencia la oferta y la demanda.</p>
+      <p class="section-text">Con la aparición de la <strong>agricultura, la alfarería y la escritura</strong> (ca. 1100 a.C.), las formas de comercialización se complejizaron. El uso de vías marítimas permitió que productos de otras partes del mundo pudieran intercambiarse, sentando las bases del comercio internacional.</p>
+    </div>
+
+    <div class="section-block">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">3000 a.C.</div>
+          <div class="timeline-content"><strong>El Trueque en Mesopotamia:</strong> Primera forma de comercialización organizada. El valor se determinaba por unidades físicas, no monetarias.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1100 a.C.</div>
+          <div class="timeline-content"><strong>Escritura y Ventas:</strong> La aparición de la escritura transforma los sistemas de registro comercial y la forma de acordar transacciones.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">s. XIX</div>
+          <div class="timeline-content"><strong>Revolución Industrial (EUA):</strong> El ferrocarril expande la colonización y transforma al país de agrario a industrial en siete décadas. La guerra civil detiene brevemente la expansión, pero impulsa transporte, economía y demografía.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1945</div>
+          <div class="timeline-content"><strong>Surgimiento de la ONU:</strong> Tras la Segunda Guerra Mundial, los países crean organismos internacionales para garantizar la paz, la cooperación y el orden comercial global.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1947</div>
+          <div class="timeline-content"><strong>Creación del GATT:</strong> El Acuerdo General sobre Aranceles Aduaneros y Comercio es firmado por 23 países como primer marco multilateral del comercio internacional post-bélico.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1960–70s</div>
+          <div class="timeline-content"><strong>Era industrial y abundancia:</strong> Nueva fase de la revolución industrial. EUA se consolida como potencia mundial. Los 80s traen trastornos en la economía internacional.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1995</div>
+          <div class="timeline-content"><strong>Nace la OMC:</strong> La Organización Mundial del Comercio reemplaza al GATT, con sede en Ginebra y personalidad jurídica plena como organismo internacional.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Hoy</div>
+          <div class="timeline-content"><strong>Bitcoin y comercio digital:</strong> El ingreso de la moneda digital ha revolucionado la forma en que se hacen intercambios dentro de la Red, siendo el ejemplo más reciente de la evolución constante de los sistemas de comercialización.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label">Conexión clave</div>
+      <h2 class="section-title">¿Qué son los Organismos Internacionales?</h2>
+      <p class="section-text">Los Organismos Internacionales (OI) son entidades creadas mediante tratados entre Estados para cumplir funciones específicas en el ámbito global. Su surgimiento responde a la misma necesidad que impulsó el comercio ancestral: <strong>regular las relaciones entre actores para garantizar convivencia armónica y beneficio mutuo</strong>.</p>
+
+      <div class="highlight-box">
+        <div class="highlight-box-label">📌 Personalidad Jurídica Internacional</div>
+        <p>Los Organismos Internacionales gozan de <strong>personalidad jurídica propia</strong>: pueden firmar tratados, demandar y ser demandados, poseer bienes y celebrar contratos. Esta capacidad —análoga a la de una empresa dentro de su mercado— les permite operar como actores independientes en el escenario global, dictando las reglas bajo las cuales se mueve el <strong>comercio internacional que afecta directamente a las estrategias de ventas de toda empresa exportadora</strong>.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card gold-border">
+          <div class="info-card-icon">🏛️</div>
+          <div class="info-card-title">OI Intergubernamentales</div>
+          <div class="info-card-text">Formados por Estados miembros (ONU, OMC, FMI). Establecen normas vinculantes para el comercio internacional.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🌱</div>
+          <div class="info-card-title">ONG Internacionales</div>
+          <div class="info-card-text">Integradas por organizaciones civiles o privadas. Influyen en políticas pero sin poder coercitivo directo.</div>
+        </div>
+        <div class="info-card red-border">
+          <div class="info-card-icon">⚖️</div>
+          <div class="info-card-title">Por función comercial</div>
+          <div class="info-card-text">Organismos especializados en el comercio global (OMC), finanzas (FMI), desarrollo (BM) y normas laborales (OIT).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETO 1 -->
+    <div class="reto-section" id="reto-1">
+      <div class="reto-tag">⚡ Desafío de Misión 1</div>
+      <h3 class="reto-title">Cronología Interactiva</h3>
+      <p class="reto-desc">Arrastra cada hito hacia su posición correcta en la línea del tiempo. Ordena los eventos del más antiguo al más reciente para revelar la cadena que conecta el trueque con el orden comercial global moderno.</p>
+      <div class="reto-xp">🏆 Recompensa: +200 XP · Insignia 🏺 Cronista del Comercio</div>
+
+      <div class="dnd-wrapper">
+        <div>
+          <div class="dnd-source-pool">
+            <h4>Eventos disponibles</h4>
+            <div id="dnd-pool">
+              <div class="dnd-item" draggable="true" data-id="gatt" data-order="5"><span class="item-year">1947</span> Creación del GATT (23 países)</div>
+              <div class="dnd-item" draggable="true" data-id="trueque" data-order="1"><span class="item-year">3000 a.C.</span> El Trueque en Mesopotamia</div>
+              <div class="dnd-item" draggable="true" data-id="escritura" data-order="2"><span class="item-year">1100 a.C.</span> Escritura y comercio formal</div>
+              <div class="dnd-item" draggable="true" data-id="ferrocarril" data-order="3"><span class="item-year">s. XIX</span> Ferrocarril y expansión industrial</div>
+              <div class="dnd-item" draggable="true" data-id="onu" data-order="4"><span class="item-year">1945</span> Fundación de la ONU</div>
+              <div class="dnd-item" draggable="true" data-id="omc" data-order="6"><span class="item-year">1995</span> Nace la OMC (Ginebra)</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">Línea del tiempo</h4>
+          <div class="dnd-drop-zones" id="dnd-zones">
+            <div class="drop-zone" data-slot="1"><span class="slot-label">①</span><span class="slot-placeholder">Hito más antiguo</span></div>
+            <div class="drop-zone" data-slot="2"><span class="slot-label">②</span><span class="slot-placeholder">Segundo hito</span></div>
+            <div class="drop-zone" data-slot="3"><span class="slot-label">③</span><span class="slot-placeholder">Tercer hito</span></div>
+            <div class="drop-zone" data-slot="4"><span class="slot-label">④</span><span class="slot-placeholder">Cuarto hito</span></div>
+            <div class="drop-zone" data-slot="5"><span class="slot-label">⑤</span><span class="slot-placeholder">Quinto hito</span></div>
+            <div class="drop-zone" data-slot="6"><span class="slot-label">⑥</span><span class="slot-placeholder">Hito más reciente</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-primary" onclick="checkDnD()">Verificar orden</button>
+        <button class="btn-secondary" onclick="resetDnD()">↺ Reiniciar</button>
+      </div>
+      <div class="feedback-panel" id="feedback-1"></div>
+    </div>
+
+  </div>
+  <div class="nav-row">
+    <button class="btn-continue" id="continue-1" disabled onclick="goToModule(2)">Módulo 2: Marco Regulatorio →</button>
+  </div>
+</div>
+
+<!-- ======================== MODULE 2 SCREEN ======================== -->
+<div class="screen" id="screen-m2">
+  <div class="module-header" style="background:linear-gradient(135deg,#1a2e3b,#0d2233);">
+    <div class="module-header-inner">
+      <div class="module-header-num">Módulo 02 / Marco Regulatorio y Estrategia</div>
+      <h2>Administración de Ventas en el Contexto Normativo Global</h2>
+      <p>Las funciones del gerente de ventas no operan en un vacío: están enmarcadas por principios internacionales que dictan las reglas del comercio transfronterizo.</p>
+    </div>
+  </div>
+
+  <div class="content-area">
+
+    <div class="section-block">
+      <div class="section-label">1.2 · Concepto y funciones</div>
+      <h2 class="section-title">¿Qué es la Administración de Ventas?</h2>
+      <p class="section-text">Para la <strong>American Marketing Association</strong> (citada en Johnston &amp; Marshall, 2009), la administración de ventas es <em>"el proceso personal o impersonal de persuadir y ayudar a un cliente potencial para que adquiera un bien o para que actúe favorablemente sobre una idea que tiene importancia comercial sobre el vendedor"</em>.</p>
+      <p class="section-text">Su objetivo fundamental es la dirección del personal, las relaciones con estos, y todo el proceso de organizar la <strong>fuerza de ventas</strong>: desde el reclutamiento hasta la evaluación del desempeño y las medidas correctivas. En un entorno de comercio globalizado, estas funciones deben alinearse con los marcos normativos internacionales.</p>
+    </div>
+
+    <div class="section-block">
+      <h2 class="section-title">Las 5 Funciones Clásicas del Gerente de Ventas</h2>
+      <ul class="principles-list">
+        <li>
+          <div class="principle-num">1</div>
+          <div class="principle-body">
+            <div class="principle-title">Planeación</div>
+            <div class="principle-desc">Diseño de planes de ventas donde se fijan objetivos, se determinan políticas, programas y campañas. En contexto global: debe considerar los acuerdos comerciales vigentes (T-MEC, UE) y las restricciones arancelarias de la OMC.</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">2</div>
+          <div class="principle-body">
+            <div class="principle-title">Organización</div>
+            <div class="principle-desc">Gestión de las relaciones entre vendedores y clientes. Puede ser por territorios, sectores o clientes (modelo tradicional) o mediante teams especializados (perfil técnico, inside sales, soporte).</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">3</div>
+          <div class="principle-body">
+            <div class="principle-title">Personal</div>
+            <div class="principle-desc">Criterios de selección, entrenamiento, evaluación del desempeño y programas de compensación. El gerente es un capacitador y motivador de la fuerza de ventas.</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">4</div>
+          <div class="principle-body">
+            <div class="principle-title">Dirección</div>
+            <div class="principle-desc">Disposición y supervisión de vendedores y colaboradores. Requiere habilidades de liderazgo, comunicación, manejo de conflictos y delegación efectiva.</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">5</div>
+          <div class="principle-body">
+            <div class="principle-title">Control</div>
+            <div class="principle-desc">Vigilar que los resultados se logren en el tiempo determinado, detectar fallas y áreas de oportunidad. En mercados internacionales incluye monitorear el cumplimiento regulatorio (aduanas, certificaciones, normativas OMC).</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label">Marco normativo global</div>
+      <h2 class="section-title">Los Principios de la OMC y el Impacto en las Ventas</h2>
+      <p class="section-text">Para cualquier empresa que opere en mercados internacionales, los <strong>principios del GATT/OMC</strong> son restricciones y oportunidades que el departamento de ventas debe conocer. La <em>personalidad jurídica</em> de la OMC le permite firmar acuerdos vinculantes con sus 164 países miembros.</p>
+
+      <div class="info-grid">
+        <div class="info-card gold-border">
+          <div class="info-card-icon">⚖️</div>
+          <div class="info-card-title">Nación Más Favorecida (NMF)</div>
+          <div class="info-card-text">Un país no puede dar condiciones comerciales mejores a un socio sin extenderlas a todos. Para ventas: implica que tu empresa compite en igualdad de condiciones en los mercados de los países miembros.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🏠</div>
+          <div class="info-card-title">Trato Nacional</div>
+          <div class="info-card-text">Los productos importados deben recibir el mismo trato que los nacionales una vez dentro del país. Protege a las empresas exportadoras de discriminación en el mercado destino.</div>
+        </div>
+        <div class="info-card red-border">
+          <div class="info-card-icon">🔍</div>
+          <div class="info-card-title">Transparencia</div>
+          <div class="info-card-text">Los países deben publicar sus normas comerciales y notificar cambios. Para ventas: permite planear estrategias con información confiable sobre barreras arancelarias y normativas.</div>
+        </div>
+        <div class="info-card gold-border">
+          <div class="info-card-icon">🤜🤛</div>
+          <div class="info-card-title">Reciprocidad</div>
+          <div class="info-card-text">Principio de concesiones mutuas. Los acuerdos como el T-MEC se basan en este principio: México accede al mercado norteamericano a cambio de apertura recíproca.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETO 2 -->
+    <div class="reto-section" id="reto-2" style="background:linear-gradient(135deg,#0d2233,#1a2e3b);">
+      <div class="reto-tag">⚡ Desafío de Misión 2</div>
+      <h3 class="reto-title">Simulador de Cumplimiento OMC</h3>
+      <p class="reto-desc">Eres el Gerente de Ventas Internacionales de <strong>MexTech S.A.</strong>, empresa fabricante de componentes electrónicos. Evalúa las estrategias propuestas y determina cuáles cumplen con los principios de la OMC (Transparencia, No Discriminación, NMF).</p>
+      <div class="reto-xp">🏆 Recompensa: +200 XP · Insignia 🤝 Diplomático de Ventas</div>
+
+      <div class="scenario-card">
+        <div class="scenario-title">📋 Escenario: Estrategia de Precios para Mercados de EUA, Canadá y Brasil</div>
+        <div class="scenario-desc">Tu director general propone la siguiente política comercial: ofrecer precios preferenciales exclusivos (30% de descuento) solo a clientes de EUA, alegando que son el mercado prioritario. Para Brasil y Canadá se aplicarán condiciones estándar sin descuento, aunque son miembros plenos de la OMC. Además, propone no publicar el catálogo de precios internacionales para "proteger información competitiva".</div>
+      </div>
+
+      <div class="compliance-options" id="compliance-opts">
+        <div class="comp-opt" data-correct="false" onclick="selectCompliance(this, false)">
+          <div class="opt-letter">A</div>
+          <div class="opt-text">
+            <strong>✅ Estrategia válida y recomendable</strong>
+            Esta política es legítima porque cada empresa puede elegir libremente a qué mercados priorizar. La confidencialidad de precios es una práctica comercial común.
+          </div>
+        </div>
+        <div class="comp-opt" data-correct="true" onclick="selectCompliance(this, true)">
+          <div class="opt-letter">B</div>
+          <div class="opt-text">
+            <strong>❌ Incumple principios OMC — Requiere rediseño</strong>
+            Viola el principio de NMF (dar condiciones preferentes solo a EUA discrimina a Canadá y Brasil) y el de Transparencia (ocultar precios). Se recomienda una política de precios uniforme y publicar listas de precios accesibles.
+          </div>
+        </div>
+        <div class="comp-opt" data-correct="false" onclick="selectCompliance(this, false)">
+          <div class="opt-letter">C</div>
+          <div class="opt-text">
+            <strong>⚠️ Parcialmente válida — Solo ajustar la transparencia</strong>
+            La discriminación de precios entre países es permitida mientras los productos sean diferentes. Solo necesita publicar los precios para cumplir con la OMC.
+          </div>
+        </div>
+        <div class="comp-opt" data-correct="false" onclick="selectCompliance(this, false)">
+          <div class="opt-letter">D</div>
+          <div class="opt-text">
+            <strong>✅ Válida, la OMC no regula empresas privadas</strong>
+            Las normas de la OMC solo aplican a gobiernos, no a empresas. MexTech puede implementar cualquier política de precios sin restricciones internacionales.
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-panel" id="feedback-2"></div>
+    </div>
+
+  </div>
+  <div class="nav-row">
+    <button class="btn-continue" id="continue-2" disabled onclick="goToModule(3)">Módulo 3: Tendencias Modernas →</button>
+  </div>
+</div>
+
+<!-- ======================== MODULE 3 SCREEN ======================== -->
+<div class="screen" id="screen-m3">
+  <div class="module-header" style="background:linear-gradient(135deg,#1a0d2e,#2d1b42);">
+    <div class="module-header-inner">
+      <div class="module-header-num">Módulo 03 / Tendencias y Casos Actuales</div>
+      <h2>Gerencia Moderna Frente a la Gobernanza Global</h2>
+      <p>La pandemia, los conflictos bélicos y la digitalización han redefinido las reglas del juego. El gerente de ventas del siglo XXI debe navegar estas disrupciones con visión estratégica.</p>
+    </div>
+  </div>
+
+  <div class="content-area">
+
+    <div class="section-block">
+      <div class="section-label">1.4 · Gerencia moderna</div>
+      <h2 class="section-title">Tendencias de la Gerencia de Ventas</h2>
+      <p class="section-text">Según Ferrín (2018), <em>"las nuevas tendencias gerenciales exigen flexibilidad, adaptación y disposición al trabajo en equipo"</em>. El gerente de ventas moderno trasciende la simple supervisión de cuotas: debe ser un líder estratégico consciente del entorno global.</p>
+
+      <div class="info-grid">
+        <div class="info-card gold-border">
+          <div class="info-card-icon">🎯</div>
+          <div class="info-card-title">Pensamiento Prospectivo</div>
+          <div class="info-card-text">Visión estratégica orientada al futuro. Las decisiones del gerente deben anticipar escenarios de disrupciones globales: pandemias, conflictos, cambios arancelarios.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">💡</div>
+          <div class="info-card-title">Innovación Continua</div>
+          <div class="info-card-text">Transformaciones en productos, servicios y procesos. En ventas: adopción de CRM, ventas digitales, automatización y análisis de datos.</div>
+        </div>
+        <div class="info-card red-border">
+          <div class="info-card-icon">🌍</div>
+          <div class="info-card-title">Globalización e Internacionalización</div>
+          <div class="info-card-text">Expansión de fronteras comerciales. Requiere conocimiento de los marcos regulatorios (OMC, bloques regionales) y adaptación cultural de la estrategia de ventas.</div>
+        </div>
+        <div class="info-card gold-border">
+          <div class="info-card-icon">♻️</div>
+          <div class="info-card-title">Responsabilidad Social Empresarial</div>
+          <div class="info-card-text">En la actualidad es casi obligatorio que una empresa sea socialmente responsable. Las ventas éticas y sostenibles son un diferenciador competitivo en mercados globales.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label">Casos de disrupción global</div>
+      <h2 class="section-title">Retos de Gobernanza que Impactan las Ventas</h2>
+
+      <div class="highlight-box" style="background:linear-gradient(135deg,#1a0d2e,#2d1b42);margin-bottom:20px;">
+        <div class="highlight-box-label">🦠 Caso: COVID-19 y el Proceso de Ventas</div>
+        <p>La pandemia (2020-2022) impuso el mayor experimento de digitalización de ventas en la historia. Las empresas que sobrevivieron adoptaron <strong>ventas remotas, e-commerce B2B, y CRM digitales</strong>. La OMS coordinó el programa COVAX y el FMI aprobó $650B en derechos especiales de giro, pero las cadenas de suministro interrumpidas obligaron a los gerentes de ventas a <strong>rediseñar procesos completos</strong>: desde la prospección hasta el posventa, todo migró a canales digitales.</p>
+      </div>
+
+      <div class="highlight-box" style="background:linear-gradient(135deg,#2e1a0d,#3b2a1a);margin-bottom:20px;">
+        <div class="highlight-box-label">⚔️ Caso: Guerra en Ucrania — Impacto en Suministros</div>
+        <p>El conflicto iniciado en 2022 demostró la fragilidad de las cadenas de valor globales. Ucrania y Rusia representan el <strong>28% del trigo mundial, 15% del maíz y 13% de los fertilizantes globales</strong>. Para los gerentes de ventas en agroindustria, alimentos, energía y manufactura, esto implicó: <strong>actualizar estrategias de precios</strong> ante inflación de insumos (+20% FAO), diversificar proveedores y reconfigurar rutas logísticas. El Mecanismo de Solución de Diferencias de la OMC procesó múltiples disputas derivadas de sanciones y restricciones a exportaciones.</p>
+      </div>
+
+      <div class="highlight-box" style="background:linear-gradient(135deg,#0d2e1a,#1a3b2a);">
+        <div class="highlight-box-label">💻 Caso: Comercio Digital y Nearshoring en México</div>
+        <p>El T-MEC 2020 modernizó el TLCAN incorporando regulaciones de <strong>comercio digital, propiedad intelectual y derechos laborales</strong>. México se posicionó como segundo exportador hacia EUA. La guerra comercial EUA-China (+145% aranceles) impulsó el <strong>nearshoring</strong>: empresas reubican operaciones de Asia a México, generando una oportunidad de ~$50,000M USD en inversión. Los equipos de ventas deben entender este nuevo contexto para identificar prospectos y adaptar propuestas de valor.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label">1.5 · Proceso de ventas</div>
+      <h2 class="section-title">El Proceso de Ventas Adaptado a Entornos Disruptivos</h2>
+      <p class="section-text">Torres (2014) propone un proceso de ventas de 5 fases que, en el contexto actual, debe integrarse con el enfoque de <strong>ventas basadas en la confianza</strong> de Avila, LaForge e Ingram (2016). La diferencia clave: en entornos disruptivos, la confianza no puede construirse en un solo encuentro, sino que requiere consistencia sostenida.</p>
+
+      <ul class="principles-list">
+        <li>
+          <div class="principle-num">1</div>
+          <div class="principle-body">
+            <div class="principle-title">Prospección y Calificación</div>
+            <div class="principle-desc">Identificar, calificar y priorizar clientes potenciales. En post-COVID: herramientas digitales (LinkedIn Sales Navigator, CRM) amplían el alcance global sin presencia física.</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">2</div>
+          <div class="principle-body">
+            <div class="principle-title">Contacto e Inicio del Proceso</div>
+            <div class="principle-desc">El vendedor debe conocer al cliente (¿quién es?, ¿qué quiere?, ¿sus aspiraciones?). En crises globales, el primer contacto debe demostrar que la empresa tiene soluciones para los nuevos dolores del cliente (disrupciones de suministro, incertidumbre).</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">3</div>
+          <div class="principle-body">
+            <div class="principle-title">Presentación</div>
+            <div class="principle-desc">El objetivo es llegar al cierre. En ventas complejas, requiere varias visitas (ahora videoconferencias). La propuesta debe integrar cómo el producto/servicio mitiga los riesgos geopolíticos identificados.</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">4</div>
+          <div class="principle-body">
+            <div class="principle-title">Manejo de Objeciones</div>
+            <div class="principle-desc">Las objeciones en contextos de crisis añaden dimensiones nuevas: incertidumbre cambiaria, sanciones internacionales, restricciones de importación. El vendedor debe estar preparado con información actualizada sobre el marco OMC/GATT.</div>
+          </div>
+        </li>
+        <li>
+          <div class="principle-num">5</div>
+          <div class="principle-body">
+            <div class="principle-title">Cierre y Actividades Posventa</div>
+            <div class="principle-desc">El vendedor no solo cierra: garantiza la entrega en contextos de logística disruptida, monitorea la satisfacción y construye relaciones a largo plazo que sobrevivan los ciclos de crisis.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- RETO 3 -->
+    <div class="reto-section" id="reto-3" style="background:linear-gradient(135deg,#1a0d2e,#1a2e1a);">
+      <div class="reto-tag">⚡ Desafío de Misión 3</div>
+      <h3 class="reto-title">Resolución de Crisis: Elige tu Estrategia</h3>
+      <p class="reto-desc">Eres el Gerente de Ventas Internacionales de <strong>AgroMex Exportaciones</strong>, empresa proveedora de granos para Europa. Es febrero de 2022 y el conflicto en Ucrania acaba de iniciar. Tu mayor competidor abastece el 40% del mercado europeo desde esa región. Tienes 48 horas para decidir.</p>
+      <div class="reto-xp">🏆 Recompensa: +200 XP · Insignia 🌐 Estratega Global</div>
+
+      <div class="crisis-scene">
+        <span class="crisis-tag">🚨 Alerta geopolítica</span>
+        <p>Los puertos del Mar Negro están bloqueados. Los contratos de entrega en Europa no pueden cumplirse desde Ucrania. El precio del trigo sube 30% en 48 horas. Tus clientes europeos —que aún no tienen contrato contigo— están desesperados buscando proveedores alternativos. Tienes capacidad de producción disponible, pero tu precio estándar era 20% mayor al ucraniano antes del conflicto.</p>
+      </div>
+
+      <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);margin-bottom:16px;">¿Cuál es tu movimiento estratégico?</p>
+
+      <div class="crisis-paths" id="crisis-options">
+        <div class="crisis-path" onclick="selectCrisis(this, 'A')">
+          <div class="crisis-path-icon">📈</div>
+          <div class="crisis-path-title">A. Especulación de Precio</div>
+          <div class="crisis-path-desc">Subir precios un 40% aprovechando la escasez y maximizar ingresos a corto plazo. El mercado dicta el precio.</div>
+        </div>
+        <div class="crisis-path" onclick="selectCrisis(this, 'B')">
+          <div class="crisis-path-icon">🤝</div>
+          <div class="crisis-path-title">B. Alianza Estratégica + Precio Justo</div>
+          <div class="crisis-path-desc">Contactar proactivamente a clientes europeos, ofrecer contratos a largo plazo con precio estable (+10% ajuste por costos logísticos) y garantía de suministro.</div>
+        </div>
+        <div class="crisis-path" onclick="selectCrisis(this, 'C')">
+          <div class="crisis-path-icon">⏳</div>
+          <div class="crisis-path-title">C. Esperar y observar</div>
+          <div class="crisis-path-desc">No actuar hasta que el mercado se estabilice. La incertidumbre es demasiado alta para comprometerse ahora.</div>
+        </div>
+        <div class="crisis-path" onclick="selectCrisis(this, 'D')">
+          <div class="crisis-path-icon">🔄</div>
+          <div class="crisis-path-title">D. Diversificación Express</div>
+          <div class="crisis-path-desc">Contactar múltiples regiones simultáneamente (Asia, LATAM, Europa) con propuestas personalizadas y ajuste de portafolio según demanda.</div>
+        </div>
+      </div>
+
+      <div class="crisis-outcome" id="crisis-result"></div>
+      <div class="feedback-panel" id="feedback-3"></div>
+    </div>
+
+  </div>
+  <div class="nav-row">
+    <button class="btn-continue" id="continue-3" disabled onclick="goToScreen('complete')">Ver mi Certificado →</button>
+  </div>
+</div>
+
+<!-- ======================== COMPLETION SCREEN ======================== -->
+<div class="screen" id="screen-complete">
+  <div class="completion-screen">
+    <div class="completion-icon">🏆</div>
+    <h2 class="completion-title">¡Misión Completada!</h2>
+    <p class="completion-subtitle">Has demostrado dominio en Administración de Ventas y Gobernanza Comercial Internacional. Tu comprensión de los marcos históricos, regulatorios y estratégicos te posiciona como un <strong>profesional de ventas globalmente competente</strong>.</p>
+
+    <div class="completion-stats">
+      <div class="stat-card">
+        <div class="big" id="final-xp">600</div>
+        <div class="label">XP Ganados</div>
+      </div>
+      <div class="stat-card">
+        <div class="big">3/3</div>
+        <div class="label">Retos Completados</div>
+      </div>
+      <div class="stat-card">
+        <div class="big" id="final-time">—</div>
+        <div class="label">Tiempo Total</div>
+      </div>
+    </div>
+
+    <div class="completion-badges">
+      <div class="comp-badge">
+        <span class="comp-badge-icon">🏺</span>
+        <div class="comp-badge-name">Cronista del Comercio</div>
+      </div>
+      <div class="comp-badge">
+        <span class="comp-badge-icon">🤝</span>
+        <div class="comp-badge-name">Diplomático de Ventas</div>
+      </div>
+      <div class="comp-badge">
+        <span class="comp-badge-icon">🌐</span>
+        <div class="comp-badge-name">Estratega Global</div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border-radius:12px;padding:28px;margin-bottom:32px;border:2px solid var(--gold);text-align:left;">
+      <div style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;">Competencias Demostradas</div>
+      <ul style="list-style:none;font-size:0.9rem;color:#374151;line-height:2;">
+        <li>✅ Análisis histórico del comercio y surgimiento de OI</li>
+        <li>✅ Aplicación de principios OMC/GATT en estrategias de ventas</li>
+        <li>✅ Funciones de la administración de ventas (Torres, 2014)</li>
+        <li>✅ Adaptación del proceso de ventas ante disrupciones globales</li>
+        <li>✅ Toma de decisiones estratégicas en contextos geopolíticos</li>
+      </ul>
+    </div>
+
+    <button class="restart-btn" onclick="restartMission()">↺ Repetir Misión</button>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+const state = {
+  xp: 0,
+  badges: [false, false, false],
+  m1Done: false,
+  m2Done: false,
+  m3Done: false,
+  startTime: Date.now(),
+  dndZoneData: {},    // slot -> {id, order, text}
+  crisisChoice: null,
+  complianceAnswered: false
+};
+
+// ============ NAVIGATION ============
+function goToScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+  updateTabs(id);
+}
+
+function goToModule(n) {
+  const tabs = document.querySelectorAll('.tab-btn');
+  if (tabs[n].classList.contains('locked')) return;
+  goToScreen('m' + n);
+}
+
+function startMission() {
+  unlockTab(1);
+  goToScreen('m1');
+}
+
+function unlockTab(n) {
+  const tab = document.getElementById('tab-' + n);
+  if (tab) {
+    tab.classList.remove('locked');
+  }
+}
+
+function updateTabs(screen) {
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  if (screen === 'landing') document.getElementById('tab-0').classList.add('active');
+  else if (screen === 'm1') document.getElementById('tab-1').classList.add('active');
+  else if (screen === 'm2') document.getElementById('tab-2').classList.add('active');
+  else if (screen === 'm3') document.getElementById('tab-3').classList.add('active');
+  else if (screen === 'complete') document.getElementById('tab-4').classList.add('active');
+}
+
+// ============ XP + BADGES ============
+function addXP(amount) {
+  state.xp += amount;
+  const display = document.getElementById('xp-display');
+  display.textContent = state.xp + ' XP';
+  display.classList.remove('pop');
+  void display.offsetWidth;
+  display.classList.add('pop');
+  updateProgress();
+  showXPFloat('+' + amount + ' XP');
+}
+
+function showXPFloat(text) {
+  const el = document.createElement('div');
+  el.className = 'xp-float';
+  el.textContent = text;
+  document.getElementById('xp-float-container').appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
+function earnBadge(index) {
+  if (state.badges[index]) return;
+  state.badges[index] = true;
+  const el = document.getElementById('badge-' + index);
+  el.classList.add('earned');
+  const names = ['🏺 Cronista del Comercio', '🤝 Diplomático de Ventas', '🌐 Estratega Global'];
+  showXPFloat('Insignia: ' + names[index]);
+}
+
+function updateProgress() {
+  const done = (state.m1Done ? 1 : 0) + (state.m2Done ? 1 : 0) + (state.m3Done ? 1 : 0);
+  const pct = (done / 3) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+// ============ RETO 1: DRAG & DROP ============
+// Correct order: trueque(1), escritura(2), ferrocarril(3), onu(4), gatt(5), omc(6)
+
+function initDnD() {
+  const items = document.querySelectorAll('.dnd-item');
+  const zones = document.querySelectorAll('.drop-zone');
+
+  items.forEach(item => {
+    item.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id', item.dataset.id);
+      e.dataTransfer.setData('order', item.dataset.order);
+      e.dataTransfer.setData('text', item.textContent.trim());
+      item.classList.add('dragging');
+    });
+    item.addEventListener('dragend', () => item.classList.remove('dragging'));
+  });
+
+  zones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      zone.classList.add('drag-over');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('id');
+      const order = e.dataTransfer.getData('order');
+      const text = e.dataTransfer.getData('text');
+      const slot = zone.dataset.slot;
+
+      // Remove from pool if there
+      const poolItem = document.querySelector('#dnd-pool [data-id="' + id + '"]');
+      if (poolItem) poolItem.remove();
+
+      // If zone already has item, put it back to pool
+      if (state.dndZoneData[slot]) {
+        const prev = state.dndZoneData[slot];
+        addToPool(prev.id, prev.order, prev.text);
+      }
+
+      state.dndZoneData[slot] = { id, order, text };
+      zone.classList.add('has-item');
+
+      // Update zone display
+      const placeholder = zone.querySelector('.slot-placeholder');
+      if (placeholder) placeholder.remove();
+
+      // Remove existing item display
+      const existing = zone.querySelector('.drop-item');
+      if (existing) existing.remove();
+
+      const div = document.createElement('div');
+      div.className = 'drop-item';
+      div.style.cssText = 'font-size:0.83rem;color:white;flex:1;';
+      div.textContent = text;
+      zone.appendChild(div);
+    });
+  });
+}
+
+function addToPool(id, order, text) {
+  const pool = document.getElementById('dnd-pool');
+  const div = document.createElement('div');
+  div.className = 'dnd-item';
+  div.draggable = true;
+  div.dataset.id = id;
+  div.dataset.order = order;
+  div.innerHTML = text;
+  pool.appendChild(div);
+
+  div.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('id', div.dataset.id);
+    e.dataTransfer.setData('order', div.dataset.order);
+    e.dataTransfer.setData('text', div.textContent.trim());
+    div.classList.add('dragging');
+  });
+  div.addEventListener('dragend', () => div.classList.remove('dragging'));
+}
+
+function checkDnD() {
+  // Check all 6 slots filled
+  for (let i = 1; i <= 6; i++) {
+    if (!state.dndZoneData[i]) {
+      showFeedback('feedback-1', false, '⚠️ Completa todos los espacios', 'Arrastra los 6 eventos a la línea del tiempo antes de verificar.');
+      return;
+    }
+  }
+
+  let correct = true;
+  for (let i = 1; i <= 6; i++) {
+    if (parseInt(state.dndZoneData[i].order) !== i) {
+      correct = false;
+      break;
+    }
+  }
+
+  if (correct) {
+    addXP(200);
+    earnBadge(0);
+    state.m1Done = true;
+    document.getElementById('tab-1').classList.add('done');
+    unlockTab(2);
+    document.getElementById('continue-1').disabled = false;
+    showFeedback('feedback-1', true, '🎉 ¡Orden perfecto! +200 XP',
+      'Excelente trabajo. Has trazado correctamente la línea evolutiva del comercio: del trueque mesopotámico hasta la OMC moderna. Esta continuidad histórica es fundamental para entender por qué las reglas del comercio global tienen la forma que tienen hoy.');
+    // Disable drag
+    document.querySelectorAll('.dnd-item').forEach(i => { i.draggable = false; i.style.cursor = 'default'; });
+  } else {
+    addXP(-20);
+    showFeedback('feedback-1', false, '❌ Orden incorrecto — intenta de nuevo (-20 XP)',
+      'Revisa las fechas de cada evento. Recuerda: el trueque (3000 a.C.) precede a la escritura (1100 a.C.), luego viene la industrialización (s. XIX), la ONU (1945), el GATT (1947) y finalmente la OMC (1995).');
+  }
+}
+
+function resetDnD() {
+  state.dndZoneData = {};
+  const zones = document.querySelectorAll('.drop-zone');
+  zones.forEach(zone => {
+    zone.classList.remove('has-item', 'drag-over');
+    const existing = zone.querySelector('.drop-item');
+    if (existing) existing.remove();
+    if (!zone.querySelector('.slot-placeholder')) {
+      const ph = document.createElement('span');
+      ph.className = 'slot-placeholder';
+      ph.textContent = 'Arrastra aquí';
+      zone.appendChild(ph);
+    }
+  });
+
+  document.getElementById('dnd-pool').innerHTML = `
+    <div class="dnd-item" draggable="true" data-id="gatt" data-order="5"><span class="item-year">1947</span> Creación del GATT (23 países)</div>
+    <div class="dnd-item" draggable="true" data-id="trueque" data-order="1"><span class="item-year">3000 a.C.</span> El Trueque en Mesopotamia</div>
+    <div class="dnd-item" draggable="true" data-id="escritura" data-order="2"><span class="item-year">1100 a.C.</span> Escritura y comercio formal</div>
+    <div class="dnd-item" draggable="true" data-id="ferrocarril" data-order="3"><span class="item-year">s. XIX</span> Ferrocarril y expansión industrial</div>
+    <div class="dnd-item" draggable="true" data-id="onu" data-order="4"><span class="item-year">1945</span> Fundación de la ONU</div>
+    <div class="dnd-item" draggable="true" data-id="omc" data-order="6"><span class="item-year">1995</span> Nace la OMC (Ginebra)</div>
+  `;
+  initDnD();
+  hideFeedback('feedback-1');
+}
+
+// ============ RETO 2: COMPLIANCE SIMULATOR ============
+function selectCompliance(el, isCorrect) {
+  if (state.complianceAnswered) return;
+  state.complianceAnswered = true;
+
+  document.querySelectorAll('.comp-opt').forEach(opt => {
+    opt.style.pointerEvents = 'none';
+    if (opt.dataset.correct === 'true') {
+      opt.classList.add('correct');
+    } else {
+      opt.classList.add('wrong');
+    }
+  });
+
+  if (isCorrect) {
+    addXP(200);
+    earnBadge(1);
+    state.m2Done = true;
+    document.getElementById('tab-2').classList.add('done');
+    unlockTab(3);
+    document.getElementById('continue-2').disabled = false;
+    showFeedback('feedback-2', true, '🎉 ¡Análisis correcto! +200 XP',
+      'Identificaste las dos violaciones clave: (1) el principio de Nación Más Favorecida exige que los beneficios otorgados a un país miembro se extiendan automáticamente a todos; (2) el principio de Transparencia requiere que las políticas comerciales sean accesibles. La opción D es un error común: aunque la OMC regula gobiernos, las empresas deben cumplir con las leyes nacionales que implementan esos acuerdos, y las prácticas discriminatorias pueden generar disputas diplomáticas que afecten sus operaciones.');
+  } else {
+    addXP(-30);
+    showFeedback('feedback-2', false, '❌ Análisis incorrecto — revisa los principios OMC (-30 XP)',
+      'La respuesta correcta es la opción B. Los principios de la OMC que se violan son: Nación Más Favorecida (no puedes dar condiciones exclusivas a un país) y Transparencia (las políticas comerciales deben ser públicas). Nota importante: aunque la OMC regula directamente a los Estados, las empresas que operan en mercados internacionales deben alinear sus políticas con estos principios para evitar disputas comerciales entre sus gobiernos.');
+  }
+}
+
+// ============ RETO 3: CRISIS ============
+function selectCrisis(el, choice) {
+  state.crisisChoice = choice;
+  document.querySelectorAll('.crisis-path').forEach(p => p.classList.remove('selected-path'));
+  el.classList.add('selected-path');
+
+  const outcomes = {
+    A: {
+      title: '📉 Resultado: Ganancias a corto plazo, reputación destruida',
+      text: 'Lograste un aumento de ingresos del 25% en Q1 2022. Sin embargo, cuando el conflicto se prolongó, tus clientes europeos firmaron contratos con proveedores argentinos y canadienses que mantuvieron precios estables. Perdiste el 60% de tu cartera europea en 18 meses. La OMC/FAO documentó las prácticas especulativas y tus clientes potenciales las citaron en negociaciones futuras. Lección: las ventas son relaciones, no transacciones. La especulación viola el principio de confianza de Avila, LaForge e Ingram (2016).',
+      good: false
+    },
+    B: {
+      title: '🏆 Resultado óptimo: Alianzas duraderas + 200 XP',
+      text: '¡Decisión magistral! Contactaste proactivamente a 12 clientes europeos, ofreciste estabilidad en un momento de caos. El +10% fue percibido como justo dado el contexto. 9 de 12 firmaron contratos de 3 años. Para 2024, AgroMex se convirtió en el segundo mayor proveedor europeo de granos desde México. Aplicaste el enfoque de ventas basadas en la confianza: la crisis fue una oportunidad para demostrar que tu empresa es un socio estratégico confiable. Esto también cumple con los principios de RSE de la gerencia moderna (Ferrín, 2018).',
+      good: true
+    },
+    C: {
+      title: '😐 Resultado: Oportunidad perdida — ventana cerrada',
+      text: 'Tu cautela te protegió de riesgos inmediatos, pero cuando decidiste actuar (3 semanas después), los clientes más grandes ya tenían contratos firmados con competidores. Capturaste solo el 15% del mercado disponible. Torres (2015) advierte: el gerente de ventas debe "proyectar el futuro de la empresa y la relación que esta tiene con el medio". La pasividad ante disrupciones es tan riesgosa como la especulación. En ventas: quien no se mueve, pierde.',
+      good: false
+    },
+    D: {
+      title: '✅ Resultado bueno, pero subóptimo — 100 XP',
+      text: 'La diversificación fue una decisión inteligente y prudente. Lograste contratos en 3 regiones, aunque ninguna fue tan sólida como hubiera sido una relación prioritaria con Europa. La dispersión de esfuerzos diluyó la calidad de las propuestas. Avila, LaForge e Ingram (2016) enfatizan que la prospección estratégica implica priorizar: en una crisis con ventana de 48 horas, concentrar energía en el mercado más urgente (Europa) habría generado mejores resultados que la diversificación simultánea.',
+      good: false
+    }
+  };
+
+  const outcome = outcomes[choice];
+  const resultEl = document.getElementById('crisis-result');
+  resultEl.innerHTML = `<h5>${outcome.title}</h5><p>${outcome.text}</p>`;
+  resultEl.style.borderLeftColor = outcome.good ? '#27ae60' : '#e67e22';
+  resultEl.classList.add('show');
+
+  if (outcome.good) {
+    addXP(200);
+    earnBadge(2);
+    state.m3Done = true;
+    document.getElementById('tab-3').classList.add('done');
+    unlockTab(4);
+    document.getElementById('continue-3').disabled = false;
+    showFeedback('feedback-3', true, '🎉 ¡Decisión estratégica óptima! +200 XP', '');
+    setFinalStats();
+  } else if (choice === 'D') {
+    addXP(100);
+    state.m3Done = true;
+    document.getElementById('tab-3').classList.add('done');
+    unlockTab(4);
+    document.getElementById('continue-3').disabled = false;
+    earnBadge(2);
+    showFeedback('feedback-3', false, '⚠️ Resultado aceptable, pero puedes hacerlo mejor (+100 XP)', 'Intenta de nuevo para maximizar tu puntaje. La opción B demuestra el enfoque de ventas basadas en la confianza ante situaciones de crisis.');
+    setFinalStats();
+  } else {
+    addXP(-40);
+    showFeedback('feedback-3', false, '❌ Estrategia subóptima (-40 XP) — Puedes reintentar', 'Piensa en los principios de la gerencia moderna: pensamiento prospectivo, responsabilidad social y ventas basadas en la confianza. ¿Qué haría un gerente que piensa en el largo plazo?');
+    // Allow retry
+    setTimeout(() => {
+      document.querySelectorAll('.crisis-path').forEach(p => {
+        p.classList.remove('selected-path');
+        p.style.pointerEvents = '';
+      });
+      state.crisisChoice = null;
+      const resultEl = document.getElementById('crisis-result');
+      resultEl.classList.remove('show');
+      hideFeedback('feedback-3');
+    }, 4000);
+  }
+}
+
+function setFinalStats() {
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  document.getElementById('final-xp').textContent = state.xp;
+  document.getElementById('final-time').textContent = mins + ':' + String(secs).padStart(2, '0');
+}
+
+// ============ FEEDBACK ============
+function showFeedback(id, success, title, text) {
+  const el = document.getElementById(id);
+  el.className = 'feedback-panel show ' + (success ? 'success' : 'error');
+  el.innerHTML = `<h5>${title}</h5>${text ? '<p>' + text + '</p>' : ''}`;
+}
+function hideFeedback(id) {
+  const el = document.getElementById(id);
+  el.className = 'feedback-panel';
+  el.innerHTML = '';
+}
+
+// ============ RESTART ============
+function restartMission() {
+  state.xp = 0;
+  state.badges = [false, false, false];
+  state.m1Done = false; state.m2Done = false; state.m3Done = false;
+  state.startTime = Date.now();
+  state.dndZoneData = {};
+  state.crisisChoice = null;
+  state.complianceAnswered = false;
+
+  document.getElementById('xp-display').textContent = '0 XP';
+  document.getElementById('progress-bar').style.width = '0%';
+  document.querySelectorAll('.badge-icon').forEach(b => b.classList.remove('earned'));
+
+  // Reset tabs
+  for (let i = 1; i <= 4; i++) {
+    const tab = document.getElementById('tab-' + i);
+    tab.classList.add('locked');
+    tab.classList.remove('done', 'active');
+  }
+  document.getElementById('tab-0').classList.add('active');
+
+  // Reset continues
+  ['continue-1','continue-2','continue-3'].forEach(id => {
+    document.getElementById(id).disabled = true;
+  });
+
+  // Reset DnD
+  resetDnD();
+
+  // Reset compliance
+  document.querySelectorAll('.comp-opt').forEach(o => {
+    o.classList.remove('correct','wrong','selected');
+    o.style.pointerEvents = '';
+  });
+  hideFeedback('feedback-2');
+
+  // Reset crisis
+  document.querySelectorAll('.crisis-path').forEach(p => {
+    p.classList.remove('selected-path');
+    p.style.pointerEvents = '';
+  });
+  document.getElementById('crisis-result').classList.remove('show');
+  hideFeedback('feedback-3');
+
+  goToScreen('landing');
+}
+
+// ============ INIT ============
+document.addEventListener('DOMContentLoaded', () => {
+  initDnD();
+});
+</script>
+</body>
+</html>
