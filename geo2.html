@@ -52,7 +52,7 @@
     justify-content: space-between;
     gap: 16px;
   }
-  .hud-logo { height: 36px; }
+  .hud-logo { height: 36px; width: auto; object-fit: contain; }
   .hud-title {
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -694,7 +694,7 @@
     gap: 16px;
     margin-bottom: 16px;
   }
-  .cert-logo { height: 48px; }
+  .cert-logo { height: 48px; width: auto; object-fit: contain; }
   .cert-ieu {
     font-family: var(--font-display);
     font-size: 1.8rem;
@@ -1107,17 +1107,21 @@
       <div class="mission-icon">🤝</div>
       <div class="mission-header-text">
         <h2>MISIÓN 2: NEGOCIADOR T-MEC</h2>
-        <p>Responde 5 escenarios de negociación sobre el TLCAN y el T-MEC. Cada decisión correcta suma XP.</p>
+        <p>Responde 6 escenarios de negociación sobre el TLCAN y el T-MEC. Cada decisión correcta suma XP.</p>
       </div>
-        <div class="mission-xp-reward">
-          <div class="xp-num">300</div>
-          <div class="xp-label">XP DISPONIBLE</div>
-        </div>
+      <div class="mission-xp-reward">
+        <div class="xp-num">300</div>
+        <div class="xp-label">XP DISPONIBLE</div>
+      </div>
+    </div>
+
+    <div class="theory-section">
+      <h4>📚 TLCAN vs T-MEC — CLAVES DEL NEGOCIADOR</h4>
       El <strong>TLCAN (1994)</strong> inició negociaciones en febrero de 1991, con 19 grupos de trabajo especializados. Contenía 22 capítulos con <strong>80% de contenido comercial y 20% político</strong>. Eliminó barreras arancelarias y consolidó a América del Norte como región dinámica del comercio mundial, aunque generó críticas por distribución desigual de riqueza.
       <br><br>
       El <strong>T-MEC (2020)</strong>, vigente desde el 1 de julio de 2020, pasó de 24 a <strong>34 capítulos</strong>, con proporción inversa: <strong>80% político, 20% comercial</strong>. Nuevos capítulos: <strong>comercio digital, anticorrupción, PYMES, medio ambiente, derechos laborales</strong>. Reglas de origen automotriz: <strong>75% contenido regional</strong> + regla de valor laboral (40-45% de trabajadores deben ganar ≥ $16 USD/hora).
       <br><br>
-      <strong>Detonante:</strong> La elección de <strong>Donald Trump</strong> y su discurso sobre déficit comercial con México. El T-MEC cubre <strong>más de 400 millones de personas</strong> (7% población mundial) y el <strong>16% del comercio global</strong>. Es uno de los acuerdos más importantes del mundo.
+      <strong>Detonante:</strong> La elección de <strong>Donald Trump</strong> y su discurso sobre déficit comercial con México. El T-MEC cubre <strong>más de 400 millones de personas</strong> (7% población mundial) y el <strong>16% del comercio global</strong>.
     </div>
 
     <div class="m2-progress" id="m2-progress"></div>
@@ -1375,6 +1379,11 @@ function startGame() {
   xp = 0; missionsDone = [false,false,false];
   m2Current = 0; m2Score = 0; m1Correct = 0;
   matchSelected = null; matchScore = 0; tfScore = 0;
+  // Reset certificate
+  document.getElementById('certificate').style.display = 'none';
+  document.getElementById('cert-actions').style.display = 'none';
+  document.getElementById('student-name').value = '';
+  document.getElementById('cert-name-display').textContent = 'Estudiante IEU';
   updateHUD();
   initM1();
   showScreen('screen-m1');
@@ -1879,6 +1888,10 @@ function completeM3() {
 }
 
 function showResults() {
+  // Reset certificate visibility
+  document.getElementById('certificate').style.display = 'none';
+  document.getElementById('cert-actions').style.display = 'none';
+
   document.getElementById('final-xp').textContent = xp + ' XP TOTAL · NIVEL: ' + getLevel(xp);
   document.getElementById('cert-score-display').textContent = `Puntuación: ${xp} XP · Nivel: ${getLevel(xp)}`;
   document.getElementById('cert-date').textContent = 'Fecha de emisión: ' + new Date().toLocaleDateString('es-MX', {year:'numeric',month:'long',day:'numeric'});
@@ -1897,13 +1910,13 @@ function showResults() {
     }
   });
 
-  document.getElementById('cert-actions').style.display = 'flex';
   showScreen('screen-results');
 }
 
 function showCertificate() {
   const cert = document.getElementById('certificate');
   cert.style.display = 'block';
+  document.getElementById('cert-actions').style.display = 'flex';
   const nameInput = document.getElementById('student-name');
   nameInput.oninput = () => {
     document.getElementById('cert-name-display').textContent = nameInput.value || 'Estudiante IEU';
