@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IVC Bloque 2 · Misión: Ventas Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0D0804;
+    --bg2: #140C06;
+    --bg3: #1A1008;
+    --orange: #E8440A;
+    --orange-light: #FF8040;
+    --amber: #FFB347;
+    --white: #F5EDE0;
+    --muted: #8C7A65;
+    --success: #4CAF50;
+    --danger: #E8440A;
+    --card: rgba(255,255,255,0.04);
+    --card-border: rgba(232,68,10,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: radial-gradient(circle at 20% 50%, rgba(232,68,10,0.04) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(255,128,64,0.03) 0%, transparent 40%);
+  }
+
+  /* Dot pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(232,68,10,0.15) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- HUD ---- */
+  #hud {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(13,8,4,0.92);
+    border-bottom: 2px solid var(--orange);
+    backdrop-filter: blur(12px);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  #hud .logo-wrap {
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+
+  #hud .logo-wrap img {
+    height: 32px; width: auto;
+    object-fit: contain;
+    filter: brightness(1.1);
+  }
+
+  #hud .course-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+  #hud .course-label strong { color: var(--orange-light); font-size: 13px; display: block; }
+
+  #hud .spacer { flex: 1; }
+
+  #hud .level-badge {
+    background: linear-gradient(135deg, var(--orange), var(--amber));
+    color: #0D0804;
+    font-weight: 900;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  #hud .xp-block { text-align: right; }
+  #hud .xp-block .xp-num {
+    font-size: 22px; font-weight: 800;
+    color: var(--amber);
+    line-height: 1;
+  }
+  #hud .xp-block .xp-label { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+
+  #hud .progress-bar-wrap {
+    flex: 1; max-width: 200px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    height: 8px;
+    overflow: hidden;
+  }
+  #hud .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), var(--amber));
+    border-radius: 100px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ---- SCREENS ---- */
+  .screen {
+    display: none;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding-top: 62px;
+  }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ---- INTRO SCREEN ---- */
+  #screen-intro {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 0;
+  }
+
+  .intro-orange-strip {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--orange), var(--amber), var(--orange-light));
+  }
+
+  .intro-hero {
+    max-width: 700px;
+  }
+
+  .intro-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+
+  .intro-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(44px, 8vw, 80px);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .intro-title .highlight {
+    color: var(--orange);
+    display: block;
+    -webkit-text-stroke: 1px var(--orange-light);
+  }
+
+  .intro-subtitle {
+    font-size: clamp(14px, 2vw, 17px);
+    color: var(--muted);
+    max-width: 480px;
+    margin: 16px auto 36px;
+    line-height: 1.6;
+  }
+
+  .mission-cards {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .mission-card-preview {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: left;
+    min-width: 160px;
+    max-width: 180px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .mission-card-preview:hover {
+    border-color: var(--orange);
+    transform: translateY(-2px);
+  }
+  .mission-card-preview .m-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .mission-card-preview .m-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+  }
+  .mission-card-preview .m-icon { font-size: 22px; margin-bottom: 6px; }
+
+  .btn-primary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: #fff;
+    border: none;
+    padding: 16px 48px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 24px rgba(232,68,10,0.4);
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15));
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,68,10,0.5); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: transparent;
+    color: var(--orange-light);
+    border: 2px solid var(--orange);
+    padding: 10px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-secondary:hover { background: var(--orange); color: #fff; }
+
+  /* ---- MISSION SCREEN ---- */
+  #screen-mission {
+    padding: 80px 0 0;
+    flex-direction: column;
+  }
+
+  .mission-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+    width: 100%;
+  }
+
+  .mission-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .mission-badge {
+    background: linear-gradient(135deg, var(--orange), var(--amber));
+    color: #0D0804;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .mission-title-block h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .mission-title-block p {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* MINI LESSON */
+  .mini-lesson {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .mini-lesson h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .mini-lesson h3::before { content: '📖'; }
+
+  .lesson-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .lesson-tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .lesson-tab.active, .lesson-tab:hover {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #fff;
+  }
+  .lesson-content { display: none; font-size: 14px; line-height: 1.7; color: rgba(245,237,224,0.85); }
+  .lesson-content.active { display: block; }
+  .lesson-content strong { color: var(--amber); }
+  .lesson-content ul { margin: 8px 0 8px 18px; }
+  .lesson-content li { margin-bottom: 4px; }
+  .lesson-content .step-list { list-style: none; margin-left: 0; }
+  .lesson-content .step-list li {
+    display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;
+  }
+  .lesson-content .step-list .step-num {
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* GAME ZONE */
+  .game-zone {
+    background: linear-gradient(135deg, rgba(232,68,10,0.06), rgba(255,179,71,0.04));
+    border: 1px solid var(--orange);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .game-zone::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(232,68,10,0.15), transparent 70%);
+  }
+
+  .game-zone h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .game-zone p.game-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* ---- MISSION 1: DRAG & DROP ---- */
+  .drag-board {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .drag-source-zone {
+    grid-column: 1 / -1;
+    background: rgba(0,0,0,0.3);
+    border: 1px dashed rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 60px;
+  }
+  .drag-source-zone h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .drag-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .drag-item {
+    background: rgba(232,68,10,0.12);
+    border: 1px solid rgba(232,68,10,0.4);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: grab;
+    user-select: none;
+    transition: background 0.15s, transform 0.1s, opacity 0.2s;
+    color: var(--white);
+  }
+  .drag-item:hover { background: rgba(232,68,10,0.25); transform: scale(1.03); }
+  .drag-item.dragging { opacity: 0.4; transform: scale(0.95); cursor: grabbing; }
+  .drag-item.placed { display: none; }
+
+  .drop-column {
+    background: rgba(0,0,0,0.2);
+    border: 2px dashed rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 140px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .drop-column.drag-over {
+    border-color: var(--orange);
+    background: rgba(232,68,10,0.07);
+  }
+  .drop-column h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    color: var(--orange-light);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .drop-column .drop-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 40px;
+  }
+  .drop-column .drop-items .drag-item {
+    cursor: pointer;
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  .drop-column .drop-items .drag-item.correct {
+    background: rgba(76,175,80,0.2);
+    border-color: #4CAF50;
+    color: #81C784;
+  }
+  .drop-column .drop-items .drag-item.incorrect {
+    background: rgba(232,68,10,0.2);
+    border-color: var(--orange);
+    animation: shake 0.3s;
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  /* ---- MISSION 2: SIMULATOR ---- */
+  .sim-scenario {
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(245,237,224,0.9);
+  }
+  .sim-scenario strong { color: var(--amber); }
+
+  .sim-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sim-option {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-align: left;
+    color: var(--white);
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: 'Barlow', sans-serif;
+  }
+  .sim-option:hover:not(:disabled) {
+    border-color: var(--orange-light);
+    background: rgba(232,68,10,0.08);
+  }
+  .sim-option.selected-correct {
+    border-color: #4CAF50;
+    background: rgba(76,175,80,0.12);
+    color: #81C784;
+  }
+  .sim-option.selected-incorrect {
+    border-color: var(--orange);
+    background: rgba(232,68,10,0.15);
+    animation: shake 0.4s;
+  }
+  .sim-option.reveal-correct {
+    border-color: #4CAF50;
+    background: rgba(76,175,80,0.08);
+    color: rgba(129,199,132,0.8);
+  }
+  .sim-option:disabled { cursor: not-allowed; }
+  .sim-option .opt-prefix {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--orange);
+    margin-right: 8px;
+  }
+
+  /* Step navigation for M2 */
+  .sim-step-indicator {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .sim-step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.3s;
+  }
+  .sim-step-dot.active { background: var(--orange); }
+  .sim-step-dot.done { background: var(--amber); }
+
+  /* ---- MISSION 3: MATCH GAME ---- */
+  .match-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .match-card {
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px 12px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    min-height: 80px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.18s;
+    position: relative;
+    overflow: hidden;
+    color: var(--white);
+  }
+  .match-card:hover:not(.flipped):not(.matched) {
+    border-color: var(--orange-light);
+    background: rgba(232,68,10,0.07);
+    transform: scale(1.02);
+  }
+  .match-card.selected {
+    border-color: var(--amber);
+    background: rgba(255,179,71,0.12);
+    box-shadow: 0 0 16px rgba(255,179,71,0.2);
+  }
+  .match-card.matched {
+    border-color: #4CAF50;
+    background: rgba(76,175,80,0.1);
+    color: #81C784;
+    cursor: default;
+  }
+  .match-card.wrong {
+    border-color: var(--orange);
+    animation: shake 0.35s;
+  }
+
+  /* ---- FEEDBACK TOAST ---- */
+  #feedback-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1A1008;
+    border: 1.5px solid var(--orange);
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    z-index: 500;
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+    opacity: 0;
+    white-space: nowrap;
+    max-width: 90vw;
+    text-align: center;
+  }
+  #feedback-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  #feedback-toast.success { border-color: #4CAF50; color: #81C784; }
+  #feedback-toast.fail { border-color: var(--orange); color: var(--orange-light); }
+
+  /* ---- CHECK BUTTON ---- */
+  .check-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    box-shadow: 0 4px 16px rgba(232,68,10,0.3);
+    margin-top: 16px;
+  }
+  .check-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,68,10,0.4); }
+  .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .next-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: transparent;
+    color: var(--amber);
+    border: 2px solid var(--amber);
+    padding: 12px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    margin-top: 16px;
+    margin-left: 12px;
+    display: none;
+  }
+  .next-btn:hover { background: var(--amber); color: #0D0804; }
+  .next-btn.visible { display: inline-flex; align-items: center; gap: 8px; }
+
+  /* ---- RESULTS SCREEN ---- */
+  #screen-results {
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 80px 24px 60px;
+    flex-direction: column;
+  }
+
+  .results-hero {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 40px;
+  }
+
+  .results-trophy {
+    font-size: 80px;
+    margin-bottom: 16px;
+    animation: bounce 1.5s ease infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .results-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .results-title span { color: var(--orange); }
+
+  .results-subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  .xp-display {
+    background: linear-gradient(135deg, rgba(232,68,10,0.15), rgba(255,179,71,0.1));
+    border: 1.5px solid var(--orange);
+    border-radius: 14px;
+    padding: 24px 40px;
+    margin-bottom: 28px;
+    display: inline-block;
+  }
+  .xp-display .big-xp {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--amber);
+    line-height: 1;
+  }
+  .xp-display .big-xp-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .results-missions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .result-mission-badge {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .result-mission-badge.done { border-color: #4CAF50; color: #81C784; }
+
+  .cert-section { display: none; margin-top: 24px; }
+  .cert-section.visible { display: block; }
+
+  .certificate {
+    background: linear-gradient(135deg, #1A0E04, #0D0804);
+    border: 2px solid var(--orange);
+    border-radius: 16px;
+    padding: 32px 40px;
+    max-width: 560px;
+    margin: 0 auto 20px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(232,68,10,0.15);
+  }
+  .certificate::before, .certificate::after {
+    content: '';
+    position: absolute;
+    width: 60px; height: 60px;
+    border: 2px solid var(--orange);
+    opacity: 0.3;
+  }
+  .certificate::before { top: 12px; left: 12px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
+  .certificate::after { bottom: 12px; right: 12px; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
+
+  .cert-logo { height: 36px; margin-bottom: 16px; object-fit: contain; }
+  .cert-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .cert-main {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .cert-name-field {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--amber);
+    margin-bottom: 12px;
+    min-height: 32px;
+    border-bottom: 1px solid rgba(255,179,71,0.4);
+    display: inline-block;
+    padding: 0 8px;
+  }
+  .cert-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .cert-seal {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+  .cert-footer {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    color: rgba(140,122,101,0.6);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  #cert-name-input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    text-align: center;
+    width: 280px;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  #cert-name-input:focus { border-color: var(--orange); }
+  #cert-name-input::placeholder { color: var(--muted); }
+
+  .results-orange-strip {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--orange), var(--amber), var(--orange-light));
+    z-index: 10;
+  }
+
+  /* ---- MISSION NAV TABS ---- */
+  .mission-tabs {
+    display: flex;
+    gap: 8px;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0;
+  }
+  .mission-tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: 8px 8px 0 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--card-border);
+    border-bottom: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .mission-tab.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #fff;
+  }
+  .mission-tab.completed::after {
+    content: '✓';
+    font-size: 11px;
+    background: var(--amber);
+    color: #0D0804;
+    border-radius: 50%;
+    width: 16px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+  }
+
+  .mission-body {
+    display: none;
+  }
+  .mission-body.active { display: block; }
+
+  /* Utility */
+  .flex-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .text-amber { color: var(--amber); }
+  .text-orange { color: var(--orange); }
+  .text-muted { color: var(--muted); }
+  .text-success { color: #81C784; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .hint-box {
+    background: rgba(255,179,71,0.07);
+    border: 1px solid rgba(255,179,71,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: rgba(245,237,224,0.7);
+    line-height: 1.5;
+    margin-top: 12px;
+    display: none;
+  }
+  .hint-box.visible { display: block; }
+  .hint-box strong { color: var(--amber); }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in-up { animation: fadeInUp 0.5s ease both; }
+
+  @keyframes xp-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); color: #FFE082; }
+    100% { transform: scale(1); }
+  }
+  .xp-pop { animation: xp-pop 0.5s ease; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(232,68,10,0.3); border-radius: 3px; }
+
+  @media (max-width: 600px) {
+    .drag-board { grid-template-columns: 1fr; }
+    .match-grid { grid-template-columns: repeat(2, 1fr); }
+    #hud .progress-bar-wrap { display: none; }
+    .certificate { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="logo-wrap">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_Universidad_IEU.svg" alt="IEU" onerror="this.style.display='none'">
+    <div class="course-label">
+      <strong>Intro a Ventas y Com.</strong>
+      Bloque 2
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="hud-progress" style="width:0%"></div>
+  </div>
+  <div class="level-badge" id="hud-level">🎯 NOVATO</div>
+  <div class="xp-block">
+    <div class="xp-num" id="hud-xp">0</div>
+    <div class="xp-label">XP</div>
+  </div>
+</div>
+
+<!-- FEEDBACK TOAST -->
+<div id="feedback-toast"></div>
+
+<!-- ===== INTRO SCREEN ===== -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-hero fade-in-up">
+    <div class="intro-eyebrow">🎓 Universidad IEU · Misión Ventas Pro</div>
+    <h1 class="intro-title">
+      Construye tu
+      <span class="highlight">Dpto. de Ventas</span>
+    </h1>
+    <p class="intro-subtitle">
+      Eres el nuevo Gerente de Ventas. Completa 3 misiones para dominar la planeación, organización y gestión del departamento de ventas. Cada misión correcta suma XP.
+    </p>
+
+    <div class="mission-cards">
+      <div class="mission-card-preview">
+        <div class="m-icon">🗺️</div>
+        <div class="m-num">Misión 1</div>
+        <div class="m-title">Estratega de Territorios</div>
+      </div>
+      <div class="mission-card-preview">
+        <div class="m-icon">📊</div>
+        <div class="m-num">Misión 2</div>
+        <div class="m-title">Simulador de Planeación</div>
+      </div>
+      <div class="mission-card-preview">
+        <div class="m-icon">🤝</div>
+        <div class="m-num">Misión 3</div>
+        <div class="m-title">Recluta a tu Equipo</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startMissions()">
+      🚀 INICIAR MISIONES
+    </button>
+  </div>
+  <div class="intro-orange-strip"></div>
+</div>
+
+<!-- ===== MISSION SCREEN ===== -->
+<div id="screen-mission" class="screen">
+  <!-- Mission Tabs -->
+  <div class="mission-tabs" id="mission-tabs">
+    <div class="mission-tab active" id="tab-m1" onclick="switchMission(1)">🗺️ Misión 1</div>
+    <div class="mission-tab" id="tab-m2" onclick="switchMission(2)">📊 Misión 2</div>
+    <div class="mission-tab" id="tab-m3" onclick="switchMission(3)">🤝 Misión 3</div>
+  </div>
+
+  <div class="mission-container">
+
+    <!-- ===== MISIÓN 1: CLASIFICACIÓN DE ESTRUCTURA ===== -->
+    <div class="mission-body active" id="body-m1">
+      <div class="mission-header">
+        <div class="mission-badge">Misión 1 · 150 XP</div>
+        <div class="mission-title-block">
+          <h2>🗺️ Estratega de Territorios</h2>
+          <p>Clasifica cada elemento en el tipo correcto de organización del departamento de ventas. Arrastra cada tarjeta a su columna.</p>
+        </div>
+      </div>
+
+      <!-- Mini Lesson -->
+      <div class="mini-lesson">
+        <h3>Repaso Rápido</h3>
+        <div class="lesson-tabs">
+          <div class="lesson-tab active" onclick="switchTab(this,'lesson-m1-1')">Organización</div>
+          <div class="lesson-tab" onclick="switchTab(this,'lesson-m1-2')">Territorios</div>
+          <div class="lesson-tab" onclick="switchTab(this,'lesson-m1-3')">Distribución</div>
+        </div>
+        <div class="lesson-content active" id="lesson-m1-1">
+          El departamento de ventas puede estructurarse de <strong>4 formas</strong> según Johnston & Marshall (2009):
+          <ul>
+            <li><strong>Geográfica:</strong> un vendedor por zona → bajos costos, mejor relación con cliente.</li>
+            <li><strong>Por productos:</strong> especialistas en categorías → posible duplicidad de esfuerzos.</li>
+            <li><strong>Por mercado/clientes:</strong> especialización por segmento → comprende mejor las necesidades.</li>
+            <li><strong>Por funciones:</strong> requiere habilidades técnicas específicas (ej. visitadores médicos).</li>
+          </ul>
+        </div>
+        <div class="lesson-content" id="lesson-m1-2">
+          La <strong>zona de ventas</strong> es el conjunto de clientes actuales, antiguos y potenciales asignados a un vendedor o distribuidor (Torres, 2015). El proceso de asignación sigue <strong>5 pasos</strong>:
+          <ol class="step-list">
+            <li><span class="step-num">1</span>Seleccionar unidad geográfica de control (ciudades, estados).</li>
+            <li><span class="step-num">2</span>Análisis de cuentas: potencial de ventas por zona.</li>
+            <li><span class="step-num">3</span>Análisis de carga de trabajo del vendedor.</li>
+            <li><span class="step-num">4</span>Combinar unidades en territorios con potencial equitativo.</li>
+            <li><span class="step-num">5</span>Asignar personal según experiencia y capacidad.</li>
+          </ol>
+        </div>
+        <div class="lesson-content" id="lesson-m1-3">
+          <strong>Tipos de distribución</strong> (Lerma y Márquez, 2010): Exclusiva (un solo distribuidor por mercado), Selectiva (canales acordes al posicionamiento), Intensiva (máxima cobertura), Directa (productor = distribuidor), Indirecta (intermediarios independientes), Dual (dos canales), Electrónica (e-commerce).
+        </div>
+      </div>
+
+      <!-- Game Zone -->
+      <div class="game-zone">
+        <h3>🎮 Clasifica los Escenarios</h3>
+        <p class="game-desc">Cada escenario describe una situación real de un departamento de ventas. Arrastra al tipo de organización correcto. Click en una tarjeta colocada para devolverla.</p>
+
+        <div class="drag-board" id="drag-board-m1">
+          <div class="drag-source-zone">
+            <h4>🃏 Escenarios — Arrastra a su categoría</h4>
+            <div class="drag-items" id="drag-source-items">
+              <!-- Items inserted by JS -->
+            </div>
+          </div>
+
+          <div class="drop-column" id="drop-geo" data-cat="geografica" ondrop="dropItem(event, this)" ondragover="allowDrop(event)">
+            <h4>🌎 Geográfica</h4>
+            <div class="drop-items" id="drop-items-geo"></div>
+          </div>
+
+          <div class="drop-column" id="drop-prod" data-cat="productos" ondrop="dropItem(event, this)" ondragover="allowDrop(event)">
+            <h4>📦 Por Productos</h4>
+            <div class="drop-items" id="drop-items-prod"></div>
+          </div>
+
+          <div class="drop-column" id="drop-mkt" data-cat="mercado" ondrop="dropItem(event, this)" ondragover="allowDrop(event)">
+            <h4>👥 Por Mercado</h4>
+            <div class="drop-items" id="drop-items-mkt"></div>
+          </div>
+
+          <div class="drop-column" id="drop-func" data-cat="funciones" ondrop="dropItem(event, this)" ondragover="allowDrop(event)">
+            <h4>⚙️ Por Funciones</h4>
+            <div class="drop-items" id="drop-items-func"></div>
+          </div>
+        </div>
+
+        <div class="flex-row">
+          <button class="check-btn" id="check-m1" onclick="checkMission1()" disabled>✅ VERIFICAR CLASIFICACIÓN</button>
+          <button class="next-btn" id="next-m1" onclick="switchMission(2)">Siguiente Misión →</button>
+        </div>
+        <div class="hint-box" id="hint-m1">
+          <strong>💡 Pista:</strong> <span id="hint-m1-text"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MISIÓN 2: SIMULADOR DE PLANEACIÓN ===== -->
+    <div class="mission-body" id="body-m2">
+      <div class="mission-header">
+        <div class="mission-badge">Misión 2 · 200 XP</div>
+        <div class="mission-title-block">
+          <h2>📊 Simulador de Planeación</h2>
+          <p>Toma las decisiones correctas como Gerente de Ventas en 5 escenarios clave. Cada respuesta correcta suma XP.</p>
+        </div>
+      </div>
+
+      <!-- Mini Lesson -->
+      <div class="mini-lesson">
+        <h3>Repaso Rápido</h3>
+        <div class="lesson-tabs">
+          <div class="lesson-tab active" onclick="switchTab(this,'lesson-m2-1')">Proceso de Ventas</div>
+          <div class="lesson-tab" onclick="switchTab(this,'lesson-m2-2')">Ruta Crítica</div>
+          <div class="lesson-tab" onclick="switchTab(this,'lesson-m2-3')">Resultados</div>
+        </div>
+        <div class="lesson-content active" id="lesson-m2-1">
+          El <strong>proceso de ventas</strong> incluye: Prospección → Contacto inicial → Presentación → Manejo de objeciones → Cierre → Actividades posventa. Se recomienda usar <strong>agendas y cronogramas</strong> para asignar tiempo a cada tarea y reducir incertidumbre.
+        </div>
+        <div class="lesson-content" id="lesson-m2-2">
+          La <strong>Ruta Crítica</strong> (Colcha et al., 2021) consta de 3 fases:
+          <ol class="step-list">
+            <li><span class="step-num">1</span><strong>Planeación:</strong> diagrama en red de actividades y dependencias.</li>
+            <li><span class="step-num">2</span><strong>Programación:</strong> tiempos de inicio y fin, holguras.</li>
+            <li><span class="step-num">3</span><strong>Control:</strong> supervisión y ajuste de actividades.</li>
+          </ol>
+        </div>
+        <div class="lesson-content" id="lesson-m2-3">
+          La <strong>rentabilidad</strong> es resultado del esfuerzo conjunto de todos los departamentos (Erickson, 2010). Los gastos que la afectan directamente son: <strong>gastos de distribución</strong> y <strong>gastos de venta y entrega</strong> (comisiones, salarios, viáticos).
+        </div>
+      </div>
+
+      <!-- Game Zone -->
+      <div class="game-zone">
+        <h3>🎮 Gerente en Acción</h3>
+        <p class="game-desc">Lee cada situación y elige la decisión más acertada. +40 XP por respuesta correcta.</p>
+
+        <div class="sim-step-indicator" id="sim-steps"></div>
+        <div id="sim-question-container"></div>
+
+        <div class="hint-box" id="hint-m2">
+          <strong>💡 Explicación:</strong> <span id="hint-m2-text"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MISIÓN 3: MATCH ===== -->
+    <div class="mission-body" id="body-m3">
+      <div class="mission-header">
+        <div class="mission-badge">Misión 3 · 150 XP</div>
+        <div class="mission-title-block">
+          <h2>🤝 Recluta a tu Equipo</h2>
+          <p>Empareja cada tipo de vendedor o paso del proceso de selección con su descripción correcta.</p>
+        </div>
+      </div>
+
+      <!-- Mini Lesson -->
+      <div class="mini-lesson">
+        <h3>Repaso Rápido</h3>
+        <div class="lesson-tabs">
+          <div class="lesson-tab active" onclick="switchTab(this,'lesson-m3-1')">Tipos de Vendedores</div>
+          <div class="lesson-tab" onclick="switchTab(this,'lesson-m3-2')">Selección</div>
+          <div class="lesson-tab" onclick="switchTab(this,'lesson-m3-3')">Objetivos</div>
+        </div>
+        <div class="lesson-content active" id="lesson-m3-1">
+          Tipos de vendedores (Mañas, 2016): <strong>Dependientes</strong> (mostrador, atienden minoristas), <strong>Visitadores</strong> (directos del fabricante, comisión por venta), <strong>Vendedores técnicos</strong> (asesores industriales, proceso largo), <strong>Agentes comerciales</strong> (autónomos, contratos de agencia), <strong>Promotores</strong> (demostradores + animadores), <strong>Vendedores a domicilio</strong> (visitan previa cita).
+        </div>
+        <div class="lesson-content" id="lesson-m3-2">
+          El proceso de selección de 8 pasos (Torres, 2014):
+          <ol style="margin-left:16px; font-size:13px; line-height:2;">
+            <li>Recepción preliminar de solicitudes</li>
+            <li>Pruebas de idoneidad</li>
+            <li>Entrevista de selección</li>
+            <li>Verificación de datos y referencias</li>
+            <li>Examen médico</li>
+            <li>Entrevista con el supervisor</li>
+            <li>Descripción realista del puesto</li>
+            <li>Decisión de contratar</li>
+          </ol>
+        </div>
+        <div class="lesson-content" id="lesson-m3-3">
+          Los agentes de ventas se clasifican por: <strong>tipo de empresa</strong> (minoristas, mayoristas), <strong>naturaleza del producto</strong> (bienes, servicios) y <strong>tipo de venta</strong> (mostrador, representante, demostrador, creador de clientela). Su objetivo es vender por volumen, ganancias o gastos.
+        </div>
+      </div>
+
+      <!-- Game Zone: Memory Match -->
+      <div class="game-zone">
+        <h3>🎮 Emparejamiento Express</h3>
+        <p class="game-desc">Selecciona un tipo/concepto y luego su definición. Empareja los 8 pares correctamente. +18 XP por par.</p>
+
+        <div class="match-grid" id="match-grid-m3">
+          <!-- Cards inserted by JS -->
+        </div>
+
+        <div class="flex-row mt-8">
+          <span class="text-muted" style="font-size:13px;">Pares encontrados: <strong class="text-amber" id="match-count">0</strong> / 8</span>
+          <button class="check-btn" id="reset-m3" onclick="resetMatch()" style="background:transparent;border:2px solid var(--muted);color:var(--muted);box-shadow:none;font-size:13px;padding:8px 16px;">↺ Reiniciar</button>
+          <button class="next-btn visible" id="next-m3" onclick="goToResults()" style="display:none;">🏆 Ver Resultados →</button>
+        </div>
+        <div class="hint-box" id="hint-m3">
+          <strong>💡 Incorrecto:</strong> <span id="hint-m3-text">Intenta de nuevo.</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /mission-container -->
+</div><!-- /screen-mission -->
+
+<!-- ===== RESULTS SCREEN ===== -->
+<div id="screen-results" class="screen">
+  <div class="results-hero fade-in-up">
+    <div class="results-trophy">🏆</div>
+    <h2 class="results-title">¡<span>Misión</span> Cumplida!</h2>
+    <p class="results-subtitle">Has completado el Bloque 2 de Introducción a Ventas y Comercialización</p>
+
+    <div class="xp-display">
+      <div class="big-xp" id="final-xp">0</div>
+      <div class="big-xp-label">Puntos de experiencia ganados</div>
+    </div>
+
+    <div class="results-missions" id="results-missions-row"></div>
+
+    <div class="flex-row" style="justify-content:center; gap:12px; margin-bottom:24px;">
+      <button class="btn-primary" onclick="showCertificate()">🏅 VER CERTIFICADO</button>
+      <button class="btn-secondary" onclick="playAgain()">↺ Jugar de Nuevo</button>
+    </div>
+
+    <!-- Certificate (hidden by default) -->
+    <div class="cert-section" id="cert-section">
+      <input type="text" id="cert-name-input" placeholder="Escribe tu nombre aquí…" oninput="updateCertName()">
+      <div class="certificate" id="certificate">
+        <img class="cert-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_Universidad_IEU.svg" alt="IEU" onerror="this.style.display='none'">
+        <div class="cert-title">Certificado de Logro</div>
+        <div class="cert-main">Introducción a Ventas<br>y Comercialización — Bloque 2</div>
+        <div style="margin: 12px 0 4px; font-size:12px; color:var(--muted);">Otorgado a</div>
+        <div class="cert-name-field" id="cert-name-display">— Tu Nombre —</div>
+        <div class="cert-body">
+          Ha demostrado competencias en Planeación y Organización del Departamento de Ventas, incluyendo territorios, distribución, tipos de vendedores y proceso de selección.
+        </div>
+        <div class="cert-seal">🎖️</div>
+        <div style="color:var(--amber); font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:800; margin-bottom:4px;" id="cert-xp-line">XP: 0</div>
+        <div class="cert-footer">Universidad IEU · <span id="cert-date"></span></div>
+      </div>
+
+      <div class="flex-row" style="justify-content:center; margin-top:12px;">
+        <button class="btn-secondary" onclick="downloadCert()">⬇️ Descargar Certificado</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="results-orange-strip"></div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// =====================================================================
+// STATE
+// =====================================================================
+let totalXP = 0;
+let missionXP = [0, 0, 0];
+let missionDone = [false, false, false];
+let currentMission = 1;
+
+// =====================================================================
+// XP & HUD
+// =====================================================================
+function addXP(amount) {
+  totalXP += amount;
+  const el = document.getElementById('hud-xp');
+  el.textContent = totalXP;
+  el.classList.remove('xp-pop');
+  void el.offsetWidth;
+  el.classList.add('xp-pop');
+  updateHUD();
+}
+
+function updateHUD() {
+  const max = 500;
+  const pct = Math.min((totalXP / max) * 100, 100);
+  document.getElementById('hud-progress').style.width = pct + '%';
+
+  const lvl = document.getElementById('hud-level');
+  if (totalXP >= 450) { lvl.textContent = '🏆 LEYENDA'; lvl.style.background = 'linear-gradient(135deg,#FFD700,#FFA500)'; }
+  else if (totalXP >= 300) { lvl.textContent = '⭐ EXPERTO'; lvl.style.background = 'linear-gradient(135deg,#E8440A,#FF8040)'; }
+  else if (totalXP >= 150) { lvl.textContent = '🔥 PROFESIONAL'; }
+  else { lvl.textContent = '🎯 NOVATO'; }
+}
+
+// =====================================================================
+// TOAST
+// =====================================================================
+let toastTimer;
+function showToast(msg, type = '') {
+  const t = document.getElementById('feedback-toast');
+  clearTimeout(toastTimer);
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  toastTimer = setTimeout(() => { t.className = ''; }, 2800);
+}
+
+// =====================================================================
+// SCREENS
+// =====================================================================
+function startMissions() {
+  showScreen('screen-mission');
+  switchMission(1);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToResults() {
+  updateResults();
+  showScreen('screen-results');
+}
+
+// =====================================================================
+// MISSION TABS
+// =====================================================================
+function switchMission(n) {
+  currentMission = n;
+  document.querySelectorAll('.mission-body').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mission-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('body-m' + n).classList.add('active');
+  document.getElementById('tab-m' + n).classList.add('active');
+
+  if (n === 2 && !simInitialized) initSim();
+  if (n === 3 && !matchInitialized) initMatch();
+}
+
+// =====================================================================
+// LESSON TABS
+// =====================================================================
+function switchTab(el, contentId) {
+  const parent = el.closest('.mini-lesson');
+  parent.querySelectorAll('.lesson-tab').forEach(t => t.classList.remove('active'));
+  parent.querySelectorAll('.lesson-content').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(contentId).classList.add('active');
+}
+
+// =====================================================================
+// MISSION 1 — DRAG & DROP CLASSIFICATION
+// =====================================================================
+const m1Items = [
+  { id: 'i1', text: 'Un vendedor cubre todo el norte del país, minimizando gastos de viaje.', cat: 'geografica', hint: 'Cada vendedor responsable de una zona específica = Organización Geográfica.' },
+  { id: 'i2', text: 'La empresa asigna representantes especializados en líneas de electrodomésticos vs. líneas de cómputo.', cat: 'productos', hint: 'Los vendedores se especializan por categoría de producto.' },
+  { id: 'i3', text: 'Visitadores médicos con formación en farmacología presentan los medicamentos a los doctores.', cat: 'funciones', hint: 'Requiere conocimientos técnicos específicos = Organización por Funciones.' },
+  { id: 'i4', text: 'Se separan equipos para atender a clientes corporativos vs. pequeños negocios.', cat: 'mercado', hint: 'División por tipo de cliente o segmento = Organización por Mercado.' },
+  { id: 'i5', text: 'Cada representante conoce a fondo las características técnicas e industriales de su producto.', cat: 'productos', hint: 'El vendedor se vuelve experto en el producto que oferta.' },
+  { id: 'i6', text: 'El equipo de ventas CDMX atiende solo clientes de retail; otro equipo atiende gobierno.', cat: 'mercado', hint: 'Especialización por tipo de cliente en un mismo territorio.' },
+  { id: 'i7', text: 'La fuerza de ventas Occidente genera relaciones más cercanas gracias a la exclusividad territorial.', cat: 'geografica', hint: 'Relación cercana con el cliente y bajos costos = Geográfica.' },
+  { id: 'i8', text: 'Un químico farmacéutico resuelve dudas complejas de los clientes sobre el proceso productivo.', cat: 'funciones', hint: 'Habilidades técnicas específicas para resolver dudas = Por Funciones.' },
+];
+
+let draggedItemId = null;
+let m1Placements = {}; // itemId -> colId
+const m1ColItems = { geo: [], prod: [], mkt: [], func: [] };
+
+function initMission1() {
+  const src = document.getElementById('drag-source-items');
+  src.innerHTML = '';
+  m1Items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'drag-item';
+    div.textContent = item.text;
+    div.id = 'drag-' + item.id;
+    div.draggable = true;
+    div.dataset.id = item.id;
+    div.addEventListener('dragstart', (e) => {
+      draggedItemId = item.id;
+      setTimeout(() => div.classList.add('dragging'), 10);
+    });
+    div.addEventListener('dragend', () => div.classList.remove('dragging'));
+    src.appendChild(div);
+  });
+}
+
+function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dropItem(e, col) {
+  e.preventDefault();
+  col.classList.remove('drag-over');
+  if (!draggedItemId) return;
+
+  const item = m1Items.find(x => x.id === draggedItemId);
+  if (!item) return;
+
+  // Remove from previous column if exists
+  Object.keys(m1Placements).forEach(id => {
+    if (id === draggedItemId) {
+      const prev = m1Placements[id];
+      const prevEl = document.getElementById('placed-' + id);
+      if (prevEl) prevEl.remove();
+      delete m1Placements[id];
+    }
+  });
+
+  // Return source item to visible
+  const srcEl = document.getElementById('drag-' + draggedItemId);
+
+  // Place in new column
+  m1Placements[draggedItemId] = col.dataset.cat;
+  const placed = document.createElement('div');
+  placed.className = 'drag-item';
+  placed.id = 'placed-' + draggedItemId;
+  placed.textContent = item.text;
+  placed.dataset.id = draggedItemId;
+  placed.style.cursor = 'pointer';
+  placed.title = 'Click para devolver';
+  placed.addEventListener('click', () => returnItemToSource(draggedItemId || item.id, placed));
+  placed.addEventListener('click', function() { returnItemToSource(item.id, this); });
+
+  const dropItems = col.querySelector('.drop-items');
+  dropItems.appendChild(placed);
+
+  if (srcEl) srcEl.style.display = 'none';
+  draggedItemId = null;
+
+  const checkBtn = document.getElementById('check-m1');
+  if (Object.keys(m1Placements).length === m1Items.length) {
+    checkBtn.disabled = false;
+  }
+}
+
+function returnItemToSource(itemId, el) {
+  delete m1Placements[itemId];
+  el.remove();
+  const srcEl = document.getElementById('drag-' + itemId);
+  if (srcEl) srcEl.style.display = '';
+  document.getElementById('check-m1').disabled = Object.keys(m1Placements).length < m1Items.length;
+}
+
+function checkMission1() {
+  let correct = 0;
+  let firstWrong = null;
+
+  m1Items.forEach(item => {
+    const placedEl = document.getElementById('placed-' + item.id);
+    if (!placedEl) return;
+    const placed = m1Placements[item.id];
+    if (placed === item.cat) {
+      correct++;
+      placedEl.classList.add('correct');
+    } else {
+      placedEl.classList.add('incorrect');
+      if (!firstWrong) firstWrong = item;
+    }
+  });
+
+  const xp = Math.round((correct / m1Items.length) * 150);
+  if (!missionDone[0]) {
+    missionXP[0] = xp;
+    addXP(xp);
+  }
+
+  if (correct === m1Items.length) {
+    missionDone[0] = true;
+    document.getElementById('tab-m1').classList.add('completed');
+    showToast('🎉 ¡Perfecto! +' + xp + ' XP — Misión 1 Completada!', 'success');
+    document.getElementById('next-m1').classList.add('visible');
+    document.getElementById('check-m1').disabled = true;
+  } else {
+    const hint = firstWrong ? firstWrong.hint : 'Revisa las categorías.';
+    document.getElementById('hint-m1-text').textContent = hint + ' (' + correct + '/' + m1Items.length + ' correctas)';
+    document.getElementById('hint-m1').classList.add('visible');
+    showToast('❌ ' + correct + '/' + m1Items.length + ' correctas. Revisa las marcadas en rojo.', 'fail');
+    if (xp > 0 && !missionDone[0]) { missionXP[0] = xp; addXP(xp); }
+  }
+}
+
+// =====================================================================
+// MISSION 2 — SIMULATOR
+// =====================================================================
+const simQuestions = [
+  {
+    scenario: 'Eres el nuevo Gerente de Ventas de una empresa de tecnología. Tu equipo de 12 vendedores cubre todo México pero las ventas están desorganizadas. ¿Cuál es el PRIMER paso para establecer territorios de ventas?',
+    options: [
+      { text: 'A. Contratar más vendedores inmediatamente.', correct: false },
+      { text: 'B. Seleccionar una unidad geográfica de control (estados, ciudades).', correct: true },
+      { text: 'C. Aumentar las comisiones de los vendedores actuales.', correct: false },
+      { text: 'D. Lanzar una campaña de publicidad nacional.', correct: false },
+    ],
+    explanation: 'El primer paso del proceso de Anderson, Hair y Bush (2003) es seleccionar la unidad geográfica de control. Con estas unidades se facilita la segmentación posterior.'
+  },
+  {
+    scenario: 'Tu empresa vende equipos médicos especializados. Los clientes hacen preguntas muy técnicas que los vendedores actuales no pueden responder. ¿Qué tipo de organización del departamento de ventas es más adecuada?',
+    options: [
+      { text: 'A. Organización geográfica.', correct: false },
+      { text: 'B. Organización por funciones de venta.', correct: true },
+      { text: 'C. Organización por productos de consumo masivo.', correct: false },
+      { text: 'D. Organización únicamente por volumen de ventas.', correct: false },
+    ],
+    explanation: 'La organización por funciones requiere habilidades técnicas específicas (como en farmacéuticas con médicos) para resolver dudas complejas de los clientes.'
+  },
+  {
+    scenario: 'El Director Financiero te pregunta qué factores afectan directamente la rentabilidad del departamento de ventas. ¿Cuál es la respuesta correcta según Erickson (2010)?',
+    options: [
+      { text: 'A. Solo el volumen de ventas mensual.', correct: false },
+      { text: 'B. Únicamente las comisiones de los vendedores.', correct: false },
+      { text: 'C. Los gastos de distribución y los gastos de venta y entrega (comisiones, salarios, viáticos).', correct: true },
+      { text: 'D. El número de vendedores contratados.', correct: false },
+    ],
+    explanation: 'Según Erickson (2010), la rentabilidad se ve afectada por los gastos de distribución y los gastos de venta y entrega de mercancías, incluyendo comisiones, salarios y viáticos.'
+  },
+  {
+    scenario: 'Para lanzar un producto nacional, necesitas planificar todas las actividades de ventas con sus tiempos, dependencias y holguras. ¿Qué método es el más apropiado para este proyecto?',
+    options: [
+      { text: 'A. Un chat grupal de WhatsApp.', correct: false },
+      { text: 'B. Solo una lista de tareas en papel.', correct: false },
+      { text: 'C. La Ruta Crítica (planeación, programación y control).', correct: true },
+      { text: 'D. Asignar todo al vendedor con más experiencia.', correct: false },
+    ],
+    explanation: 'La Ruta Crítica (Colcha et al., 2021) engloba dirección, planeación, organización y control, con sus 3 fases: planeación (diagramas de red), programación (tiempos) y control (supervisión).'
+  },
+  {
+    scenario: 'Un candidato para vendedor llegó con excelente solicitud y pasó las pruebas de idoneidad. ¿Cuál es el siguiente paso en el proceso de selección según Torres (2014)?',
+    options: [
+      { text: 'A. Decisión de contratar directamente.', correct: false },
+      { text: 'B. Entrevista de selección formal.', correct: true },
+      { text: 'C. Asignarle territorio inmediatamente.', correct: false },
+      { text: 'D. Examen médico antes de cualquier entrevista.', correct: false },
+    ],
+    explanation: 'El proceso de selección de 8 pasos: 1) Recepción de solicitudes → 2) Pruebas de idoneidad → 3) Entrevista de selección → 4) Verificación de datos → 5) Examen médico → 6) Entrevista con supervisor → 7) Descripción del puesto → 8) Decisión de contratar.'
+  }
+];
+
+let simInitialized = false;
+let currentSimQ = 0;
+let simAnswered = []; // booleans
+let simXP = 0;
+
+function initSim() {
+  simInitialized = true;
+  currentSimQ = 0;
+  simAnswered = [];
+  simXP = 0;
+
+  const stepsEl = document.getElementById('sim-steps');
+  stepsEl.innerHTML = '';
+  simQuestions.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'sim-step-dot' + (i === 0 ? ' active' : '');
+    d.id = 'sim-dot-' + i;
+    stepsEl.appendChild(d);
+  });
+
+  renderSimQuestion();
+}
+
+function renderSimQuestion() {
+  if (currentSimQ >= simQuestions.length) {
+    finishSim();
+    return;
+  }
+
+  const q = simQuestions[currentSimQ];
+  const container = document.getElementById('sim-question-container');
+  document.getElementById('hint-m2').classList.remove('visible');
+
+  container.innerHTML = `
+    <div class="sim-scenario fade-in-up">
+      <strong>Escenario ${currentSimQ + 1}/${simQuestions.length}:</strong><br>${q.scenario}
+    </div>
+    <div class="sim-options" id="sim-opts">
+      ${q.options.map((o, i) => `
+        <button class="sim-option" onclick="answerSim(${i})" id="sim-opt-${i}">
+          ${o.text}
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function answerSim(idx) {
+  const q = simQuestions[currentSimQ];
+  const opts = document.querySelectorAll('.sim-option');
+  opts.forEach(o => o.disabled = true);
+
+  const correct = q.options[idx].correct;
+  if (correct) {
+    opts[idx].classList.add('selected-correct');
+    simXP += 40;
+    addXP(40);
+    showToast('✅ ¡Correcto! +40 XP', 'success');
+    simAnswered.push(true);
+  } else {
+    opts[idx].classList.add('selected-incorrect');
+    q.options.forEach((o, i) => { if (o.correct) opts[i].classList.add('reveal-correct'); });
+    showToast('❌ Incorrecto. Lee la explicación.', 'fail');
+    simAnswered.push(false);
+  }
+
+  document.getElementById('hint-m2-text').textContent = q.explanation;
+  document.getElementById('hint-m2').classList.add('visible');
+
+  // Update step dots
+  document.getElementById('sim-dot-' + currentSimQ).className = 'sim-step-dot done';
+
+  // Add next button
+  const container = document.getElementById('sim-question-container');
+  if (currentSimQ < simQuestions.length - 1) {
+    const btn = document.createElement('button');
+    btn.className = 'next-btn visible';
+    btn.textContent = 'Siguiente →';
+    btn.style.marginLeft = '0';
+    btn.onclick = () => {
+      currentSimQ++;
+      if (currentSimQ < simQuestions.length) {
+        document.getElementById('sim-dot-' + currentSimQ).classList.add('active');
+      }
+      renderSimQuestion();
+    };
+    container.appendChild(btn);
+  } else {
+    const btn = document.createElement('button');
+    btn.className = 'next-btn visible';
+    btn.innerHTML = '🤝 Ir a Misión 3 →';
+    btn.style.marginLeft = '0';
+    btn.onclick = () => { finishSim(); switchMission(3); };
+    container.appendChild(btn);
+  }
+}
+
+function finishSim() {
+  if (!missionDone[1]) {
+    missionDone[1] = true;
+    missionXP[1] = simXP;
+    document.getElementById('tab-m2').classList.add('completed');
+    showToast('🎉 ¡Misión 2 Completada! Total: +' + simXP + ' XP', 'success');
+  }
+}
+
+// =====================================================================
+// MISSION 3 — MEMORY MATCH
+// =====================================================================
+const matchPairs = [
+  { id: 'a', term: 'Dependiente', def: 'Vende en mostrador de tienda minorista, asesora al cliente.' },
+  { id: 'b', term: 'Visitador', def: 'Vendedor directo del fabricante, recibe comisión por venta.' },
+  { id: 'c', term: 'Vendedor Técnico', def: 'Asesor industrial con proceso de compra largo y especificaciones técnicas.' },
+  { id: 'd', term: 'Agente Comercial', def: 'Empleado autónomo que actúa bajo contrato de agencia.' },
+  { id: 'e', term: 'Promotor', def: 'Realiza demostraciones de nuevos productos y anima la compra.' },
+  { id: 'f', term: 'V. a Domicilio', def: 'Visita al cliente previa cita, requiere creatividad en la demostración.' },
+  { id: 'g', term: 'Pruebas de Idoneidad', def: 'Paso 2 de selección: evalúa compatibilidad entre puesto y aspirante.' },
+  { id: 'h', term: 'Descripción del Puesto', def: 'Paso 7: familiarización para eliminar expectativas equivocadas.' },
+];
+
+let matchInitialized = false;
+let selectedMatchCards = [];
+let matchedPairs = [];
+let matchXP = 0;
+
+function initMatch() {
+  matchInitialized = true;
+  selectedMatchCards = [];
+  matchedPairs = [];
+  matchXP = 0;
+  renderMatchGrid();
+}
+
+function renderMatchGrid() {
+  const grid = document.getElementById('match-grid-m3');
+  grid.innerHTML = '';
+  document.getElementById('match-count').textContent = '0';
+
+  // Create all cards (term + def) and shuffle
+  let cards = [];
+  matchPairs.forEach(p => {
+    cards.push({ id: p.id + '-term', pairId: p.id, type: 'term', text: p.term });
+    cards.push({ id: p.id + '-def', pairId: p.id, type: 'def', text: p.def });
+  });
+
+  // Shuffle
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+
+  cards.forEach(card => {
+    const div = document.createElement('div');
+    div.className = 'match-card';
+    div.id = 'mc-' + card.id;
+    div.textContent = card.text;
+    div.dataset.pairId = card.pairId;
+    div.dataset.type = card.type;
+    div.dataset.cardId = card.id;
+    div.onclick = () => selectMatchCard(div);
+    grid.appendChild(div);
+  });
+}
+
+function selectMatchCard(el) {
+  if (el.classList.contains('matched') || el.classList.contains('selected')) return;
+  if (selectedMatchCards.length >= 2) return;
+
+  el.classList.add('selected');
+  selectedMatchCards.push(el);
+
+  if (selectedMatchCards.length === 2) {
+    const [a, b] = selectedMatchCards;
+    setTimeout(() => checkMatchPair(a, b), 400);
+  }
+}
+
+function checkMatchPair(a, b) {
+  const sameId = a.dataset.pairId === b.dataset.pairId;
+  const diffType = a.dataset.type !== b.dataset.type;
+
+  if (sameId && diffType) {
+    a.classList.remove('selected'); b.classList.remove('selected');
+    a.classList.add('matched'); b.classList.add('matched');
+    matchedPairs.push(a.dataset.pairId);
+    matchXP += 18;
+    addXP(18);
+    document.getElementById('match-count').textContent = matchedPairs.length;
+    showToast('✅ ¡Par encontrado! +18 XP', 'success');
+
+    if (matchedPairs.length === matchPairs.length) {
+      finishMatch();
+    }
+  } else {
+    a.classList.add('wrong'); b.classList.add('wrong');
+    document.getElementById('hint-m3').classList.add('visible');
+    const pair = matchPairs.find(p => p.id === a.dataset.pairId || p.id === b.dataset.pairId);
+    document.getElementById('hint-m3-text').textContent = 'Busca el par correcto. Cada concepto tiene una definición específica.';
+    setTimeout(() => {
+      a.classList.remove('selected','wrong');
+      b.classList.remove('selected','wrong');
+    }, 700);
+    showToast('❌ No coinciden. Intenta de nuevo.', 'fail');
+  }
+  selectedMatchCards = [];
+}
+
+function finishMatch() {
+  if (!missionDone[2]) {
+    missionDone[2] = true;
+    missionXP[2] = matchXP;
+    document.getElementById('tab-m3').classList.add('completed');
+    showToast('🏆 ¡Misión 3 Completada! Todas las misiones terminadas!', 'success');
+    const nextBtn = document.getElementById('next-m3');
+    nextBtn.style.display = 'inline-flex';
+    document.getElementById('hint-m3').classList.remove('visible');
+  }
+}
+
+function resetMatch() {
+  matchInitialized = false;
+  initMatch();
+}
+
+// =====================================================================
+// RESULTS
+// =====================================================================
+function updateResults() {
+  document.getElementById('final-xp').textContent = totalXP;
+  document.getElementById('cert-xp-line').textContent = 'XP Total: ' + totalXP;
+  document.getElementById('cert-date').textContent = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  const row = document.getElementById('results-missions-row');
+  row.innerHTML = '';
+  const labels = ['🗺️ Territorios', '📊 Planeación', '🤝 Reclutamiento'];
+  labels.forEach((label, i) => {
+    const d = document.createElement('div');
+    d.className = 'result-mission-badge' + (missionDone[i] ? ' done' : '');
+    d.innerHTML = label + ' — <strong>' + missionXP[i] + ' XP</strong>';
+    row.appendChild(d);
+  });
+}
+
+function showCertificate() {
+  const section = document.getElementById('cert-section');
+  section.classList.add('visible');
+  section.scrollIntoView({ behavior: 'smooth' });
+}
+
+function updateCertName() {
+  const name = document.getElementById('cert-name-input').value;
+  document.getElementById('cert-name-display').textContent = name || '— Tu Nombre —';
+}
+
+function downloadCert() {
+  const cert = document.getElementById('certificate');
+  // Simple print-based download
+  const printWin = window.open('', '_blank');
+  printWin.document.write(`
+    <html><head><title>Certificado IEU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body { background: #0D0804; color: #F5EDE0; font-family: 'Barlow', sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; }
+      .cert { background: linear-gradient(135deg,#1A0E04,#0D0804); border: 2px solid #E8440A; border-radius:16px; padding:40px 60px; max-width:580px; text-align:center; }
+      .ct { font-family:'Barlow Condensed',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:3px; color:#E8440A; margin-bottom:8px; }
+      .cm { font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:900; text-transform:uppercase; }
+      .cn { font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700; color:#FFB347; margin:12px 0; }
+      .cb { font-size:13px; color:#8C7A65; line-height:1.5; margin-bottom:16px; }
+      .cs { font-size:40px; }
+    </style>
+    </head>
+    <body>
+    <div class="cert">
+      <div class="ct">Certificado de Logro</div>
+      <div class="cm">Introducción a Ventas y Comercialización — Bloque 2</div>
+      <div style="font-size:12px;color:#8C7A65;margin:12px 0 4px;">Otorgado a</div>
+      <div class="cn">${document.getElementById('cert-name-display').textContent}</div>
+      <div class="cb">Ha demostrado competencias en Planeación y Organización del Departamento de Ventas.</div>
+      <div class="cs">🎖️</div>
+      <div style="color:#FFB347;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;">${document.getElementById('cert-xp-line').textContent}</div>
+      <div style="font-size:11px;color:#8C7A65;text-transform:uppercase;letter-spacing:2px;margin-top:8px;">Universidad IEU · ${document.getElementById('cert-date').textContent}</div>
+    </div>
+    </body></html>
+  `);
+  printWin.document.close();
+  setTimeout(() => { printWin.print(); }, 500);
+}
+
+function playAgain() {
+  totalXP = 0; missionXP = [0,0,0]; missionDone = [false,false,false];
+  updateHUD();
+  simInitialized = false; matchInitialized = false;
+  document.getElementById('hud-xp').textContent = '0';
+  document.querySelectorAll('.mission-tab').forEach(t => t.classList.remove('completed'));
+  document.getElementById('cert-section').classList.remove('visible');
+  document.getElementById('cert-name-input').value = '';
+  updateCertName();
+
+  // Reset M1
+  Object.keys(m1Placements).forEach(k => delete m1Placements[k]);
+  initMission1();
+  document.getElementById('check-m1').disabled = true;
+  document.getElementById('next-m1').classList.remove('visible');
+  document.getElementById('hint-m1').classList.remove('visible');
+  ['drop-items-geo','drop-items-prod','drop-items-mkt','drop-items-func'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+
+  startMissions();
+}
+
+// =====================================================================
+// DRAG EVENTS — touch support (passive)
+// =====================================================================
+document.querySelectorAll('.drop-column').forEach(col => {
+  col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+});
+
+// =====================================================================
+// INIT
+// =====================================================================
+initMission1();
+updateHUD();
+</script>
+</body>
+</html>
