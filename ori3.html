@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="SPA educativa IEU: Domina ONU, Banco Mundial, FMI, OCDE, UNCTAD y UNICINTRA en la Cumbre de Organismos Internacionales. Aprende gobernanza global."/>
+<title>Corresponsal en la Cumbre Global · Bloque III · IEU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════
+   VARIABLES & RESET
+══════════════════════════════════ */
+:root{
+  --bg:#0D0804;
+  --pri:#E8440A;
+  --sec:#FF8040;
+  --amb:#FFB347;
+  --sur:#171009;
+  --sur2:#211508;
+  --brd:#3e1e08;
+  --txt:#f0dcc8;
+  --mut:#9a7252;
+  --grn:#4ade80;
+  --red:#f87171;
+  --blu:#60a5fa;
+  --cya:#2dd4bf;
+  --pur:#a78bfa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);color:var(--txt);
+  min-height:100vh;
+  background-image:radial-gradient(circle,rgba(232,68,10,.11) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+
+/* ══════ HUD ══════ */
+#hud{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  background:rgba(13,8,4,.96);
+  border-bottom:2.5px solid var(--pri);
+  backdrop-filter:blur(18px);
+  height:62px;display:flex;align-items:center;
+  padding:0 20px;gap:14px;
+}
+.hbrand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hbrand img{height:34px;object-fit:contain}
+.hbrand-t .t1{font-family:'Bebas Neue',sans-serif;font-size:.98rem;
+  color:var(--pri);letter-spacing:.08em;line-height:1}
+.hbrand-t .t2{font-size:.58rem;color:var(--mut);font-family:'Space Mono',monospace}
+.hsp{flex:1}
+.htabs{display:flex;gap:3px;flex-shrink:0}
+.htab{
+  font-family:'Space Mono',monospace;font-size:.59rem;
+  background:var(--sur2);border:1px solid var(--brd);
+  border-radius:5px;padding:4px 9px;cursor:pointer;
+  color:var(--mut);transition:all .18s;white-space:nowrap;
+}
+.htab:hover{border-color:var(--sec);color:var(--sec)}
+.htab.on{background:var(--pri);border-color:var(--pri);color:#000;font-weight:700}
+.htab.ok{border-color:var(--grn);color:var(--grn)}
+.hxp-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.hxp-bg{width:75px;height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
+.hxp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--pri),var(--amb));
+  border-radius:3px;transition:width .5s ease}
+.hxp-num{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--pri)}
+.hlvl{font-family:'Space Mono',monospace;font-size:.62rem;
+  border:1px solid var(--amb);color:var(--amb);
+  border-radius:20px;padding:3px 10px;white-space:nowrap;flex-shrink:0}
+@media(max-width:700px){.htabs{display:none}.hxp-bg{width:46px}}
+
+/* ══════ SCREENS ══════ */
+.scr{display:none;padding-top:70px;min-height:100vh}
+.scr.on{display:block}
+.w{max-width:920px;margin:0 auto;padding:28px 18px 68px}
+
+/* ══════ INTRO ══════ */
+#si{
+  display:none;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;
+  padding:88px 18px 60px;min-height:100vh;
+}
+#si.on{display:flex}
+.i-globe{font-size:5rem;animation:spin3d 6s linear infinite;display:block;margin-bottom:14px}
+@keyframes spin3d{
+  0%{transform:rotateY(0deg) scale(1)}
+  50%{transform:rotateY(180deg) scale(1.08)}
+  100%{transform:rotateY(360deg) scale(1)}
+}
+.i-h{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,8vw,5.8rem);
+  line-height:.92;letter-spacing:.02em;
+  background:linear-gradient(135deg,#fff 15%,var(--sec) 50%,var(--amb));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:10px;
+}
+.i-sub{color:var(--mut);font-size:.92rem;line-height:1.7;max-width:520px;margin:0 auto 28px}
+.i-org-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:28px}
+.pill{
+  background:var(--sur2);border:1px solid var(--brd);
+  border-radius:20px;padding:5px 14px;
+  font-family:'Space Mono',monospace;font-size:.68rem;color:var(--sec);
+  transition:all .2s;
+}
+.pill:hover{border-color:var(--pri);color:var(--pri)}
+.i-cards{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+.icard{
+  background:var(--sur);border:1px solid var(--brd);
+  border-radius:14px;padding:16px 18px;width:190px;text-align:left;
+  transition:all .2s;
+}
+.icard:hover{border-color:var(--pri);transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(232,68,10,.2)}
+.icard-ic{font-size:1.9rem;margin-bottom:8px}
+.icard-n{font-family:'Bebas Neue',sans-serif;color:var(--pri);font-size:.92rem;letter-spacing:.05em;margin-bottom:4px}
+.icard-d{font-size:.7rem;color:var(--mut);line-height:1.5}
+.btngo{
+  background:linear-gradient(135deg,var(--pri),var(--sec));
+  color:#000;font-family:'Bebas Neue',sans-serif;
+  font-size:1.5rem;letter-spacing:.1em;
+  border:none;border-radius:10px;padding:14px 48px;cursor:pointer;
+  box-shadow:0 0 40px rgba(232,68,10,.5);
+  transition:transform .15s,box-shadow .15s;
+}
+.btngo:hover{transform:scale(1.05);box-shadow:0 0 65px rgba(232,68,10,.7)}
+.stripe{height:5px;width:100%;max-width:520px;margin-top:38px;
+  background:linear-gradient(90deg,var(--pri),var(--amb),var(--sec),var(--amb),var(--pri));
+  border-radius:3px;}
+
+/* ══════ MISSION HEADER ══════ */
+.mbadge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--pri);color:#000;
+  font-family:'Bebas Neue',sans-serif;letter-spacing:.08em;font-size:.9rem;
+  border-radius:5px;padding:3px 13px;margin-bottom:10px;
+}
+.mh{font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.9rem,5vw,3rem);line-height:1;color:#fff;margin-bottom:6px}
+.ml{color:var(--mut);font-size:.88rem;line-height:1.65;max-width:620px;margin-bottom:20px}
+.prow{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.plbl{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--mut);white-space:nowrap}
+.pbg{flex:1;height:4px;background:var(--brd);border-radius:2px;overflow:hidden}
+.pfil{height:100%;background:linear-gradient(90deg,var(--pri),var(--amb));
+  border-radius:2px;transition:width .5s}
+
+/* ══════ ACCORDION ══════ */
+.acc{background:var(--sur);border:1px solid var(--brd);border-radius:12px;
+  margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.acc:hover{border-color:var(--sec)}
+.aH{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer}
+.aH-ic{font-size:1.3rem;flex-shrink:0}
+.aH-t{font-family:'Bebas Neue',sans-serif;font-size:.96rem;letter-spacing:.06em;color:var(--sec);flex:1}
+.aH-ar{color:var(--mut);font-size:.85rem;transition:transform .3s;flex-shrink:0}
+.aH-ar.op{transform:rotate(180deg)}
+.aB{max-height:0;overflow:hidden;transition:max-height .42s ease;
+  padding:0 18px;font-size:.84rem;line-height:1.75;color:var(--txt)}
+.aB.op{max-height:2000px;padding:0 18px 16px}
+.aB p{margin-bottom:9px}
+.aB ul{padding-left:18px;margin-bottom:9px}
+.aB li{margin-bottom:5px}
+.hl{color:var(--amb);font-weight:700}
+.chip{display:inline-block;background:var(--sur2);border:1px solid var(--brd);border-radius:4px;
+  padding:1px 7px;font-family:'Space Mono',monospace;font-size:.66rem;color:var(--sec);margin:2px}
+.ib{background:var(--sur2);border-left:3px solid var(--pri);border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:10px 0;font-size:.82rem;color:var(--amb);line-height:1.5}
+
+/* org badge */
+.org-header{
+  display:flex;align-items:center;gap:12px;
+  background:var(--sur2);border-left:4px solid var(--pri);
+  border-radius:0 10px 10px 0;padding:12px 16px;margin-bottom:14px;
+}
+.org-ic{font-size:2rem;flex-shrink:0}
+.org-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--pri);letter-spacing:.06em}
+.org-sub{font-size:.72rem;color:var(--mut);font-family:'Space Mono',monospace}
+
+/* data grid */
+.data-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0}
+.dbox{background:var(--sur2);border:1px solid var(--brd);border-radius:9px;padding:12px}
+.dbox-l{font-family:'Bebas Neue',sans-serif;font-size:.78rem;color:var(--sec);
+  letter-spacing:.05em;margin-bottom:5px}
+.dbox-v{font-size:.8rem;color:var(--txt);line-height:1.5}
+
+/* ══════ QUIZ ══════ */
+.stit{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--pri);
+  letter-spacing:.06em;margin:28px 0 14px;display:flex;align-items:center;gap:8px}
+.qc{background:var(--sur2);border:1px solid var(--brd);border-radius:10px;padding:18px 20px;margin-bottom:14px}
+.qt{font-size:.9rem;margin-bottom:13px;line-height:1.65}
+.qo{display:flex;flex-direction:column;gap:7px}
+.qb{background:var(--sur);border:1px solid var(--brd);border-radius:7px;
+  padding:10px 14px;color:var(--txt);font-family:'Outfit',sans-serif;font-size:.82rem;
+  cursor:pointer;text-align:left;transition:all .18s}
+.qb:hover:not(:disabled){border-color:var(--sec);background:rgba(255,128,64,.07)}
+.qb.cor{border-color:var(--grn);background:rgba(74,222,128,.1);color:var(--grn)}
+.qb.wr{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.qb:disabled{cursor:default}
+.fb{margin-top:9px;padding:8px 12px;border-radius:6px;font-size:.82rem;display:none}
+.fb.on{display:block}
+.fb.ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:var(--grn)}
+.fb.no{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+
+/* ══════ DRAG & DROP ══════ */
+.dpool{display:flex;flex-wrap:wrap;gap:8px;background:var(--sur2);
+  border:1px dashed var(--brd);border-radius:10px;padding:14px;min-height:68px;margin-bottom:18px}
+.dit{background:var(--sur);border:1px solid var(--sec);border-radius:6px;
+  padding:7px 13px;font-size:.76rem;cursor:grab;color:var(--txt);user-select:none;
+  transition:opacity .2s,transform .15s}
+.dit:active{cursor:grabbing;opacity:.6;transform:scale(.94)}
+.dit.pl{display:none}
+.dzwrap{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:600px){.dzwrap{grid-template-columns:1fr}}
+.dz{background:var(--sur2);border:2px dashed var(--brd);border-radius:10px;
+  padding:12px;min-height:130px;transition:border-color .2s,background .2s}
+.dz.ov{border-color:var(--pri);background:rgba(232,68,10,.07)}
+.dz-t{font-family:'Bebas Neue',sans-serif;font-size:.8rem;color:var(--amb);
+  letter-spacing:.05em;margin-bottom:8px;text-align:center;
+  border-bottom:1px solid var(--brd);padding-bottom:5px}
+.dz .dit{width:100%;margin-bottom:5px;cursor:default;font-size:.74rem}
+.btnchk{background:linear-gradient(135deg,var(--pri),var(--sec));
+  color:#000;font-family:'Bebas Neue',sans-serif;font-size:.98rem;letter-spacing:.08em;
+  border:none;border-radius:8px;padding:11px 24px;cursor:pointer;transition:transform .15s;margin-right:8px}
+.btnchk:hover:not(:disabled){transform:scale(1.04)}
+.btnchk:disabled{opacity:.4;cursor:default}
+.btnnx{background:transparent;border:2px solid var(--sec);color:var(--sec);
+  font-family:'Bebas Neue',sans-serif;font-size:.98rem;letter-spacing:.08em;
+  border-radius:8px;padding:10px 22px;cursor:pointer;transition:all .18s}
+.btnnx:hover{background:var(--sec);color:#000}
+
+/* ══════ SIMULATOR (M2) ══════ */
+.simcard{background:var(--sur);border:1px solid var(--brd);border-radius:12px;
+  padding:20px;margin-bottom:16px;transition:border-color .2s}
+.simcard:hover{border-color:var(--sec)}
+.simH{font-family:'Bebas Neue',sans-serif;color:var(--sec);font-size:1rem;letter-spacing:.06em;margin-bottom:8px}
+.simp{font-size:.84rem;color:var(--mut);line-height:1.65;margin-bottom:14px}
+/* compare table */
+.ctab{width:100%;border-collapse:collapse;font-size:.78rem;margin:10px 0}
+.ctab th{background:var(--sur);padding:8px 10px;text-align:left;
+  color:var(--amb);font-family:'Space Mono',monospace;border-bottom:1px solid var(--brd)}
+.ctab td{padding:8px 10px;border-bottom:1px solid var(--brd);color:var(--txt);vertical-align:top}
+.ctab tr:last-child td{border-bottom:none}
+/* policy choice grid */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:500px){.pgrid{grid-template-columns:1fr}}
+.pbtn{background:var(--sur2);border:2px solid var(--brd);border-radius:9px;
+  padding:14px 16px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.8rem;
+  color:var(--txt);text-align:left;transition:all .2s}
+.pbtn:hover:not(:disabled){border-color:var(--pri);background:rgba(232,68,10,.08)}
+.pbtn.g{border-color:var(--grn);background:rgba(74,222,128,.1);color:var(--grn)}
+.pbtn.b{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.pbtn:disabled{cursor:default}
+.pbtn-ic{display:block;font-size:1.4rem;margin-bottom:5px}
+.pbtn-t{font-weight:700;font-size:.82rem;margin-bottom:4px}
+.pbtn-d{font-size:.72rem;color:var(--mut);line-height:1.4}
+
+/* ══════ UNICINTRA CASES (M3) ══════ */
+.ucase{background:var(--sur);border:2px solid var(--brd);border-radius:12px;
+  padding:20px;margin-bottom:20px;position:relative;transition:border-color .2s}
+.ucase.solved{border-color:var(--grn)}
+.ucbadge{position:absolute;top:-10px;left:14px;font-family:'Bebas Neue',sans-serif;
+  font-size:.73rem;letter-spacing:.06em;border-radius:4px;padding:2px 10px;color:#000}
+.ub-a{background:var(--pri)}
+.ub-b{background:var(--cya)}
+.ub-c{background:var(--pur)}
+.ustamp{display:none;position:absolute;top:14px;right:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:.74rem;letter-spacing:.08em;
+  color:var(--grn);border:1.5px solid var(--grn);border-radius:4px;padding:2px 8px}
+.ustamp.on{display:block}
+.ucase-t{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--txt);margin:8px 0 6px}
+.ucase-b{font-size:.83rem;color:var(--mut);line-height:1.65;margin-bottom:14px}
+.uopts{display:flex;flex-direction:column;gap:8px}
+.ubtn{display:flex;align-items:flex-start;gap:12px;background:var(--sur2);
+  border:1px solid var(--brd);border-radius:8px;padding:12px 14px;
+  cursor:pointer;transition:all .2s;text-align:left}
+.ubtn:hover:not(:disabled){border-color:var(--sec)}
+.ubtn.cor{border-color:var(--grn);background:rgba(74,222,128,.1)}
+.ubtn.wr{border-color:var(--red);background:rgba(248,113,113,.1)}
+.ubtn:disabled{cursor:default}
+.ubtn-ic{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.ubtn-n{font-family:'Bebas Neue',sans-serif;font-size:.86rem;color:var(--amb);letter-spacing:.04em}
+.ubtn-d{font-size:.7rem;color:var(--mut);margin-top:2px;line-height:1.4}
+.uverd{margin-top:10px;padding:9px 13px;border-radius:6px;font-size:.82rem;display:none}
+.uverd.on{display:block}
+.uverd.ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:var(--grn)}
+.uverd.no{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+
+/* ══════ TOAST ══════ */
+#toast{position:fixed;bottom:22px;right:22px;z-index:500;
+  background:var(--sur);border:1px solid var(--pri);border-radius:10px;
+  padding:11px 18px;font-family:'Space Mono',monospace;font-size:.76rem;color:var(--amb);
+  box-shadow:0 12px 40px #000a;max-width:260px;
+  transform:translateY(80px);opacity:0;
+  transition:all .38s cubic-bezier(.34,1.56,.64,1)}
+#toast.pop{transform:translateY(0);opacity:1}
+
+/* ══════ RESULTS ══════ */
+#sr{display:none;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;
+  padding:82px 18px 60px;min-height:100vh}
+#sr.on{display:flex}
+.rtrophy{font-size:5.5rem;animation:rpop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes rpop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.rh{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.8rem);color:#fff;margin:10px 0 4px}
+.rxp{font-family:'Bebas Neue',sans-serif;font-size:2rem;
+  background:linear-gradient(135deg,var(--pri),var(--amb));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:22px}
+.rstats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:26px}
+.rstat{background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:13px 18px;min-width:96px}
+.rstat .rv{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--amb)}
+.rstat .rl{font-size:.64rem;color:var(--mut);font-family:'Space Mono',monospace;margin-top:2px}
+.bcert{background:transparent;border:2px solid var(--amb);color:var(--amb);
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.07em;
+  border-radius:8px;padding:11px 26px;cursor:pointer;margin:6px;transition:all .2s}
+.bcert:hover{background:var(--amb);color:#000}
+.bretry{background:var(--pri);color:#000;font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;letter-spacing:.07em;border:none;border-radius:8px;
+  padding:11px 26px;cursor:pointer;margin:6px;transition:transform .15s}
+.bretry:hover{transform:scale(1.04)}
+
+/* ══════ CERT ══════ */
+#cov{display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.9);backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:18px}
+#cov.on{display:flex}
+.cbox{background:var(--bg);border:2px solid var(--pri);border-radius:16px;
+  max-width:660px;width:100%;padding:34px 38px;text-align:center;position:relative}
+.cclose{position:absolute;top:12px;right:15px;background:none;border:none;
+  color:var(--mut);font-size:1.3rem;cursor:pointer}
+.clogo{height:42px;object-fit:contain;margin-bottom:14px}
+.cst{height:4px;background:linear-gradient(90deg,var(--pri),var(--amb),var(--sec));
+  border-radius:2px;margin:14px 0}
+.ctit{font-family:'Bebas Neue',sans-serif;font-size:1.85rem;color:var(--pri);letter-spacing:.08em}
+.csubt{font-size:.7rem;color:var(--mut);font-family:'Space Mono',monospace;margin-bottom:16px}
+.cnaml{font-size:.76rem;color:var(--mut);margin-bottom:4px}
+.cnam{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--amb);margin-bottom:4px}
+.ccrs{font-size:.85rem;color:var(--txt);margin-bottom:4px}
+.cblq{font-family:'Bebas Neue',sans-serif;font-size:.92rem;color:var(--sec);
+  letter-spacing:.05em;margin-bottom:14px}
+.csco{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--mut);margin-bottom:12px}
+.cdat{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--mut)}
+.bdl{background:var(--pri);color:#000;font-family:'Bebas Neue',sans-serif;
+  font-size:.88rem;letter-spacing:.07em;border:none;border-radius:7px;
+  padding:8px 20px;cursor:pointer;margin-top:12px;transition:transform .15s}
+.bdl:hover{transform:scale(1.04)}
+
+/* ══════ REFS ══════ */
+.rw{max-width:920px;margin:0 auto;padding:0 18px 50px}
+.rh2{font-family:'Bebas Neue',sans-serif;font-size:1.22rem;color:var(--pri);
+  letter-spacing:.06em;margin-bottom:14px;margin-top:36px}
+.ref{font-size:.72rem;color:var(--mut);line-height:1.65;
+  margin-bottom:10px;padding-left:18px;text-indent:-18px;font-family:'Space Mono',monospace}
+.ref a{color:var(--sec)}
+</style>
+</head>
+<body>
+
+<!-- ═══ HUD ═══ -->
+<div id="hud">
+  <div class="hbrand">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Logo_Universidad_IEU.svg"
+         alt="Logo oficial de la Universidad IEU Online, institución de educación superior privada reconocida por la SEP en México" width="80" height="34"/>
+    <div class="hbrand-t">
+      <div class="t1">GCI · Bloque III</div>
+      <div class="t2">Organismos Internacionales</div>
+    </div>
+  </div>
+  <div class="hsp"></div>
+  <div class="htabs">
+    <div class="htab on" id="tb-i" onclick="nav('i')">🏠</div>
+    <div class="htab" id="tb-m1" onclick="nav('m1')">🌐 M1</div>
+    <div class="htab" id="tb-m2" onclick="nav('m2')">📊 M2</div>
+    <div class="htab" id="tb-m3" onclick="nav('m3')">⚖️ M3</div>
+  </div>
+  <div class="hxp-wrap">
+    <div class="hxp-bg"><div class="hxp-fill" id="xpbar"></div></div>
+    <div class="hxp-num">⚡<span id="xpn">0</span></div>
+  </div>
+  <div class="hlvl" id="lvllbl">Pasante en la ONU</div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ═══ CERT OVERLAY ═══ -->
+<div id="cov">
+  <div class="cbox">
+    <button class="cclose" onclick="closeCert()">✕</button>
+    <img class="clogo" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Logo_Universidad_IEU.svg"
+         alt="Escudo institucional de la Universidad IEU Online, acreditada por organismos nacionales de educación superior en México"
+         onerror="this.style.display='none'"/>
+    <div class="cst"></div>
+    <div class="ctit">🏅 CERTIFICADO DE LOGRO</div>
+    <div class="csubt">COMERCIO GLOBAL INTERNACIONAL · IEU ONLINE</div>
+    <div class="cnaml">Este certificado acredita que</div>
+    <div class="cnam" id="cn">Estudiante IEU</div>
+    <div class="ccrs">completó satisfactoriamente el módulo</div>
+    <div class="cblq">Bloque III · Organismos Internacionales</div>
+    <div class="cblq" style="font-size:.78rem;color:var(--mut)">ONU · BM · FMI · OCDE · UNCTAD · UNICINTRA</div>
+    <div class="csco" id="cs"></div>
+    <div class="cst"></div>
+    <div class="cdat" id="cd"></div>
+    <button class="bdl" onclick="printCert()">⬇ Descargar / Imprimir</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     INTRO
+════════════════════════════════════════ -->
+<div class="scr on" id="si">
+  <span class="i-globe">🌐</span>
+  <div class="i-h">Corresponsal en la<br/>Cumbre Global</div>
+  <p class="i-sub">
+    Eres un periodista digital especializado en gobernanza global. Has sido enviado a cubrir la
+    <strong>Cumbre de Organismos Internacionales</strong>. Explica a tu audiencia de TikTok cómo funcionan
+    las instituciones que rigen la política, las finanzas y el comercio mundial.
+  </p>
+  <div class="i-org-pills">
+    <div class="pill">🕊️ ONU</div>
+    <div class="pill">🏦 Banco Mundial</div>
+    <div class="pill">💱 FMI</div>
+    <div class="pill">📈 OCDE</div>
+    <div class="pill">📦 UNCTAD</div>
+    <div class="pill">⚖️ UNICINTRA</div>
+  </div>
+  <div class="i-cards">
+    <div class="icard">
+      <div class="icard-ic">🌐</div>
+      <div class="icard-n">M1 · El Tridente del Orden</div>
+      <div class="icard-d">Clasifica funciones de ONU, Banco Mundial y FMI sin confundirlos.</div>
+    </div>
+    <div class="icard">
+      <div class="icard-ic">📊</div>
+      <div class="icard-n">M2 · Estratega de Políticas</div>
+      <div class="icard-d">Representa a México ante la OCDE y contrasta con la UNCTAD.</div>
+    </div>
+    <div class="icard">
+      <div class="icard-ic">⚖️</div>
+      <div class="icard-n">M3 · Diplomático UNICINTRA</div>
+      <div class="icard-d">Resuelve 3 disputas comerciales con la base jurídica correcta.</div>
+    </div>
+  </div>
+  <button class="btngo" onclick="nav('m1')">📡 INICIAR COBERTURA</button>
+  <div class="stripe"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MISSION 1 — ONU · BM · FMI
+════════════════════════════════════════ -->
+<div class="scr" id="sm1">
+<div class="w">
+  <div class="mbadge">🌐 MISIÓN 1</div>
+  <h1 class="mh">El Tridente del Orden Mundial</h1>
+  <p class="ml">Como corresponsal debes dominar los tres pilares del sistema internacional para no confundirlos al aire. Estudia cada organismo y luego clasifica sus funciones.</p>
+  <div class="prow">
+    <div class="plbl">Progreso M1</div>
+    <div class="pbg"><div class="pfil" id="pg1" style="width:0%"></div></div>
+    <div class="plbl" id="pt1">0 / 4</div>
+  </div>
+
+  <!-- ONU -->
+  <div class="acc" id="a-onu">
+    <div class="aH" onclick="tog('a-onu')">
+      <span class="aH-ic">🕊️</span>
+      <span class="aH-t">ONU — Organización de las Naciones Unidas</span>
+      <span class="aH-ar" id="ar-a-onu">▼</span>
+    </div>
+    <div class="aB" id="bd-a-onu">
+      <div class="org-header">
+        <span class="org-ic">🕊️</span>
+        <div><div class="org-name">ONU</div><div class="org-sub">Fundada: 1945 · Sede: Nueva York · 193 Estados miembros</div></div>
+      </div>
+      <p><strong>Antecedentes:</strong> Surgió tras la Segunda Guerra Mundial para reemplazar a la Liga de las Naciones. Fundada el <span class="hl">24 de octubre de 1945</span> con la firma de la Carta de las Naciones Unidas por 51 países.</p>
+      <div class="data-grid">
+        <div class="dbox"><div class="dbox-l">Estructura principal</div><div class="dbox-v">Asamblea General · Consejo de Seguridad (5 miembros permanentes con derecho a veto: EUA, RU, Francia, China, Rusia) · Secretaría General · CIJ · ECOSOC · Consejo de Administración Fiduciaria</div></div>
+        <div class="dbox"><div class="dbox-l">Objetivos y funciones</div><div class="dbox-v">Mantener la paz y seguridad internacional · Promover los derechos humanos · Fomentar el desarrollo sostenible · Coordinar la acción humanitaria · Facilitar el derecho internacional</div></div>
+      </div>
+      <div class="ib">💡 La Asamblea General es el único órgano donde <em>todos</em> los miembros tienen voz y voto igualitario (1 país = 1 voto). El Consejo de Seguridad tiene el poder de autorizar intervenciones militares.</div>
+    </div>
+  </div>
+
+  <!-- BANCO MUNDIAL -->
+  <div class="acc" id="a-bm">
+    <div class="aH" onclick="tog('a-bm')">
+      <span class="aH-ic">🏦</span>
+      <span class="aH-t">Banco Mundial — Financiamiento para el Desarrollo</span>
+      <span class="aH-ar" id="ar-a-bm">▼</span>
+    </div>
+    <div class="aB" id="bd-a-bm">
+      <div class="org-header" style="border-left-color:var(--blu)">
+        <span class="org-ic">🏦</span>
+        <div><div class="org-name" style="color:var(--blu)">BANCO MUNDIAL</div><div class="org-sub">Fundado: 1944 (Bretton Woods) · Sede: Washington D.C. · 189 países miembros</div></div>
+      </div>
+      <p><strong>Antecedentes:</strong> Creado en la <span class="hl">Conferencia de Bretton Woods (1944)</span> junto con el FMI. Originalmente para reconstruir Europa tras la WWII. Hoy enfocado en reducción de pobreza y desarrollo sostenible.</p>
+      <div class="data-grid">
+        <div class="dbox"><div class="dbox-l">Estructura</div><div class="dbox-v">Grupo del Banco Mundial: BIRF (Banco Internacional de Reconstrucción y Fomento) · AIF (Asociación Internacional de Fomento) · IFC · OMGI · CIADI. Gobernado por una Junta de Gobernadores (1 por país miembro).</div></div>
+        <div class="dbox"><div class="dbox-l">Objetivos y funciones</div><div class="dbox-v">Financiamiento a largo plazo para proyectos de infraestructura, salud, educación · Reducción de la pobreza extrema · Asesoría técnica y económica · Apoyo a países en desarrollo y emergentes</div></div>
+      </div>
+      <div class="ib">⚠️ DIFERENCIA CLAVE: El Banco Mundial financia <em>proyectos de inversión a largo plazo</em> (escuelas, carreteras, hospitales). El FMI atiende <em>emergencias de balanza de pagos</em> a corto plazo.</div>
+    </div>
+  </div>
+
+  <!-- FMI -->
+  <div class="acc" id="a-fmi">
+    <div class="aH" onclick="tog('a-fmi')">
+      <span class="aH-ic">💱</span>
+      <span class="aH-t">FMI — Fondo Monetario Internacional</span>
+      <span class="aH-ar" id="ar-a-fmi">▼</span>
+    </div>
+    <div class="aB" id="bd-a-fmi">
+      <div class="org-header" style="border-left-color:var(--grn)">
+        <span class="org-ic">💱</span>
+        <div><div class="org-name" style="color:var(--grn)">FMI</div><div class="org-sub">Fundado: 1944 (Bretton Woods) · Sede: Washington D.C. · 190 países miembros</div></div>
+      </div>
+      <p><strong>Antecedentes:</strong> Creado en <span class="hl">Bretton Woods (1944)</span>, entró en vigor en 1945. Diseñado para gestionar el sistema monetario internacional y evitar las crisis cambiarias que precedieron la Gran Depresión.</p>
+      <div class="data-grid">
+        <div class="dbox"><div class="dbox-l">Estructura</div><div class="dbox-v">Junta de Gobernadores (autoridad máxima) · Directorio Ejecutivo (24 directores) · Director Gerente (representa al FMI) · Comité Monetario y Financiero Internacional (CMFI)</div></div>
+        <div class="dbox"><div class="dbox-l">Objetivos y funciones</div><div class="dbox-v">Estabilidad del sistema monetario internacional · Supervisar tasas de cambio y balanzas de pagos · Préstamos de emergencia a países con crisis · Asistencia técnica y capacitación · Vigilancia económica global</div></div>
+      </div>
+      <div class="ib">💡 El FMI actúa como "prestamista de última instancia" para países con crisis de balanza de pagos. Sus préstamos vienen condicionados a <em>programas de ajuste macroeconómico</em>.</div>
+    </div>
+  </div>
+
+  <!-- DRAG & DROP M1 -->
+  <div class="stit">🎯 MINIJUEGO — Clasifica las funciones en el organismo correcto</div>
+  <p style="font-size:.79rem;color:var(--mut);margin-bottom:14px">
+    ⚠️ Recuerda: BM = proyectos de inversión a largo plazo | FMI = estabilidad cambiaria y emergencias | ONU = paz y seguridad
+  </p>
+
+  <div class="dpool" id="pool1">
+    <div class="dit" id="d1" draggable="true" ondragstart="ds(event,'d1')" data-cat="onu">Mantener la paz y seguridad internacional</div>
+    <div class="dit" id="d2" draggable="true" ondragstart="ds(event,'d2')" data-cat="bm">Financiar proyectos de infraestructura en países en desarrollo</div>
+    <div class="dit" id="d3" draggable="true" ondragstart="ds(event,'d3')" data-cat="fmi">Estabilizar el sistema monetario internacional</div>
+    <div class="dit" id="d4" draggable="true" ondragstart="ds(event,'d4')" data-cat="onu">Asamblea General con 193 países miembros</div>
+    <div class="dit" id="d5" draggable="true" ondragstart="ds(event,'d5')" data-cat="bm">Reducción de la pobreza extrema — proyectos a largo plazo</div>
+    <div class="dit" id="d6" draggable="true" ondragstart="ds(event,'d6')" data-cat="fmi">Préstamos de emergencia por crisis de balanza de pagos</div>
+    <div class="dit" id="d7" draggable="true" ondragstart="ds(event,'d7')" data-cat="onu">Consejo de Seguridad con 5 miembros permanentes y veto</div>
+    <div class="dit" id="d8" draggable="true" ondragstart="ds(event,'d8')" data-cat="bm">BIRF y AIF como componentes del Grupo Banco Mundial</div>
+    <div class="dit" id="d9" draggable="true" ondragstart="ds(event,'d9')" data-cat="fmi">Vigilar tasas de cambio y coordinar la política monetaria global</div>
+  </div>
+
+  <div class="dzwrap">
+    <div class="dz" id="z-onu" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'onu')">
+      <div class="dz-t">🕊️ ONU<br/><small style="font-size:.62rem;color:var(--mut);font-family:'Space Mono',monospace">Paz y Seguridad</small></div>
+    </div>
+    <div class="dz" id="z-bm" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'bm')">
+      <div class="dz-t">🏦 BANCO MUNDIAL<br/><small style="font-size:.62rem;color:var(--mut);font-family:'Space Mono',monospace">Desarrollo a Largo Plazo</small></div>
+    </div>
+    <div class="dz" id="z-fmi" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'fmi')">
+      <div class="dz-t">💱 FMI<br/><small style="font-size:.62rem;color:var(--mut);font-family:'Space Mono',monospace">Estabilidad Monetaria</small></div>
+    </div>
+  </div>
+
+  <button class="btnchk" id="bchk1" onclick="chkDrag()">✅ VERIFICAR CLASIFICACIÓN</button>
+  <div class="fb" id="fb-drag"></div>
+
+  <!-- Quiz M1 -->
+  <div class="stit" style="margin-top:30px">📡 PREGUNTAS DE COBERTURA</div>
+
+  <div class="qc">
+    <div class="qt">1. ¿Por qué el sistema da la pista "el FMI se enfoca en estabilidad cambiaria y el BM en proyectos de inversión" cuando alguien los confunde?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('q1','w',this)">Porque ambos fondos son divisiones del mismo organismo creado en Bretton Woods</button>
+      <button class="qb" onclick="qa('q1','c',this)">Porque tienen mandatos distintos: FMI atiende crisis monetarias a corto plazo; BM financia proyectos de desarrollo a largo plazo</button>
+      <button class="qb" onclick="qa('q1','w',this)">Porque el FMI solo presta a países ricos y el BM solo a países pobres</button>
+    </div>
+    <div class="fb" id="fb-q1"></div>
+  </div>
+
+  <div class="qc">
+    <div class="qt">2. ¿Cuál es el órgano de la ONU con poder para autorizar intervenciones militares y sanciones?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('q2','w',this)">La Asamblea General, donde todos los países votan en igualdad</button>
+      <button class="qb" onclick="qa('q2','c',this)">El Consejo de Seguridad, con 5 miembros permanentes que tienen derecho a veto</button>
+      <button class="qb" onclick="qa('q2','w',this)">La Corte Internacional de Justicia (CIJ), como máxima autoridad legal</button>
+    </div>
+    <div class="fb" id="fb-q2"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:24px">
+    <button class="btnnx" onclick="nav('m2')">Siguiente: Misión 2 📊 →</button>
+  </div>
+</div>
+</div><!-- end sm1 -->
+
+<!-- ════════════════════════════════════════
+     MISSION 2 — OCDE · UNCTAD
+════════════════════════════════════════ -->
+<div class="scr" id="sm2">
+<div class="w">
+  <div class="mbadge">📊 MISIÓN 2</div>
+  <h1 class="mh">Estratega de Políticas: OCDE y UNCTAD</h1>
+  <p class="ml">Asumes el rol de representante de México ante la OCDE. Debes decidir qué políticas proponer y entender cómo contrasta el enfoque de la UNCTAD para las naciones menos favorecidas.</p>
+  <div class="prow">
+    <div class="plbl">Progreso M2</div>
+    <div class="pbg"><div class="pfil" id="pg2" style="width:0%"></div></div>
+    <div class="plbl" id="pt2">0 / 3</div>
+  </div>
+
+  <!-- OCDE -->
+  <div class="acc" id="a-ocde">
+    <div class="aH" onclick="tog('a-ocde')">
+      <span class="aH-ic">📈</span>
+      <span class="aH-t">OCDE — Organización para la Cooperación y el Desarrollo Económicos</span>
+      <span class="aH-ar" id="ar-a-ocde">▼</span>
+    </div>
+    <div class="aB" id="bd-a-ocde">
+      <div class="org-header" style="border-left-color:var(--pur)">
+        <span class="org-ic">📈</span>
+        <div><div class="org-name" style="color:var(--pur)">OCDE</div><div class="org-sub">Fundada: 1961 · Sede: París · 38 países miembros (economías desarrolladas)</div></div>
+      </div>
+      <p><strong>Antecedentes:</strong> Sucesora de la OECE (Organización Europea de Cooperación Económica, 1948). Reformada en <span class="hl">1961</span> para incluir a EUA y Canadá y ampliar su mandato global de buenas prácticas económicas.</p>
+      <div class="data-grid">
+        <div class="dbox"><div class="dbox-l">Estructura</div><div class="dbox-v">Consejo (órgano supremo) · Comité de Políticas · Secretaría General (con el Secretario General) · Comités especializados por sector (educación, salud, fiscal, ambiental, etc.)</div></div>
+        <div class="dbox"><div class="dbox-l">Objetivos y funciones</div><div class="dbox-v">Mejores estándares de políticas públicas · Estadísticas comparativas internacionales · Lucha contra la corrupción y evasión fiscal · Informes de "peer review" entre miembros · Promover crecimiento económico sostenible</div></div>
+        <div class="dbox"><div class="dbox-l">México y la OCDE</div><div class="dbox-v">México ingresó en <span class="hl">1994</span>. La OCDE ha impactado la reforma educativa (PISA), la política fiscal (BEPS), la transparencia, la salud pública y la competencia económica. México recibe recomendaciones como "país evaluado".</div></div>
+      </div>
+      <div class="ib">💡 La OCDE produce el <em>Programa PISA</em> (evaluación educativa global) y el estándar BEPS (erosión de base imponible). Sus recomendaciones son adoptadas voluntariamente pero son de enorme influencia política.</div>
+    </div>
+  </div>
+
+  <!-- UNCTAD -->
+  <div class="acc" id="a-unctad">
+    <div class="aH" onclick="tog('a-unctad')">
+      <span class="aH-ic">📦</span>
+      <span class="aH-t">UNCTAD — Conferencia de la ONU sobre Comercio y Desarrollo</span>
+      <span class="aH-ar" id="ar-a-unctad">▼</span>
+    </div>
+    <div class="aB" id="bd-a-unctad">
+      <div class="org-header" style="border-left-color:var(--cya)">
+        <span class="org-ic">📦</span>
+        <div><div class="org-name" style="color:var(--cya)">UNCTAD</div><div class="org-sub">Fundada: 1964 · Sede: Ginebra · Órgano de la Asamblea General de la ONU</div></div>
+      </div>
+      <p><strong>Antecedentes:</strong> Creada en <span class="hl">1964</span> a iniciativa de países en desarrollo que sentían que el GATT/OMC favorecía a las naciones ricas. Es el principal foro de la ONU para comercio, inversión y desarrollo.</p>
+      <div class="data-grid">
+        <div class="dbox"><div class="dbox-l">Estructura</div><div class="dbox-v">Conferencia (órgano supremo, cada 4 años) · Junta de Comercio y Desarrollo (anual) · Comisiones de comercio y finanzas · Secretaría en Ginebra</div></div>
+        <div class="dbox"><div class="dbox-l">Objetivos y funciones</div><div class="dbox-v">Promover el comercio justo para países en desarrollo · Inversión extranjera directa hacia países del Sur · Transferencia de tecnología · Reducir la brecha entre países ricos y pobres · Informes World Investment Report (WIR)</div></div>
+      </div>
+      <div class="ib">⚠️ CONTRASTE OCDE vs UNCTAD: La OCDE representa el "club de países ricos" y promueve estándares de buenas prácticas entre economías desarrolladas. La UNCTAD aboga por un sistema comercial más equitativo para los países del Sur Global.</div>
+    </div>
+  </div>
+
+  <!-- SIMULATOR M2 -->
+  <div class="stit">🎭 SIMULADOR — Representa a México ante la OCDE</div>
+  <p style="font-size:.8rem;color:var(--mut);margin-bottom:16px">México ingresó a la OCDE en 1994. Como representante debes tomar decisiones de política pública basadas en los estándares del organismo.</p>
+
+  <div class="simcard">
+    <div class="simH">🏫 DECISIÓN 1: Política Educativa</div>
+    <div class="simp">Los resultados PISA de México muestran que los estudiantes están por debajo del promedio OCDE en matemáticas y lectura. ¿Qué recomiendas como representante mexicano fiel a los estándares OCDE?</div>
+    <table class="ctab">
+      <tr><th>Dimensión</th><th>Enfoque OCDE</th><th>Enfoque UNCTAD</th></tr>
+      <tr><td>Educación</td><td>Estandarización, evaluación PISA, autonomía escolar</td><td>Acceso equitativo, reducir brecha urbano-rural</td></tr>
+      <tr><td>Fiscalidad</td><td>BEPS, transparencia fiscal, lucha contra evasión</td><td>Trato especial para países en desarrollo</td></tr>
+      <tr><td>Comercio</td><td>Apertura comercial, libre competencia</td><td>Protección a industrias nacientes del Sur</td></tr>
+    </table>
+    <div class="pgrid">
+      <button class="pbtn" id="pb1a" onclick="simDec(1,'good','pb1a','pb1b')">
+        <span class="pbtn-ic">📊</span>
+        <div class="pbtn-t">Adoptar evaluación PISA y reforma curricular basada en competencias OCDE</div>
+        <div class="pbtn-d">Alinear a México con los estándares internacionales de calidad educativa. +35 XP si el impacto en política pública es identificado correctamente.</div>
+      </button>
+      <button class="pbtn" id="pb1b" onclick="simDec(1,'bad','pb1b','pb1a')">
+        <span class="pbtn-ic">🚫</span>
+        <div class="pbtn-t">Rechazar los estándares PISA por ser diseñados para países ricos</div>
+        <div class="pbtn-d">Argumentar que los estándares OCDE no aplican a la realidad mexicana y proponer un modelo propio sin adoptar métricas comparativas.</div>
+      </button>
+    </div>
+    <div class="fb" id="fb-sim1"></div>
+  </div>
+
+  <div class="simcard">
+    <div class="simH">💰 DECISIÓN 2: Política Fiscal</div>
+    <div class="simp">La OCDE ha identificado que México tiene una de las recaudaciones fiscales más bajas entre sus miembros (15-17% del PIB vs. promedio OCDE de 34%). ¿Cuál es la recomendación correcta?</div>
+    <div class="pgrid">
+      <button class="pbtn" id="pb2a" onclick="simDec(2,'good','pb2a','pb2b')">
+        <span class="pbtn-ic">📋</span>
+        <div class="pbtn-t">Implementar el estándar BEPS para combatir la evasión fiscal de multinacionales</div>
+        <div class="pbtn-d">Fortalecer la recaudación cerrando lagunas fiscales internacionales. Ampliar la base tributaria sin subir tasas generales.</div>
+      </button>
+      <button class="pbtn" id="pb2b" onclick="simDec(2,'bad','pb2b','pb2a')">
+        <span class="pbtn-ic">❌</span>
+        <div class="pbtn-t">Mantener exenciones fiscales especiales para atraer inversión extranjera</div>
+        <div class="pbtn-d">Competir con otros países ofreciendo tasas más bajas, lo que contradi ce los estándares OCDE contra la competencia fiscal desleal.</div>
+      </button>
+    </div>
+    <div class="fb" id="fb-sim2"></div>
+  </div>
+
+  <!-- Quiz M2 -->
+  <div class="stit">📡 PREGUNTA DE ANÁLISIS</div>
+  <div class="qc">
+    <div class="qt">3. ¿Cuál es la principal diferencia ideológica entre la OCDE y la UNCTAD respecto al comercio internacional?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('q3','w',this)">La OCDE se enfoca en el comercio de materias primas y la UNCTAD en manufacturas</button>
+      <button class="qb" onclick="qa('q3','c',this)">La OCDE promueve apertura y mejores estándares entre economías desarrolladas; la UNCTAD aboga por un sistema más equitativo para los países del Sur Global</button>
+      <button class="qb" onclick="qa('q3','w',this)">Ambas tienen el mismo enfoque, solo difieren en la sede donde operan</button>
+    </div>
+    <div class="fb" id="fb-q3"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:24px">
+    <button class="btnnx" onclick="nav('m3')">Siguiente: Misión 3 ⚖️ →</button>
+  </div>
+</div>
+</div><!-- end sm2 -->
+
+<!-- ════════════════════════════════════════
+     MISSION 3 — UNICINTRA
+════════════════════════════════════════ -->
+<div class="scr" id="sm3">
+<div class="w">
+  <div class="mbadge">⚖️ MISIÓN 3</div>
+  <h1 class="mh">Diplomático de UNICINTRA: Resolución de Disputas</h1>
+  <p class="ml">Se presentan 3 casos de disputas comerciales internacionales. Identifica cuándo recurrir a las normas de UNICINTRA para el arbitraje y la armonización jurídica internacional.</p>
+  <div class="prow">
+    <div class="plbl">Progreso M3</div>
+    <div class="pbg"><div class="pfil" id="pg3" style="width:0%"></div></div>
+    <div class="plbl" id="pt3">0 / 4</div>
+  </div>
+
+  <!-- UNICINTRA theory -->
+  <div class="acc" id="a-uni">
+    <div class="aH" onclick="tog('a-uni')">
+      <span class="aH-ic">⚖️</span>
+      <span class="aH-t">UNICINTRA — Instituto Internacional para la Unificación del Derecho Privado (UNIDROIT)</span>
+      <span class="aH-ar" id="ar-a-uni">▼</span>
+    </div>
+    <div class="aB" id="bd-a-uni">
+      <div class="org-header" style="border-left-color:var(--pur)">
+        <span class="org-ic">⚖️</span>
+        <div><div class="org-name" style="color:var(--pur)">UNIDROIT / UNICINTRA</div><div class="org-sub">Fundado: 1926 (Liga de Naciones) · Refundado: 1940 · Sede: Roma · 63 países miembros</div></div>
+      </div>
+      <p><strong>Antecedentes:</strong> Creado originalmente en <span class="hl">1926</span> como parte de la Liga de las Naciones. Tras la disolución de la Liga, fue refundado como organización independiente en <span class="hl">1940</span> mediante acuerdo multilateral con sede en Roma, Italia.</p>
+      <div class="data-grid">
+        <div class="dbox"><div class="dbox-l">Estructura</div><div class="dbox-v">Asamblea General (órgano máximo, anual) · Consejo de Gobierno (25 miembros elegidos) · Secretaría General permanente en Roma. Los textos jurídicos se elaboran mediante comités de expertos internacionales.</div></div>
+        <div class="dbox"><div class="dbox-l">Objetivos y funciones</div><div class="dbox-v">Unificación y armonización del derecho privado internacional · Elaboración de principios, convenios y leyes modelo · Facilitar el comercio internacional reduciendo barreras jurídicas · Principios UNIDROIT sobre contratos comerciales internacionales (PICC)</div></div>
+      </div>
+      <div class="ib">💡 Instrumentos clave: <strong>Principios UNIDROIT (PICC)</strong> — aplicables cuando las partes no eligen un derecho nacional; <strong>Convenio de Ciudad del Cabo</strong> — financiamiento de activos móviles (aviones, ferrocarriles); <strong>Convenio UNIDROIT sobre bienes culturales robados</strong>. No tiene poder de sanción pero sus textos son adoptados voluntariamente en contratos internacionales.</div>
+    </div>
+  </div>
+
+  <div class="stit">⚖️ RESOLUCIÓN DE CASOS — Elige la base jurídica correcta</div>
+
+  <!-- CASE A -->
+  <div class="ucase" id="uc-a">
+    <div class="ucbadge ub-a">CASO A — Contrato Internacional</div>
+    <div class="ustamp" id="us-a">✔ RESUELTO</div>
+    <h3 class="ucase-t">📝 Una empresa mexicana y una alemana firman un contrato de compraventa internacional sin especificar qué ley aplica</h3>
+    <p class="ucase-b">La empresa mexicana incumple una cláusula sobre plazo de entrega. La empresa alemana quiere reclamar daños y perjuicios. El contrato no especifica si aplica el derecho mexicano, alemán o algún estándar internacional. No hay cláusula arbitral. ¿Qué base jurídica de UNIDROIT resuelve el conflicto?</p>
+    <div class="uopts">
+      <button class="ubtn" onclick="usolve('a','cor','ua1','ua2','ua3')">
+        <span class="ubtn-ic">📋</span>
+        <div><div class="ubtn-n">Principios UNIDROIT (PICC) sobre contratos comerciales internacionales</div>
+        <div class="ubtn-d">Aplicables cuando no se ha elegido ley nacional. Regulan formación, validez, interpretación, incumplimiento y remedios del contrato.</div></div>
+      </button>
+      <button class="ubtn" id="ua2" onclick="usolve('a','wr','ua2','ua1','ua3')">
+        <span class="ubtn-ic">🌐</span>
+        <div><div class="ubtn-n">Carta de la ONU — Artículo 33 sobre resolución pacífica de disputas</div>
+        <div class="ubtn-d">Para disputas entre Estados, no entre empresas privadas en contratos comerciales.</div></div>
+      </button>
+      <button class="ubtn" id="ua3" onclick="usolve('a','wr','ua3','ua1','ua2')">
+        <span class="ubtn-ic">💱</span>
+        <div><div class="ubtn-n">Programa de ajuste del FMI por desequilibrio comercial bilateral</div>
+        <div class="ubtn-d">El FMI atiende crisis macroeconómicas nacionales, no disputas contractuales entre empresas privadas.</div></div>
+      </button>
+    </div>
+    <div class="uverd" id="uv-a"></div>
+  </div>
+
+  <!-- CASE B -->
+  <div class="ucase" id="uc-b">
+    <div class="ucbadge ub-b">CASO B — Activos Financieros Internacionales</div>
+    <div class="ustamp" id="us-b">✔ RESUELTO</div>
+    <h3 class="ucase-t">✈️ Una aerolínea latinoamericana financia la compra de 10 aviones a un banco europeo. El banco quiere garantías legales si la aerolínea incumple</h3>
+    <p class="ucase-b">El banco europeo necesita un marco jurídico internacional que le garantice poder recuperar los aviones si la aerolínea entra en quiebra o incumple los pagos, independientemente del país donde se encuentren las aeronaves. ¿Qué instrumento de UNIDROIT aplica?</p>
+    <div class="uopts">
+      <button class="ubtn" id="ub1" onclick="usolve('b','wr','ub1','ub2','ub3')">
+        <span class="ubtn-ic">📋</span>
+        <div><div class="ubtn-n">Principios PICC sobre contratos comerciales</div>
+        <div class="ubtn-d">Útil para contratos generales, pero no específico para financiamiento de activos móviles de alto valor.</div></div>
+      </button>
+      <button class="ubtn" id="ub2" onclick="usolve('b','cor','ub2','ub1','ub3')">
+        <span class="ubtn-ic">✈️</span>
+        <div><div class="ubtn-n">Convenio de Ciudad del Cabo (UNIDROIT) sobre garantías internacionales en bienes de equipo móvil</div>
+        <div class="ubtn-d">Específicamente diseñado para financiamiento de aviones, ferrocarriles y equipos espaciales. Establece un registro internacional de garantías.</div></div>
+      </button>
+      <button class="ubtn" id="ub3" onclick="usolve('b','wr','ub3','ub1','ub2')">
+        <span class="ubtn-ic">🏦</span>
+        <div><div class="ubtn-n">Préstamo de emergencia del Banco Mundial con condicionalidad</div>
+        <div class="ubtn-d">El BM financia proyectos de desarrollo, no garantías para transacciones comerciales privadas entre empresas y bancos.</div></div>
+      </button>
+    </div>
+    <div class="uverd" id="uv-b"></div>
+  </div>
+
+  <!-- CASE C -->
+  <div class="ucase" id="uc-c">
+    <div class="ucbadge ub-c">CASO C — Bienes Culturales</div>
+    <div class="ustamp" id="us-c">✔ RESUELTO</div>
+    <h3 class="ucase-t">🏺 Un museo europeo tiene en su colección una pieza arqueológica que México reclama como patrimonio cultural robado durante el siglo XX</h3>
+    <p class="ucase-b">México tiene documentación que acredita que la pieza fue extraída ilegalmente de su territorio. El museo alega haberla adquirido de buena fe en el mercado de arte. Existe una disputa jurídica internacional sobre la propiedad. ¿Qué instrumento de UNIDROIT es el mecanismo correcto?</p>
+    <div class="uopts">
+      <button class="ubtn" id="uc1" onclick="usolve('c','wr','uc1','uc2','uc3')">
+        <span class="ubtn-ic">🌐</span>
+        <div><div class="ubtn-n">Resolución del Consejo de Seguridad de la ONU solicitando la devolución</div>
+        <div class="ubtn-d">El CS actúa en amenazas a la paz y seguridad, no en disputas de patrimonio cultural entre Estados en tiempos de paz.</div></div>
+      </button>
+      <button class="ubtn" id="uc2" onclick="usolve('c','wr','uc2','uc1','uc3')">
+        <span class="ubtn-ic">📦</span>
+        <div><div class="ubtn-n">Denuncia ante la UNCTAD por trato inequitativo en comercio de bienes culturales</div>
+        <div class="ubtn-d">La UNCTAD se enfoca en comercio y desarrollo económico, no en restitución de patrimonio cultural robado.</div></div>
+      </button>
+      <button class="ubtn" id="uc3" onclick="usolve('c','cor','uc3','uc1','uc2')">
+        <span class="ubtn-ic">🏺</span>
+        <div><div class="ubtn-n">Convenio UNIDROIT sobre bienes culturales robados o exportados ilegalmente (Roma, 1995)</div>
+        <div class="ubtn-d">Establece el derecho de los países a reclamar la restitución de bienes culturales robados o exportados ilegalmente, incluso de adquirentes de buena fe.</div></div>
+      </button>
+    </div>
+    <div class="uverd" id="uv-c"></div>
+  </div>
+
+  <!-- Final quiz -->
+  <div class="stit">📡 PREGUNTA FINAL DE COBERTURA</div>
+  <div class="qc">
+    <div class="qt">4. ¿Por qué los textos jurídicos de UNIDROIT son tan influyentes a pesar de que el organismo no tiene poder de sanción?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('qf','w',this)">Porque son obligatorios para todos los países miembros una vez ratificados los convenios</button>
+      <button class="qb" onclick="qa('qf','c',this)">Porque son adoptados voluntariamente por empresas y tribunales en contratos internacionales, y al ser elaborados por expertos de 63 países representan el mejor estándar disponible</button>
+      <button class="qb" onclick="qa('qf','w',this)">Porque el FMI condiciona sus préstamos al cumplimiento de los estándares UNIDROIT</button>
+    </div>
+    <div class="fb" id="fb-qf"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="btngo" style="font-size:1.2rem;padding:12px 36px" onclick="finish()">🏆 COMPLETAR COBERTURA</button>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="rw" style="padding-left:0;padding-right:0">
+    <div class="rh2">📚 Referencias</div>
+    <div class="ref">Banco Mundial. (2024). <em>About the World Bank</em>. https://www.worldbank.org/en/about</div>
+    <div class="ref">Fondo Monetario Internacional. (2024). <em>About the IMF</em>. https://www.imf.org/en/About</div>
+    <div class="ref">Organización de las Naciones Unidas. (2024). <em>La ONU en breve</em>. https://www.un.org/es/about-us</div>
+    <div class="ref">Organización para la Cooperación y el Desarrollo Económicos. (2024). <em>About the OECD</em>. https://www.oecd.org/about/</div>
+    <div class="ref">Organización para la Cooperación y el Desarrollo Económicos. (2024). <em>México en la OCDE</em>. https://www.oecd.org/mexico/</div>
+    <div class="ref">Conferencia de las Naciones Unidas sobre Comercio y Desarrollo. (2024). <em>About UNCTAD</em>. https://unctad.org/about</div>
+    <div class="ref">UNIDROIT. (2024). <em>About UNIDROIT</em>. https://www.unidroit.org/about-unidroit/</div>
+    <div class="ref">UNIDROIT. (2016). <em>Principios UNIDROIT sobre los contratos comerciales internacionales 2016</em>. Instituto Internacional para la Unificación del Derecho Privado. https://www.unidroit.org/instruments/commercial-contracts/unidroit-principles-2016/</div>
+    <div class="ref">UNIDROIT. (2001). <em>Convenio de Ciudad del Cabo sobre garantías internacionales en elementos de equipo móvil</em>. https://www.unidroit.org/instruments/security-interests/cape-town-convention/</div>
+    <div class="ref">UNIDROIT. (1995). <em>Convenio de UNIDROIT sobre bienes culturales robados o exportados ilícitamente</em>. https://www.unidroit.org/instruments/cultural-property/1995-convention/</div>
+  </div>
+
+</div>
+</div><!-- end sm3 -->
+
+<!-- ════════════════════════════════════════
+     RESULTS
+════════════════════════════════════════ -->
+<div class="scr" id="sr">
+  <div class="rtrophy">🏆</div>
+  <h1 class="rh">¡COBERTURA GLOBAL COMPLETADA!</h1>
+  <p style="color:var(--mut);font-size:.9rem;margin-bottom:14px">Tu reportaje desde la Cumbre fue el más visto de TikTok, Corresponsal.</p>
+  <div class="rxp">⚡ <span id="rxp">0</span> XP TOTALES</div>
+  <div class="rstats">
+    <div class="rstat"><div class="rv" id="rcor">0</div><div class="rl">Correctas</div></div>
+    <div class="rstat"><div class="rv" id="rlvl">—</div><div class="rl">Rango Final</div></div>
+    <div class="rstat"><div class="rv">3/3</div><div class="rl">Misiones</div></div>
+  </div>
+  <button class="bcert" onclick="showCert()">🏅 VER CERTIFICADO</button>
+  <button class="bretry" onclick="reset()">🔄 Jugar de nuevo</button>
+  <div class="stripe" style="margin-top:36px"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+/* ── STATE ── */
+let XP=0,cor=0;
+let ans={},simsDone={},casesDone={a:false,b:false,c:false};
+let m1p=0,m2p=0,m3p=0;
+let dragging=null,placed={};
+
+const LEVELS=[
+  {min:0,  name:'Pasante en la ONU'},
+  {min:60, name:'Reportero del FMI'},
+  {min:150,name:'Analista del FMI'},
+  {min:280,name:'Asesor de la OCDE'},
+  {min:420,name:'Secretario General de Élite'},
+];
+const getLvl=x=>{ let l=LEVELS[0]; for(const lv of LEVELS) if(x>=lv.min) l=lv; return l; };
+
+/* ── XP ── */
+function addXP(p,msg){
+  XP+=p; cor++;
+  document.getElementById('xpn').textContent=XP;
+  const cur=getLvl(XP);
+  const nxt=LEVELS.find(l=>l.min>XP)||LEVELS[LEVELS.length-1];
+  const pct=nxt.min>cur.min?Math.min(100,((XP-cur.min)/(nxt.min-cur.min))*100):100;
+  document.getElementById('xpbar').style.width=pct+'%';
+  document.getElementById('lvllbl').textContent=cur.name;
+  toast(`+${p} XP — ${msg}`);
+}
+
+/* ── TOAST ── */
+function toast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m; t.classList.add('pop');
+  setTimeout(()=>t.classList.remove('pop'),2700);
+}
+
+/* ── NAV ── */
+function nav(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('on'));
+  const map={i:'si',m1:'sm1',m2:'sm2',m3:'sm3',r:'sr'};
+  const sc=document.getElementById(map[id]);
+  if(sc) sc.classList.add('on');
+  const tb=document.getElementById('tb-'+id);
+  if(tb) tb.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+/* ── ACCORDION ── */
+function tog(id){
+  const b=document.getElementById('bd-'+id);
+  const a=document.getElementById('ar-'+id);
+  b.classList.toggle('op'); a.classList.toggle('op');
+}
+
+/* ════ DRAG & DROP M1 ════ */
+function ds(ev,id){ dragging=id; ev.dataTransfer.effectAllowed='move'; }
+function dov(ev){ ev.preventDefault(); ev.currentTarget.classList.add('ov'); }
+function dlv(ev){ ev.currentTarget.classList.remove('ov'); }
+
+function ddr(ev,zone){
+  ev.preventDefault(); ev.currentTarget.classList.remove('ov');
+  if(!dragging) return;
+  const el=document.getElementById(dragging);
+  if(!el) return;
+  el.classList.add('pl');
+  const cl=el.cloneNode(true); cl.draggable=false; cl.id=dragging+'_c';
+  cl.dataset.orig=dragging; cl.classList.remove('pl');
+  cl.style.width='100%'; cl.style.marginBottom='5px'; cl.style.cursor='default';
+  ev.currentTarget.appendChild(cl);
+  placed[dragging]=zone; dragging=null;
+}
+
+function chkDrag(){
+  const all=document.querySelectorAll('[data-orig]');
+  let ok=0,tot=0;
+  all.forEach(item=>{
+    const orig=item.dataset.orig;
+    const cz=document.getElementById(orig).dataset.cat;
+    const uz=placed[orig]; tot++;
+    if(uz===cz){ ok++; item.style.borderColor='var(--grn)'; item.style.color='var(--grn)'; }
+    else{ item.style.borderColor='var(--red)'; item.style.color='var(--red)'; }
+  });
+  const fb=document.getElementById('fb-drag');
+  if(ok>=8||tot===0){
+    fb.textContent=`🎉 ¡Misión Cumplida! ${ok}/9 correctas. +60 XP. Recuerda: ONU=paz/seguridad · BM=desarrollo LP · FMI=estabilidad monetaria.`;
+    fb.className='fb on ok'; addXP(60,'¡Clasificación perfecta!');
+  } else if(ok>=6){
+    fb.textContent=`✅ ${ok}/${tot} correctas. +30 XP. Revisa: si confundes BM y FMI, recuerda que FMI=estabilidad cambiaria de corto plazo; BM=proyectos de inversión a largo plazo.`;
+    fb.className='fb on ok'; addXP(30,'Buena clasificación');
+  } else {
+    fb.textContent=`❌ ${ok}/${tot} correctas. Pista clave: el FMI atiende crisis de balanza de pagos AHORA; el BM financia carreteras y escuelas A LARGO PLAZO; la ONU gestiona la PAZ y SEGURIDAD global.`;
+    fb.className='fb on no';
+  }
+  document.getElementById('bchk1').disabled=true;
+  updProg(1,ok>=6?1:0,4);
+}
+
+/* ════ QUIZ GENERIC ════ */
+const QFB={
+  q1:{c:'✅ ¡Correcto! Ambos nacieron en Bretton Woods (1944) pero tienen mandatos distintos. FMI = estabilidad del sistema monetario y préstamos de emergencia a corto plazo. BM = financiamiento de proyectos de desarrollo a largo plazo (infraestructura, salud, educación).',
+      w:'❌ Incorrecto. Aunque nacieron juntos en Bretton Woods, tienen mandatos completamente distintos. FMI = crisis monetarias y balanza de pagos (corto plazo). BM = proyectos de inversión para reducir la pobreza (largo plazo).'},
+  q2:{c:'✅ ¡Correcto! El Consejo de Seguridad tiene 5 miembros permanentes (EUA, RU, Francia, China, Rusia) con derecho a veto. Es el único órgano con poder de autorizar sanciones, misiones de paz e intervenciones militares.',
+      w:'❌ Incorrecto. La Asamblea General tiene poder igualitario (1 país=1 voto) pero solo emite resoluciones no vinculantes. La CIJ resuelve disputas entre Estados pero no autoriza intervenciones. El Consejo de Seguridad es el órgano con poder coercitivo real.'},
+  q3:{c:'✅ ¡Correcto! La OCDE es el "club de países ricos" que promueve mejores prácticas entre economías desarrolladas. La UNCTAD nació en 1964 precisamente para darle voz a los países en desarrollo que sentían que el sistema comercial internacional los perjudicaba.',
+      w:'❌ Incorrecto. La diferencia no es por tipo de bienes sino por posición ideológica: OCDE = estándares y mejores prácticas para países ricos; UNCTAD = defensa del Sur Global para un sistema comercial más equitativo.'},
+  qf:{c:'✅ ¡Correcto! La fortaleza de UNIDROIT radica en la calidad técnica de sus textos: elaborados por expertos de 63 países durante años, representan el mejor consenso jurídico internacional disponible. Por eso empresas y tribunales los adoptan voluntariamente como lex contractus.',
+      w:'❌ Incorrecto. UNIDROIT no tiene poder coercitivo. Su influencia proviene de la calidad técnica de sus textos: al ser elaborados por expertos de 63 países, empresas y tribunales los adoptan voluntariamente como el mejor estándar disponible para contratos internacionales.'},
+};
+
+function qa(id,res,btn){
+  if(ans[id]) return;
+  ans[id]=true;
+  btn.closest('.qo').querySelectorAll('.qb').forEach(b=>b.disabled=true);
+  btn.classList.add(res==='c'?'cor':'wr');
+  const fb=document.getElementById('fb-'+id);
+  fb.textContent=QFB[id][res]; fb.className='fb on '+(res==='c'?'ok':'no');
+  if(res==='c') addXP(25,'¡Respuesta correcta!');
+  const mMap={q1:1,q2:1,q3:2,qf:3};
+  if(mMap[id]) updProg(mMap[id],res==='c'?1:0,mMap[id]===3?4:4);
+}
+
+/* ════ PROGRESS ════ */
+function updProg(m,add,tot){
+  if(m===1){ m1p=Math.min(m1p+add,tot); _sp(1,m1p,tot,'m1'); }
+  if(m===2){ m2p=Math.min(m2p+add,tot); _sp(2,m2p,tot,'m2'); }
+  if(m===3){ m3p=Math.min(m3p+add,tot); _sp(3,m3p,tot,'m3'); }
+}
+function _sp(m,v,tot,tab){
+  const pct=Math.round((v/tot)*100);
+  const pg=document.getElementById('pg'+m); if(pg) pg.style.width=pct+'%';
+  const pt=document.getElementById('pt'+m); if(pt) pt.textContent=`${v} / ${tot}`;
+  if(v>=tot) document.getElementById('tb-'+tab)?.classList.add('ok');
+}
+
+/* ════ MISSION 2 SIMULATOR ════ */
+const SFBS={
+  1:{good:'✅ ¡Decisión correcta! La OCDE usa PISA para medir y comparar sistemas educativos. México adoptó reformas curriculares basadas en competencias OCDE a partir de 1994. +35 XP. Este es uno de los sectores donde la OCDE ha impactado más la política pública mexicana.',
+     bad:'❌ Decisión incorrecta para un representante OCDE. El valor de pertenecer a la OCDE es precisamente la comparabilidad internacional. Rechazar PISA aísla a México de los estándares de calidad educativa y elimina la capacidad de diagnosticar brechas con economías líderes.'},
+  2:{good:'✅ ¡Decisión correcta! El estándar BEPS (Base Erosion and Profit Shifting) de la OCDE fue diseñado exactamente para cerrar lagunas fiscales de multinacionales. México lo adoptó formalmente en su reforma fiscal. +35 XP. Esto amplía la base tributaria sin afectar a los ciudadanos ordinarios.',
+     bad:'❌ Decisión incorrecta. Mantener exenciones para atraer IED es exactamente la "competencia fiscal desleal" que la OCDE combate con el estándar BEPS. Un representante mexicano ante la OCDE debe alinearse con los estándares del club, no contradecirlos.'},
+};
+
+function simDec(stage,res,btnId,othId){
+  if(simsDone[stage]) return;
+  simsDone[stage]=true;
+  document.getElementById(btnId).classList.add(res==='good'?'g':'b');
+  document.getElementById(othId).disabled=true;
+  document.getElementById(btnId).disabled=true;
+  const fb=document.getElementById('fb-sim'+stage);
+  fb.textContent=SFBS[stage][res]; fb.className='fb on '+(res==='good'?'ok':'no');
+  if(res==='good'){ addXP(35,'¡Política OCDE correcta!'); updProg(2,1,3); }
+}
+
+/* ════ MISSION 3 UNICINTRA CASES ════ */
+const UFBS={
+  a:{cor:'✅ ¡Misión Cumplida! Los Principios UNIDROIT (PICC) son exactamente el instrumento correcto cuando las partes no eligen una ley nacional. Son la lex contractus internacional por excelencia, aplicados por tribunales arbitrales de todo el mundo. +40 XP',
+     wr:'❌ Incorrecto. Para disputas contractuales entre empresas privadas que no eligieron ley aplicable, los Principios PICC de UNIDROIT son el instrumento correcto. La ONU y el FMI operan entre Estados, no en contratos privados.'},
+  b:{cor:'✅ ¡Correcto! El Convenio de Ciudad del Cabo (UNIDROIT, 2001) fue diseñado específicamente para el financiamiento de activos móviles de alto valor: aeronaves, material ferroviario y equipos espaciales. Establece un Registro Internacional de Garantías. +40 XP',
+     wr:'❌ Incorrecto. Los PICC son para contratos generales; el BM no financia transacciones privadas. El Convenio de Ciudad del Cabo de UNIDROIT fue creado específicamente para el financiamiento de aviones y activos móviles costosos con garantías jurídicas internacionales.'},
+  c:{cor:'✅ ¡Caso resuelto! El Convenio UNIDROIT de 1995 sobre bienes culturales establece el derecho de restitución para bienes robados o exportados ilegalmente, aplicable incluso frente a adquirentes de buena fe (con compensación). Es el instrumento internacional correcto para este tipo de reclamación. +40 XP',
+     wr:'❌ Incorrecto. El CS de la ONU actúa en amenazas a la paz; la UNCTAD trabaja comercio económico. El instrumento específico para patrimonio cultural robado es el Convenio UNIDROIT de 1995, que prevé mecanismos de restitución entre Estados con disposiciones sobre buena fe.'},
+};
+
+function usolve(cas,res,btnId,...others){
+  if(casesDone[cas]) return;
+  casesDone[cas]=true;
+  document.getElementById(btnId).classList.add(res==='cor'?'cor':'wr');
+  others.forEach(id=>{ const b=document.getElementById(id); if(b){b.disabled=true;b.style.opacity='.4';}});
+  document.getElementById(btnId).disabled=true;
+  const verd=document.getElementById('uv-'+cas);
+  verd.textContent=UFBS[cas][res]; verd.className='uverd on '+(res==='cor'?'ok':'no');
+  if(res==='cor'){
+    addXP(40,'¡Caso diplomático resuelto!');
+    document.getElementById('us-'+cas).classList.add('on');
+    document.getElementById('uc-'+cas).classList.add('solved');
+  }
+  updProg(3,1,4);
+}
+
+/* ════ FINISH ════ */
+function finish(){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('sr').classList.add('on');
+  document.getElementById('rxp').textContent=XP;
+  document.getElementById('rcor').textContent=cor;
+  document.getElementById('rlvl').textContent=getLvl(XP).name;
+  window.scrollTo(0,0);
+}
+
+/* ════ CERT ════ */
+function showCert(){
+  document.getElementById('cd').textContent='Fecha: '+new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('cs').textContent=`XP Total: ${XP} · Correctas: ${cor} · Rango: ${getLvl(XP).name}`;
+  document.getElementById('cov').classList.add('on');
+}
+function closeCert(){ document.getElementById('cov').classList.remove('on'); }
+function printCert(){
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Certificado IEU GCI</title>
+  <style>
+    body{font-family:Georgia,serif;text-align:center;padding:50px 40px;background:#0D0804;color:#f0dcc8}
+    h1{font-size:2.1rem;color:#E8440A;margin:0 0 4px;letter-spacing:.06em}
+    .s{font-size:.7rem;color:#9a7252;margin-bottom:18px;font-family:monospace}
+    .st{height:4px;background:linear-gradient(90deg,#E8440A,#FFB347,#FF8040);margin:16px auto;max-width:500px;border-radius:2px}
+    .nm{font-size:1.9rem;color:#FFB347;margin:10px 0 4px}
+    .bl{color:#FF8040;font-size:1rem;font-weight:bold;margin:5px 0 14px}
+    .sc{font-size:.72rem;color:#9a7252;font-family:monospace}
+  </style></head><body>
+  <div class="st"></div>
+  <h1>🏅 CERTIFICADO DE LOGRO</h1>
+  <div class="s">COMERCIO GLOBAL INTERNACIONAL · IEU ONLINE</div>
+  <p>Este certificado acredita que</p>
+  <div class="nm">${document.getElementById('cn').textContent}</div>
+  <p>completó satisfactoriamente el módulo</p>
+  <p style="font-style:italic;color:#FF8040">Misión: Corresponsal en la Cumbre Global</p>
+  <div class="bl">Bloque III · Organismos Internacionales</div>
+  <div class="s">ONU · Banco Mundial · FMI · OCDE · UNCTAD · UNICINTRA</div>
+  <div class="sc">${document.getElementById('cs').textContent}</div>
+  <div class="st"></div>
+  <div class="sc">${document.getElementById('cd').textContent}</div>
+  </body></html>`);
+  w.document.close(); w.print();
+}
+
+/* ════ RESET ════ */
+function reset(){
+  XP=0;cor=0;ans={};simsDone={};casesDone={a:false,b:false,c:false};
+  m1p=0;m2p=0;m3p=0;dragging=null;placed={};
+  document.getElementById('xpn').textContent='0';
+  document.getElementById('xpbar').style.width='0%';
+  document.getElementById('lvllbl').textContent='Pasante en la ONU';
+  ['pg1','pg2','pg3'].forEach(id=>{ const e=document.getElementById(id); if(e)e.style.width='0%';});
+  document.getElementById('pt1').textContent='0 / 4';
+  document.getElementById('pt2').textContent='0 / 3';
+  document.getElementById('pt3').textContent='0 / 4';
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('ok','on'));
+  document.querySelectorAll('.dit').forEach(d=>{ d.classList.remove('pl'); d.style.display='';});
+  document.querySelectorAll('[data-orig]').forEach(c=>c.remove());
+  document.getElementById('bchk1').disabled=false;
+  document.querySelectorAll('.qb,.pbtn,.ubtn').forEach(b=>{
+    b.disabled=false; b.classList.remove('cor','wr','g','b','cor','wr');
+    b.style.opacity='';});
+  document.querySelectorAll('.fb,.uverd').forEach(f=>{ f.classList.remove('on'); f.textContent='';});
+  document.querySelectorAll('.ustamp').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.ucase').forEach(c=>c.classList.remove('solved'));
+  document.getElementById('cov').classList.remove('on');
+  document.getElementById('sr').classList.remove('on');
+  nav('i');
+}
+</script>
+</body>
+</html>
