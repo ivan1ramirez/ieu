@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Corresponsal en la Eurozona · Bloque III · IEU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════════════
+   VARIABLES & RESET
+══════════════════════════════════════════════ */
+:root{
+  --bg:#0D0804;
+  --primary:#E8440A;
+  --sec:#FF8040;
+  --amber:#FFB347;
+  --surf:#18100A;
+  --surf2:#221408;
+  --border:#3d1f0e;
+  --text:#f0e0cc;
+  --muted:#9a7060;
+  --green:#4ade80;
+  --red:#f87171;
+  --blue:#60a5fa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Syne',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  background-image:radial-gradient(circle,rgba(232,68,10,.13) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+
+/* ══════════════════════════════════════════════
+   HUD  (fixed top bar)
+══════════════════════════════════════════════ */
+#hud{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(13,8,4,.94);
+  border-bottom:2px solid var(--primary);
+  backdrop-filter:blur(14px);
+  padding:0 20px;
+  height:60px;
+  display:flex;align-items:center;gap:16px;
+}
+.hud-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hud-logo img{height:34px;object-fit:contain}
+.hud-logo-text .t1{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--primary);letter-spacing:.07em;line-height:1}
+.hud-logo-text .t2{font-size:.6rem;color:var(--muted);font-family:'DM Mono',monospace}
+.hud-spacer{flex:1}
+/* level pill */
+.hud-level{
+  font-family:'DM Mono',monospace;font-size:.7rem;
+  border:1px solid var(--amber);color:var(--amber);
+  border-radius:20px;padding:3px 10px;white-space:nowrap;flex-shrink:0;
+}
+/* xp bar */
+.hud-xp-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.hud-xp-bar-bg{width:80px;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.hud-xp-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--amber));border-radius:3px;transition:width .5s}
+.hud-xp-num{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--primary);white-space:nowrap}
+/* mission tabs */
+.hud-tabs{display:flex;gap:3px;flex-shrink:0}
+.hud-tab{
+  font-family:'DM Mono',monospace;font-size:.62rem;
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:4px;padding:3px 9px;cursor:pointer;
+  color:var(--muted);transition:all .18s;white-space:nowrap;
+}
+.hud-tab:hover{border-color:var(--sec);color:var(--sec)}
+.hud-tab.active{background:var(--primary);border-color:var(--primary);color:#000}
+.hud-tab.done{border-color:var(--green);color:var(--green)}
+@media(max-width:680px){.hud-tabs{display:none}.hud-xp-bar-bg{width:50px}}
+
+/* ══════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════ */
+.screen{display:none;padding-top:68px;min-height:100vh}
+.screen.show{display:block}
+.wrap{max-width:880px;margin:0 auto;padding:28px 20px 60px}
+
+/* ══════════════════════════════════════════════
+   INTRO
+══════════════════════════════════════════════ */
+#s-intro{
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;
+  padding:80px 20px 60px;min-height:100vh;
+}
+#s-intro.show{display:flex}
+.intro-cam{font-size:4.5rem;animation:camFloat 3s ease-in-out infinite}
+@keyframes camFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+.intro-h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,8vw,5.5rem);
+  line-height:.95;
+  background:linear-gradient(135deg,#fff 25%,var(--sec) 55%,var(--amber));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin:14px 0 6px;
+}
+.intro-sub{color:var(--muted);font-size:.95rem;line-height:1.7;max-width:520px;margin:0 auto 28px}
+.intro-cards{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+.icard{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;width:190px;text-align:left;
+  transition:border-color .2s,transform .2s;
+}
+.icard:hover{border-color:var(--primary);transform:translateY(-3px)}
+.icard-icon{font-size:1.8rem;margin-bottom:8px}
+.icard-name{font-family:'Bebas Neue',sans-serif;color:var(--primary);font-size:.95rem;letter-spacing:.05em;margin-bottom:4px}
+.icard-desc{font-size:.72rem;color:var(--muted);line-height:1.5}
+.btn-launch{
+  background:linear-gradient(135deg,var(--primary),var(--sec));
+  color:#000;font-family:'Bebas Neue',sans-serif;
+  font-size:1.45rem;letter-spacing:.1em;
+  border:none;border-radius:10px;padding:14px 44px;cursor:pointer;
+  box-shadow:0 0 36px rgba(232,68,10,.45);
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-launch:hover{transform:scale(1.05);box-shadow:0 0 56px rgba(232,68,10,.65)}
+.stripe{height:5px;background:linear-gradient(90deg,var(--primary),var(--amber),var(--sec),var(--amber),var(--primary));border-radius:3px;margin-top:40px;width:100%;max-width:480px}
+
+/* ══════════════════════════════════════════════
+   MISSION HEADER
+══════════════════════════════════════════════ */
+.mission-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--primary);color:#000;
+  font-family:'Bebas Neue',sans-serif;letter-spacing:.07em;font-size:.95rem;
+  border-radius:5px;padding:3px 13px;margin-bottom:10px;
+}
+.mission-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);line-height:1;color:#fff;margin-bottom:6px}
+.mission-lead{color:var(--muted);font-size:.9rem;line-height:1.6;max-width:580px;margin-bottom:20px}
+/* progress row */
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.prog-lbl{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);white-space:nowrap}
+.prog-bg{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--amber));border-radius:2px;transition:width .5s}
+
+/* ══════════════════════════════════════════════
+   THEORY ACCORDION
+══════════════════════════════════════════════ */
+.acc{background:var(--surf);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.acc:hover{border-color:var(--sec)}
+.acc-head{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer}
+.acc-icon{font-size:1.3rem;flex-shrink:0}
+.acc-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:var(--sec);flex:1}
+.acc-arrow{color:var(--muted);font-size:.85rem;transition:transform .3s;flex-shrink:0}
+.acc-arrow.open{transform:rotate(180deg)}
+.acc-body{
+  max-height:0;overflow:hidden;transition:max-height .4s ease;
+  padding:0 18px;font-size:.86rem;line-height:1.75;color:var(--text);
+}
+.acc-body.open{max-height:1200px;padding:0 18px 16px}
+.acc-body p{margin-bottom:10px}
+.acc-body ul{padding-left:18px;margin-bottom:10px}
+.acc-body li{margin-bottom:5px}
+.hl{color:var(--amber);font-weight:700}
+.chip{
+  display:inline-block;background:var(--surf2);
+  border:1px solid var(--border);border-radius:4px;
+  padding:1px 7px;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--sec);margin:2px;
+}
+.infobox{
+  background:var(--surf2);border-left:3px solid var(--primary);
+  border-radius:0 8px 8px 0;padding:10px 14px;
+  margin:10px 0;font-size:.83rem;color:var(--amber);line-height:1.5;
+}
+
+/* ══════════════════════════════════════════════
+   GENERAL QUIZ
+══════════════════════════════════════════════ */
+.section-title{
+  font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:var(--primary);
+  letter-spacing:.06em;margin:28px 0 14px;display:flex;align-items:center;gap:8px;
+}
+.qcard{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:10px;padding:18px 20px;margin-bottom:16px;
+}
+.qtext{font-size:.93rem;margin-bottom:14px;line-height:1.65}
+.qopts{display:flex;flex-direction:column;gap:7px}
+.qbtn{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:7px;padding:10px 14px;
+  color:var(--text);font-family:'Syne',sans-serif;font-size:.84rem;
+  cursor:pointer;text-align:left;transition:all .18s;
+}
+.qbtn:hover:not(:disabled){border-color:var(--sec);background:rgba(255,128,64,.07)}
+.qbtn.correct{border-color:var(--green);background:rgba(74,222,128,.1);color:var(--green)}
+.qbtn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.qbtn:disabled{cursor:default}
+.fb{
+  margin-top:10px;padding:8px 12px;border-radius:6px;
+  font-size:.83rem;display:none;
+}
+.fb.show{display:block}
+.fb.ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:var(--green)}
+.fb.fail{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+
+/* ══════════════════════════════════════════════
+   MISSION 1 — DRAG & DROP
+══════════════════════════════════════════════ */
+.drag-pool{
+  display:flex;flex-wrap:wrap;gap:8px;
+  background:var(--surf2);border:1px dashed var(--border);
+  border-radius:10px;padding:14px;min-height:70px;margin-bottom:18px;
+}
+.ditem{
+  background:var(--surf);border:1px solid var(--sec);
+  border-radius:6px;padding:7px 13px;font-size:.78rem;
+  cursor:grab;color:var(--text);user-select:none;transition:opacity .2s,transform .15s;
+}
+.ditem:active{cursor:grabbing;opacity:.65;transform:scale(.95)}
+.ditem.placed{display:none}
+.dzones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:560px){.dzones{grid-template-columns:1fr}}
+.dzone{
+  background:var(--surf2);border:2px dashed var(--border);
+  border-radius:10px;padding:12px;min-height:130px;
+  transition:border-color .2s,background .2s;
+}
+.dzone.over{border-color:var(--primary);background:rgba(232,68,10,.06)}
+.dzone-title{
+  font-family:'Bebas Neue',sans-serif;font-size:.85rem;color:var(--amber);
+  letter-spacing:.05em;margin-bottom:8px;text-align:center;border-bottom:1px solid var(--border);padding-bottom:6px;
+}
+.dzone .ditem{width:100%;margin-bottom:5px;cursor:default;font-size:.75rem}
+.btn-check{
+  background:linear-gradient(135deg,var(--primary),var(--sec));
+  color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.08em;
+  border:none;border-radius:8px;padding:11px 26px;cursor:pointer;
+  transition:transform .15s;margin-right:10px;
+}
+.btn-check:hover:not(:disabled){transform:scale(1.04)}
+.btn-check:disabled{opacity:.45;cursor:default}
+.btn-next{
+  background:transparent;border:2px solid var(--sec);color:var(--sec);
+  font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.08em;
+  border-radius:8px;padding:10px 24px;cursor:pointer;
+  transition:all .18s;
+}
+.btn-next:hover{background:var(--sec);color:#000}
+
+/* ══════════════════════════════════════════════
+   MISSION 2 — BREXIT SIMULATOR
+══════════════════════════════════════════════ */
+.sim-stage{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;padding:20px;margin-bottom:16px;
+  transition:border-color .2s;
+}
+.sim-stage:hover{border-color:var(--sec)}
+.sim-h{font-family:'Bebas Neue',sans-serif;color:var(--sec);font-size:1.05rem;letter-spacing:.06em;margin-bottom:8px}
+.sim-p{font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:12px}
+.sim-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.sim-choices{grid-template-columns:1fr}}
+.sim-btn{
+  background:var(--surf2);border:2px solid var(--border);
+  border-radius:9px;padding:14px 16px;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:.82rem;color:var(--text);
+  text-align:left;transition:all .2s;
+}
+.sim-btn:hover:not(:disabled){border-color:var(--primary);background:rgba(232,68,10,.08)}
+.sim-btn.chosen-good{border-color:var(--green);background:rgba(74,222,128,.1);color:var(--green)}
+.sim-btn.chosen-bad{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.sim-btn:disabled{cursor:default}
+.sim-btn .sb-icon{display:block;font-size:1.5rem;margin-bottom:6px}
+.sim-btn .sb-label{font-weight:700;font-size:.85rem;margin-bottom:4px}
+.sim-btn .sb-detail{font-size:.75rem;color:var(--muted);line-height:1.4}
+/* scoreboard */
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:16px 0}
+.score-box{background:var(--surf2);border:1px solid var(--border);border-radius:9px;padding:12px;text-align:center}
+.score-box .sv{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--amber)}
+.score-box .sl{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px}
+/* sector badges */
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:12px 0}
+.sector-card{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:8px;padding:10px;text-align:center;cursor:pointer;
+  transition:all .2s;font-size:.78rem;
+}
+.sector-card:hover:not(.locked){border-color:var(--sec)}
+.sector-card.winner{border-color:var(--green);background:rgba(74,222,128,.1);color:var(--green)}
+.sector-card.loser{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.sector-card.locked{opacity:.45;cursor:default}
+.sector-card .si{font-size:1.5rem;display:block;margin-bottom:5px}
+
+/* ══════════════════════════════════════════════
+   MISSION 3 — SECURITY CASES
+══════════════════════════════════════════════ */
+.case-card{
+  background:var(--surf);border:2px solid var(--border);
+  border-radius:12px;padding:20px;margin-bottom:20px;
+  position:relative;transition:border-color .2s;
+}
+.case-card.solved{border-color:var(--green)}
+.case-badge{
+  position:absolute;top:-10px;left:16px;
+  background:var(--primary);color:#000;
+  font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:.06em;
+  border-radius:4px;padding:2px 10px;
+}
+.case-badge.b-blue{background:var(--blue);color:#000}
+.case-badge.b-amber{background:var(--amber);color:#000}
+.case-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--text);margin:8px 0 6px}
+.case-body{font-size:.85rem;color:var(--muted);line-height:1.65;margin-bottom:14px}
+.inst-opts{display:flex;flex-direction:column;gap:8px}
+.inst-btn{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:8px;padding:12px 16px;cursor:pointer;
+  transition:all .2s;text-align:left;
+}
+.inst-btn:hover:not(:disabled){border-color:var(--sec)}
+.inst-btn.correct-inst{border-color:var(--green);background:rgba(74,222,128,.1)}
+.inst-btn.wrong-inst{border-color:var(--red);background:rgba(248,113,113,.1)}
+.inst-btn:disabled{cursor:default}
+.inst-icon{font-size:1.4rem;flex-shrink:0}
+.inst-name{font-family:'Bebas Neue',sans-serif;font-size:.92rem;color:var(--amber);letter-spacing:.04em}
+.inst-desc{font-size:.72rem;color:var(--muted);margin-top:2px}
+.case-verdict{
+  margin-top:10px;padding:10px 14px;border-radius:7px;
+  font-size:.84rem;display:none;
+}
+.case-verdict.show{display:block}
+.case-verdict.ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:var(--green)}
+.case-verdict.fail{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+.solved-stamp{
+  display:none;position:absolute;top:14px;right:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.08em;
+  color:var(--green);border:1.5px solid var(--green);border-radius:4px;padding:2px 8px;
+}
+.solved-stamp.show{display:block}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+#toast{
+  position:fixed;bottom:22px;right:22px;z-index:500;
+  background:var(--surf);border:1px solid var(--primary);
+  border-radius:10px;padding:11px 18px;
+  font-family:'DM Mono',monospace;font-size:.8rem;color:var(--amber);
+  box-shadow:0 10px 40px #0009;
+  transform:translateY(80px);opacity:0;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);max-width:260px;
+}
+#toast.pop{transform:translateY(0);opacity:1}
+
+/* ══════════════════════════════════════════════
+   RESULTS
+══════════════════════════════════════════════ */
+#s-results{
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;
+  padding:80px 20px 60px;min-height:100vh;
+}
+#s-results.show{display:flex}
+.res-trophy{font-size:5.5rem;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+.res-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,6vw,3.8rem);color:#fff;margin:10px 0 4px}
+.res-xp{font-family:'Bebas Neue',sans-serif;font-size:2rem;background:linear-gradient(135deg,var(--primary),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:22px}
+.res-stats{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:28px}
+.rstat{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:100px}
+.rstat .rv{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--amber)}
+.rstat .rl{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px}
+.btn-cert{
+  background:transparent;border:2px solid var(--amber);color:var(--amber);
+  font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.07em;
+  border-radius:8px;padding:12px 28px;cursor:pointer;margin:7px;
+  transition:all .2s;
+}
+.btn-cert:hover{background:var(--amber);color:#000}
+.btn-retry{
+  background:var(--primary);color:#000;
+  font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.07em;
+  border:none;border-radius:8px;padding:12px 28px;cursor:pointer;margin:7px;
+  transition:transform .15s;
+}
+.btn-retry:hover{transform:scale(1.04)}
+
+/* ══════════════════════════════════════════════
+   CERTIFICATE OVERLAY
+══════════════════════════════════════════════ */
+#cert-overlay{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:20px;
+}
+#cert-overlay.show{display:flex}
+.cert-box{
+  background:var(--bg);border:2px solid var(--primary);
+  border-radius:16px;max-width:660px;width:100%;
+  padding:36px 38px;text-align:center;position:relative;
+}
+.cert-close{
+  position:absolute;top:12px;right:16px;
+  background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;
+}
+.cert-logo{height:44px;object-fit:contain;margin-bottom:14px}
+.cert-stripe{height:4px;background:linear-gradient(90deg,var(--primary),var(--amber),var(--sec));border-radius:2px;margin:14px 0}
+.cert-tit{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--primary);letter-spacing:.08em}
+.cert-sub{font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:18px}
+.cert-name-lbl{font-size:.78rem;color:var(--muted);margin-bottom:4px}
+.cert-name{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--amber);margin-bottom:4px}
+.cert-course{font-size:.88rem;color:var(--text);margin-bottom:4px}
+.cert-bloque{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--sec);letter-spacing:.05em;margin-bottom:16px}
+.cert-score{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:14px}
+.cert-date{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted)}
+.btn-dl{
+  background:var(--primary);color:#000;
+  font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.07em;
+  border:none;border-radius:7px;padding:9px 22px;cursor:pointer;margin-top:14px;
+  transition:transform .15s;
+}
+.btn-dl:hover{transform:scale(1.04)}
+
+/* ══════════════════════════════════════════════
+   REFERENCES
+══════════════════════════════════════════════ */
+.refs-wrap{max-width:880px;margin:0 auto;padding:0 20px 50px}
+.refs-h{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--primary);letter-spacing:.06em;margin-bottom:14px;margin-top:36px}
+.ref{
+  font-size:.76rem;color:var(--muted);line-height:1.65;
+  margin-bottom:10px;padding-left:18px;text-indent:-18px;
+  font-family:'DM Mono',monospace;
+}
+.ref a{color:var(--sec)}
+</style>
+</head>
+<body>
+
+<!-- ══════ HUD ══════ -->
+<div id="hud">
+  <div class="hud-logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Logo_Universidad_IEU.svg" alt="IEU"
+         onerror="this.style.display='none'"/>
+    <div class="hud-logo-text">
+      <div class="t1">GCI · Bloque III</div>
+      <div class="t2">Integración Económica de Europa</div>
+    </div>
+  </div>
+  <div class="hud-spacer"></div>
+  <div class="hud-tabs">
+    <div class="hud-tab active" id="tab-intro" onclick="nav('intro')">🏠</div>
+    <div class="hud-tab" id="tab-m1" onclick="nav('m1')">🧩 M1</div>
+    <div class="hud-tab" id="tab-m2" onclick="nav('m2')">⚖️ M2</div>
+    <div class="hud-tab" id="tab-m3" onclick="nav('m3')">🛡️ M3</div>
+  </div>
+  <div class="hud-xp-wrap">
+    <div class="hud-xp-bar-bg"><div class="hud-xp-bar" id="xpbar"></div></div>
+    <div class="hud-xp-num">⚡<span id="xp-num">0</span></div>
+  </div>
+  <div class="hud-level" id="level-lbl">Novato en Bruselas</div>
+</div>
+
+<!-- ══════ TOAST ══════ -->
+<div id="toast"></div>
+
+<!-- ══════ CERT OVERLAY ══════ -->
+<div id="cert-overlay">
+  <div class="cert-box" id="cert-box">
+    <button class="cert-close" onclick="closeCert()">✕</button>
+    <img class="cert-logo" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Logo_Universidad_IEU.svg"
+         alt="IEU" onerror="this.style.display='none'"/>
+    <div class="cert-stripe"></div>
+    <div class="cert-tit">🏅 CERTIFICADO DE LOGRO</div>
+    <div class="cert-sub">COMERCIO GLOBAL INTERNACIONAL · IEU · BLOQUE III</div>
+    <div class="cert-name-lbl">Este certificado acredita que</div>
+    <div class="cert-name" id="c-name">Estudiante IEU</div>
+    <div class="cert-course">completó satisfactoriamente el módulo</div>
+    <div class="cert-bloque">Misión: Corresponsal en la Eurozona</div>
+    <div class="cert-bloque" style="font-size:.85rem;color:var(--muted)">Bloque III · Integración Económica de Europa</div>
+    <div class="cert-score" id="c-score"></div>
+    <div class="cert-stripe"></div>
+    <div class="cert-date" id="c-date"></div>
+    <button class="btn-dl" onclick="printCert()">⬇ Descargar / Imprimir</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     INTRO SCREEN
+══════════════════════════════════════════ -->
+<div class="screen show" id="s-intro">
+  <div class="intro-cam">📹</div>
+  <div class="intro-h1">Corresponsal<br/>en la Eurozona</div>
+  <p class="intro-sub">
+    Eres un TikToker especializado en geopolítica y economía. Tu misión: viajar a Bruselas y explicar
+    a millones de seguidores cómo se formó la UE, qué desafíos enfrenta y si el sentimiento proeuropeo
+    sobrevivirá al Brexit. ¿Tienes el criterio para el escenario global?
+  </p>
+  <div class="intro-cards">
+    <div class="icard">
+      <div class="icard-icon">🧩</div>
+      <div class="icard-name">M1 · Integrador Europeo</div>
+      <div class="icard-desc">Clasifica etapas de integración y retos demográficos con drag & drop.</div>
+    </div>
+    <div class="icard">
+      <div class="icard-icon">⚖️</div>
+      <div class="icard-name">M2 · Dilema del Brexit</div>
+      <div class="icard-desc">Negocia entre soberanía e integración. Identifica sectores perdedores.</div>
+    </div>
+    <div class="icard">
+      <div class="icard-icon">🛡️</div>
+      <div class="icard-name">M3 · Diplomático de Seguridad</div>
+      <div class="icard-desc">Resuelve 3 casos reales con Europol, Eurojust y la Euroorden.</div>
+    </div>
+  </div>
+  <button class="btn-launch" onclick="nav('m1')">📡 INICIAR TRANSMISIÓN</button>
+  <div class="stripe"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MISSION 1 — EL INTEGRADOR EUROPEO
+══════════════════════════════════════════ -->
+<div class="screen" id="s-m1">
+<div class="wrap">
+
+  <div class="mission-badge">🧩 MISIÓN 1</div>
+  <h1 class="mission-h1">El Integrador Europeo</h1>
+  <p class="mission-lead">
+    Como Tiktoker en Bruselas debes dominar la historia de la CEE y los retos demográficos.
+    Estudia el contenido y luego clasifica los conceptos correctamente.
+  </p>
+  <div class="prog-row">
+    <div class="prog-lbl">Progreso M1</div>
+    <div class="prog-bg"><div class="prog-fill" id="pg1" style="width:0%"></div></div>
+    <div class="prog-lbl" id="pg1-txt">0 / 3</div>
+  </div>
+
+  <!-- Theory -->
+  <div class="acc" id="acc1">
+    <div class="acc-head" onclick="toggleAcc('acc1')">
+      <span class="acc-icon">🏛️</span>
+      <span class="acc-title">3.1 Historia de la CEE — De la posguerra al Euro</span>
+      <span class="acc-arrow" id="ar-acc1">▼</span>
+    </div>
+    <div class="acc-body" id="bd-acc1">
+      <p>La <span class="hl">Comunidad Económica Europea (CEE)</span> nació en la posguerra como respuesta a la devastación de la Segunda Guerra Mundial. Los Estados buscaban reconstrucción económica y cooperación pacífica para evitar futuros conflictos.</p>
+      <p><strong>Etapas de integración:</strong></p>
+      <ul>
+        <li><span class="hl">Zona de Libre Comercio</span> → eliminación de aranceles entre miembros.</li>
+        <li><span class="hl">Unión Aduanera (1968)</span> → arancel externo común. Se logró 18 meses antes del calendario previsto.</li>
+        <li><span class="hl">Mercado Común</span> → libre circulación de bienes, servicios, capitales y personas (Tratado de Roma, 1957).</li>
+        <li><span class="hl">Unión Económica y Monetaria</span> → Tratado de Maastricht (1992/1993) + Euro físico en 2002.</li>
+      </ul>
+      <p><strong>Países fundadores del Tratado de Roma (1957):</strong> <span class="chip">Alemania</span><span class="chip">Francia</span><span class="chip">Italia</span><span class="chip">Bélgica</span><span class="chip">Países Bajos</span><span class="chip">Luxemburgo</span></p>
+      <div class="infobox">💡 El euro eliminó la volatilidad cambiaria y redujo costos de transacción. Solo 20 de los 27 Estados han adoptado el euro. La UE representa el 14% del comercio mundial de mercancías y su PIB asciende a ~18 billones de dólares.</div>
+    </div>
+  </div>
+
+  <div class="acc" id="acc2">
+    <div class="acc-head" onclick="toggleAcc('acc2')">
+      <span class="acc-icon">👥</span>
+      <span class="acc-title">3.2 Retos Demográficos — La Migración como Solución</span>
+      <span class="acc-arrow" id="ar-acc2">▼</span>
+    </div>
+    <div class="acc-body" id="bd-acc2">
+      <p>Europa enfrenta una <span class="hl">crisis demográfica</span> con raíces entre 1970-1990:</p>
+      <ul>
+        <li>Tasa de fecundidad 2023: <span class="hl">1.38 hijos/mujer</span> (nivel de reemplazo = 2.1)</li>
+        <li>Personas +65 años: del 16% (2001) al 21% (2020).</li>
+        <li>Personas +80 años: del 3.4% al 6% en el mismo período.</li>
+        <li>Jóvenes 0-19 años: disminuyeron del 23% al 20%.</li>
+        <li>Desde <span class="hl">2012</span>: mueren más personas de las que nacen en la UE.</li>
+      </ul>
+      <p><strong>Migración como solución estructural:</strong> En 2023, 5.9 millones inmigraron a la UE; Alemania y España concentraron el 42% del total. La migración compensa la disminución de población en edad laboral.</p>
+      <p><strong>Crisis de refugiados 2015-2016:</strong> más de 1.3 millones de entradas. La respuesta fue fragmentada, generando nacionalismo y cierre temporal de fronteras Schengen.</p>
+      <div class="infobox">💡 El envejecimiento cambia nichos de mercado: ↑ servicios médicos y farmacéuticos; ↓ bienes vinculados a jóvenes (educación, primera vivienda).</div>
+    </div>
+  </div>
+
+  <!-- DRAG & DROP GAME -->
+  <div class="section-title">🎯 MINIJUEGO DE CLASIFICACIÓN — Arrastra cada elemento a su categoría</div>
+  <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">
+    Arrastra los conceptos del pool hacia la zona correcta. ¡Cuidado con las trampas!
+  </p>
+
+  <div class="drag-pool" id="pool" ondragover="ev.preventDefault()" ondrop="dropPool(event)">
+    <div class="ditem" id="di1" draggable="true" ondragstart="ds(event,'di1')" data-cat="integracion">Zona de Libre Comercio</div>
+    <div class="ditem" id="di2" draggable="true" ondragstart="ds(event,'di2')" data-cat="integracion">Unión Aduanera (1968)</div>
+    <div class="ditem" id="di3" draggable="true" ondragstart="ds(event,'di3')" data-cat="integracion">Mercado Común</div>
+    <div class="ditem" id="di4" draggable="true" ondragstart="ds(event,'di4')" data-cat="integracion">Euro — moneda única (2002)</div>
+    <div class="ditem" id="di5" draggable="true" ondragstart="ds(event,'di5')" data-cat="demografico">Descenso de natalidad (1.38 hijos/mujer)</div>
+    <div class="ditem" id="di6" draggable="true" ondragstart="ds(event,'di6')" data-cat="demografico">Envejecimiento poblacional</div>
+    <div class="ditem" id="di7" draggable="true" ondragstart="ds(event,'di7')" data-cat="demografico">Migración estructural — rejuvenecer mercado laboral</div>
+    <div class="ditem" id="di8" draggable="true" ondragstart="ds(event,'di8')" data-cat="demografico">Crisis de refugiados 2015-2016</div>
+    <div class="ditem" id="di9" draggable="true" ondragstart="ds(event,'di9')" data-cat="integracion">Tratado de Roma (1957)</div>
+  </div>
+
+  <div class="dzones">
+    <div class="dzone" id="z-integracion" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'integracion')">
+      <div class="dzone-title">🏛️ Etapas de Integración Económica</div>
+    </div>
+    <div class="dzone" id="z-demografico" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'demografico')">
+      <div class="dzone-title">👥 Retos Poblacionales / Demográficos</div>
+    </div>
+  </div>
+
+  <button class="btn-check" id="btn-check-drag" onclick="checkDrag()">✅ VERIFICAR</button>
+  <div class="fb" id="fb-drag"></div>
+
+  <!-- Quiz M1 -->
+  <div class="section-title" style="margin-top:32px">📡 PREGUNTAS RÁPIDAS</div>
+
+  <div class="qcard">
+    <div class="qtext">1. Si el alumno coloca "Euro" en 1957 en la línea del tiempo, ¿qué pista da el sistema?</div>
+    <div class="qopts">
+      <button class="qbtn" onclick="qa('q1a',this,'w')">El euro se adoptó en el Tratado de Roma como objetivo final</button>
+      <button class="qbtn" onclick="qa('q1a',this,'c')">¡Cuidado! El euro se materializó físicamente mucho después, en 2002</button>
+      <button class="qbtn" onclick="qa('q1a',this,'w')">El euro nunca existió en 1957, esa categoría es incorrecta</button>
+    </div>
+    <div class="fb" id="fb-q1a"></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">2. ¿Por qué la migración es una "solución estructural" para Europa y no solo humanitaria?</div>
+    <div class="qopts">
+      <button class="qbtn" onclick="qa('q1b',this,'w')">Porque reduce los costos de los servicios públicos al traer trabajadores baratos</button>
+      <button class="qbtn" onclick="qa('q1b',this,'c')">Porque compensa la disminución de la población en edad laboral derivada del envejecimiento y la baja natalidad</button>
+      <button class="qbtn" onclick="qa('q1b',this,'w')">Porque aumenta la tasa de natalidad inmediatamente al llegar los migrantes</button>
+    </div>
+    <div class="fb" id="fb-q1b"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:26px">
+    <button class="btn-next" onclick="nav('m2')">Siguiente: Misión 2 ⚖️ →</button>
+  </div>
+</div>
+</div><!-- end s-m1 -->
+
+<!-- ══════════════════════════════════════════
+     MISSION 2 — EL DILEMA DEL BREXIT
+══════════════════════════════════════════ -->
+<div class="screen" id="s-m2">
+<div class="wrap">
+
+  <div class="mission-badge">⚖️ MISIÓN 2</div>
+  <h1 class="mission-h1">El Dilema del Brexit</h1>
+  <p class="mission-lead">
+    Eres el negociador del proceso Brexit (2016-2020). Debes elegir posturas estratégicas frente a
+    Comercio y Soberanía. Tus decisiones determinan los sectores ganadores y perdedores.
+  </p>
+  <div class="prog-row">
+    <div class="prog-lbl">Progreso M2</div>
+    <div class="prog-bg"><div class="prog-fill" id="pg2" style="width:0%"></div></div>
+    <div class="prog-lbl" id="pg2-txt">0 / 3</div>
+  </div>
+
+  <!-- Context -->
+  <div class="acc" id="acc3">
+    <div class="acc-head" onclick="toggleAcc('acc3')">
+      <span class="acc-icon">🇬🇧</span>
+      <span class="acc-title">3.4 Brexit e Italexit — Contexto del negociador</span>
+      <span class="acc-arrow" id="ar-acc3">▼</span>
+    </div>
+    <div class="acc-body" id="bd-acc3">
+      <p>El <span class="hl">23 de junio de 2016</span>, el Reino Unido votó salir de la UE con el lema <span class="hl">"Take Back Control"</span> (51.9% de los votos). La salida formal se consumó el <span class="hl">31 de enero de 2020</span>.</p>
+      <p><strong>Factores que impulsaron el Brexit:</strong> euroescepticismo histórico, crisis de refugiados 2015 (explotada políticamente), impacto de austeridad 2008, regiones desindustrializadas y percepción de pérdida de autonomía legislativa.</p>
+      <p><strong>Consecuencias:</strong> Londres perdió acceso privilegiado al mercado único. El RU pasó de actor central a posición más periférica internacionalmente.</p>
+      <p><strong>Italexit (2020):</strong> El senador Gianluigi Paragone fundó "No a Europa para Italia" (Italexit). Argumentos: euro ha dañado a familias y pequeñas empresas; Bruselas limita la autonomía. Sin embargo, el <span class="hl">58.2% de los italianos apoya el euro</span> y dependen del NextGenerationEU.</p>
+      <div class="infobox">💡 Paradoja: tras el Brexit, el apoyo a la UE aumentó en Finlandia, Países Bajos y Portugal (87.6% en 2022). Incluso en Italia el respaldo se mantiene en 70.4%.</div>
+    </div>
+  </div>
+
+  <!-- SIMULATOR STAGES -->
+  <div class="section-title">🎭 SIMULADOR DE DECISIÓN — ¿Qué haría un buen negociador?</div>
+
+  <!-- Stage 1: Comercio -->
+  <div class="sim-stage">
+    <div class="sim-h">📦 DECISIÓN 1: Postura Comercial</div>
+    <div class="sim-p">El RU debe elegir su relación con el Mercado Único tras el Brexit. ¿Qué postura recomiendas como negociador que prioriza los intereses económicos a largo plazo?</div>
+    <div class="sim-choices">
+      <button class="sim-btn" id="sb1a" onclick="simChoose(1,'bad','sb1a','sb1b')" data-val="bad">
+        <span class="sb-icon">🚧</span>
+        <div class="sb-label">Salir completamente del Mercado Único</div>
+        <div class="sb-detail">Recuperar control arancelario total. Crea nuevas barreras burocráticas en la frontera.</div>
+      </button>
+      <button class="sim-btn" id="sb1b" onclick="simChoose(1,'good','sb1b','sb1a')" data-val="good">
+        <span class="sb-icon">🤝</span>
+        <div class="sb-label">Negociar acceso parcial al Mercado Único</div>
+        <div class="sb-detail">Mantener lazos comerciales estrechos, aunque con nuevas regulaciones. Minimiza costos de transición.</div>
+      </button>
+    </div>
+    <div class="fb" id="fb-sim1"></div>
+  </div>
+
+  <!-- Stage 2: Soberanía -->
+  <div class="sim-stage">
+    <div class="sim-h">🏛️ DECISIÓN 2: Postura de Soberanía</div>
+    <div class="sim-p">El lema "Take Back Control" promete recuperar control legislativo y migratorio. Como negociador analítico, ¿qué argumento defenderías ante el Parlamento?</div>
+    <div class="sim-choices">
+      <button class="sim-btn" id="sb2a" onclick="simChoose(2,'good','sb2a','sb2b')" data-val="good">
+        <span class="sb-icon">⚖️</span>
+        <div class="sb-label">Soberanía con cooperación estratégica</div>
+        <div class="sb-detail">Recuperar autonomía legislativa pero mantener acuerdos de seguridad y comercio. Influencia sin pertenencia formal.</div>
+      </button>
+      <button class="sim-btn" id="sb2b" onclick="simChoose(2,'bad','sb2b','sb2a')" data-val="bad">
+        <span class="sb-icon">🔒</span>
+        <div class="sb-label">Soberanía total sin acuerdos vinculantes</div>
+        <div class="sb-detail">Control absoluto pero pérdida de toda influencia en decisiones europeas que afectan al RU.</div>
+      </button>
+    </div>
+    <div class="fb" id="fb-sim2"></div>
+  </div>
+
+  <!-- Sector Winners/Losers -->
+  <div class="section-title">📊 IDENTIFICA LOS SECTORES — ¿Ganador o Perdedor?</div>
+  <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">Selecciona si cada sector resultó GANADOR (✅) o PERDEDOR (❌) con el Brexit para ganar XP.</p>
+  <div class="sector-grid">
+    <div class="sector-card" id="sc1" onclick="sectorPick('sc1','loser','Sector Financiero de Londres')">
+      <span class="si">🏦</span>Sector Financiero<br/><small style="color:var(--muted)">de Londres</small>
+    </div>
+    <div class="sector-card" id="sc2" onclick="sectorPick('sc2','loser','Comercio bilateral RU-UE')">
+      <span class="si">🚢</span>Comercio bilateral<br/><small style="color:var(--muted)">RU–UE</small>
+    </div>
+    <div class="sector-card" id="sc3" onclick="sectorPick('sc3','winner','Pesca artesanal del RU')">
+      <span class="si">🎣</span>Pesca artesanal<br/><small style="color:var(--muted)">del RU</small>
+    </div>
+    <div class="sector-card" id="sc4" onclick="sectorPick('sc4','loser','Influencia política del RU')">
+      <span class="si">🌐</span>Influencia política<br/><small style="color:var(--muted)">internacional</small>
+    </div>
+    <div class="sector-card" id="sc5" onclick="sectorPick('sc5','winner','Autonomía migratoria del RU')">
+      <span class="si">🛂</span>Autonomía migratoria<br/><small style="color:var(--muted)">del RU</small>
+    </div>
+    <div class="sector-card" id="sc6" onclick="sectorPick('sc6','loser','Movilidad de ciudadanos británicos en UE')">
+      <span class="si">✈️</span>Movilidad ciudadanos<br/><small style="color:var(--muted)">brit. en UE</small>
+    </div>
+  </div>
+  <div class="fb" id="fb-sectors"></div>
+
+  <!-- Score display -->
+  <div class="score-grid" id="sim-scoreboard">
+    <div class="score-box"><div class="sv" id="sc-correct">0</div><div class="sl">Sectores correctos</div></div>
+    <div class="score-box"><div class="sv" id="sc-xp">0</div><div class="sl">XP en esta misión</div></div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px">
+    <button class="btn-next" onclick="nav('m3')">Siguiente: Misión 3 🛡️ →</button>
+  </div>
+</div>
+</div><!-- end s-m2 -->
+
+<!-- ══════════════════════════════════════════
+     MISSION 3 — DIPLOMÁTICO DE SEGURIDAD
+══════════════════════════════════════════ -->
+<div class="screen" id="s-m3">
+<div class="wrap">
+
+  <div class="mission-badge">🛡️ MISIÓN 3</div>
+  <h1 class="mission-h1">Diplomático de Seguridad Global</h1>
+  <p class="mission-lead">
+    Debes resolver 3 casos reales usando las instituciones europeas de seguridad y justicia.
+    Elige la herramienta correcta para cada amenaza y gana XP como experto en seguridad.
+  </p>
+  <div class="prog-row">
+    <div class="prog-lbl">Progreso M3</div>
+    <div class="prog-bg"><div class="prog-fill" id="pg3" style="width:0%"></div></div>
+    <div class="prog-lbl" id="pg3-txt">0 / 3</div>
+  </div>
+
+  <!-- Theory -->
+  <div class="acc" id="acc4">
+    <div class="acc-head" onclick="toggleAcc('acc4')">
+      <span class="acc-icon">🛡️</span>
+      <span class="acc-title">3.3 Instituciones de Seguridad — Europol, Eurojust y Euroorden</span>
+      <span class="acc-arrow" id="ar-acc4">▼</span>
+    </div>
+    <div class="acc-body" id="bd-acc4">
+      <p>Tras el fin de la Guerra Fría, las amenazas convencionales dieron paso a riesgos híbridos. El <span class="hl">Tratado de Ámsterdam (1997)</span> definió la Política Exterior y de Seguridad Común (PESC).</p>
+      <p><strong>🔵 EUROPOL</strong> (sede: La Haya): Previene y combate delincuencia grave, terrorismo y <span class="hl">ciberdelincuencia</span>. Tiene el Centro Europeo de Ciberdelincuencia (EC3). Ejemplo: WannaCry 2017.</p>
+      <p><strong>🟠 EUROJUST</strong> (desde 2002): Coordinación <span class="hl">judicial penal</span> entre Estados miembros. Incluye jueces, fiscales y policías. Prioridades: terrorismo, cibercrimen, trata de personas, tráfico de drogas.</p>
+      <p><strong>🟡 EUROORDEN</strong> (desde 2002): Orden de Detención Europea. Agiliza <span class="hl">extradiciones</span> entre países UE. Se activa para penas &gt; 1 año; elimina trámites burocráticos anteriores.</p>
+      <div class="infobox">💡 Amenazas híbridas actuales: desinformación, ciberataques a infraestructuras críticas y dependencia energética de Rusia (evidenciada tras invasión a Ucrania 2022).</div>
+    </div>
+  </div>
+
+  <!-- CASE A -->
+  <div class="case-card" id="case-a">
+    <div class="case-badge">CASO A — Ciberataque</div>
+    <div class="solved-stamp" id="stamp-a">✔ RESUELTO</div>
+    <h3 class="case-title">🖥️ El ransomware WannaCry paraliza hospitales en Europa</h3>
+    <p class="case-body">Mayo 2017. Un virus ransomware cifra archivos de hospitales y empresas en toda Europa y exige rescates. Sistemas médicos críticos quedan fuera de servicio. Necesitas activar la institución europea más idónea para coordinar la respuesta técnica y policial internacional.</p>
+    <div class="inst-opts">
+      <button class="inst-btn" id="ca1" onclick="solveCase('a','correct','ca1','ca2','ca3')" disabled>
+        <span class="inst-icon">🔵</span>
+        <div><div class="inst-name">EUROPOL / Centro EC3</div><div class="inst-desc">Lucha contra ciberdelincuencia. Coordina respuesta internacional con policías nacionales.</div></div>
+      </button>
+      <button class="inst-btn" id="ca2" onclick="solveCase('a','wrong','ca2','ca1','ca3')">
+        <span class="inst-icon">🟠</span>
+        <div><div class="inst-name">EUROJUST</div><div class="inst-desc">Coordinación judicial penal entre Estados miembros.</div></div>
+      </button>
+      <button class="inst-btn" id="ca3" onclick="solveCase('a','wrong','ca3','ca1','ca2')">
+        <span class="inst-icon">🟡</span>
+        <div><div class="inst-name">EUROORDEN</div><div class="inst-desc">Orden de detención europea para extradiciones.</div></div>
+      </button>
+    </div>
+    <div class="case-verdict" id="verd-a"></div>
+  </div>
+
+  <!-- CASE B -->
+  <div class="case-card" id="case-b">
+    <div class="case-badge b-amber">CASO B — Extradición</div>
+    <div class="solved-stamp" id="stamp-b">✔ RESUELTO</div>
+    <h3 class="case-title">🚔 Un criminal huye de Francia a España tras cometer fraude fiscal</h3>
+    <p class="case-body">Un sospechoso de fraude financiero organizado huye de París a Madrid. La justicia francesa necesita que España lo entregue de forma rápida, sin los largos procesos diplomáticos que solían tardar años. ¿Qué instrumento activas?</p>
+    <div class="inst-opts">
+      <button class="inst-btn" id="cb1" onclick="solveCase('b','wrong','cb1','cb2','cb3')">
+        <span class="inst-icon">🔵</span>
+        <div><div class="inst-name">EUROPOL</div><div class="inst-desc">Agencia policial para crimen organizado y ciberdelincuencia.</div></div>
+      </button>
+      <button class="inst-btn" id="cb2" onclick="solveCase('b','wrong','cb2','cb3','cb1')">
+        <span class="inst-icon">🟠</span>
+        <div><div class="inst-name">EUROJUST</div><div class="inst-desc">Coordinación judicial penal de investigaciones conjuntas.</div></div>
+      </button>
+      <button class="inst-btn" id="cb3" onclick="solveCase('b','correct','cb3','cb1','cb2')">
+        <span class="inst-icon">🟡</span>
+        <div><div class="inst-name">EUROORDEN</div><div class="inst-desc">Agiliza extradiciones entre países de la UE, sin trámites burocráticos.</div></div>
+      </button>
+    </div>
+    <div class="case-verdict" id="verd-b"></div>
+  </div>
+
+  <!-- CASE C -->
+  <div class="case-card" id="case-c">
+    <div class="case-badge b-blue">CASO C — Cooperación Judicial</div>
+    <div class="solved-stamp" id="stamp-c">✔ RESUELTO</div>
+    <h3 class="case-title">⚖️ Red de tráfico de drogas opera en 6 países simultáneamente</h3>
+    <p class="case-body">Fiscalías de Italia, Alemania, Bélgica, Países Bajos, España y Francia detectan una red transnacional de narcotráfico. Cada país investiga por separado sin compartir evidencias, lo que permite que los sospechosos escapen entre jurisdicciones. Necesitas el mecanismo de coordinación judicial penal.</p>
+    <div class="inst-opts">
+      <button class="inst-btn" id="cc1" onclick="solveCase('c','wrong','cc1','cc2','cc3')">
+        <span class="inst-icon">🔵</span>
+        <div><div class="inst-name">EUROPOL</div><div class="inst-desc">Agencia policial operativa para análisis e intercambio de información.</div></div>
+      </button>
+      <button class="inst-btn" id="cc2" onclick="solveCase('c','correct','cc2','cc1','cc3')">
+        <span class="inst-icon">🟠</span>
+        <div><div class="inst-name">EUROJUST</div><div class="inst-desc">Coordina investigaciones penales conjuntas entre fiscalías y jueces de distintos países.</div></div>
+      </button>
+      <button class="inst-btn" id="cc3" onclick="solveCase('c','wrong','cc3','cc1','cc2')">
+        <span class="inst-icon">🟡</span>
+        <div><div class="inst-name">EUROORDEN</div><div class="inst-desc">Instrumento para solicitar la entrega de personas ya identificadas.</div></div>
+      </button>
+    </div>
+    <div class="case-verdict" id="verd-c"></div>
+  </div>
+
+  <!-- Final quiz -->
+  <div class="section-title">📡 PREGUNTA FINAL DE TRANSMISIÓN</div>
+  <div class="qcard">
+    <div class="qtext">Tras la invasión rusa a Ucrania (2022), ¿qué vulnerabilidad estratégica quedó más expuesta en Europa?</div>
+    <div class="qopts">
+      <button class="qbtn" onclick="qa('qfinal',this,'w')">La falta de acuerdos comerciales con Asia</button>
+      <button class="qbtn" onclick="qa('qfinal',this,'c')">La dependencia energética de Rusia y las limitaciones defensivas ante amenazas híbridas</button>
+      <button class="qbtn" onclick="qa('qfinal',this,'w')">La ausencia de tratados de libre comercio con América Latina</button>
+      <button class="qbtn" onclick="qa('qfinal',this,'w')">La expansión excesiva del espacio Schengen</button>
+    </div>
+    <div class="fb" id="fb-qfinal"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="btn-launch" style="font-size:1.2rem;padding:12px 36px" onclick="finish()">🏆 COMPLETAR MISIONES</button>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="refs-wrap" style="padding-left:0;padding-right:0">
+    <div class="refs-h">📚 Referencias</div>
+    <div class="ref">Consejo de la Unión Europea. (2020, 30 de octubre). <em>Procedimientos de extradición más efectivos: orden de detención europea</em>. EUR-Lex. https://eur-lex.europa.eu/ES/legal-content/summary/more-effective-extradition-procedures-european-arrest-warrant.html</div>
+    <div class="ref">Díaz Galán, E. C. (Dir.). (2024). <em>La Unión Europea como actor global: desafíos políticos, jurídicos y de seguridad</em>. Ediciones Olejnik. https://elibro.net/es/ereader/ieu/267399</div>
+    <div class="ref">Eurojust. (2025). <em>About us</em>. https://www.eurojust.europa.eu/about-us</div>
+    <div class="ref">Europol. (2025). <em>History</em>. https://www.europol.europa.eu/about-europol/history</div>
+    <div class="ref">Europol. (2025, 20 de mayo). <em>Sobre Europol</em>. https://www.europol.europa.eu/about-europol:es</div>
+    <div class="ref">Eurostat. (2021). <em>Demografía de Europa: estadísticas visualizadas</em>. Oficina de Publicaciones de la Unión Europea. https://www.ine.es/prodyser/demografia_UE/img/pdf/Demograhy-InteractivePublication-2021_es.pdf?lang=es</div>
+    <div class="ref">Gil Pecharromán, J. (2024). <em>Historia de la integración europea</em>. Universidad Nacional de Educación a Distancia. https://elibro.net/es/ereader/ieu/273668</div>
+    <div class="ref">Guinea Bonillo, J. &amp; Pérez Bustamante, R. (2021). <em>La conferencia sobre el futuro de Europa: la apuesta ciudadana por la integración</em> (1.ª ed.). Dykinson. https://elibro.net/es/ereader/ieu/207333</div>
+    <div class="ref">Lafuente Sánchez, R. (2023). <em>Introducción a la Unión Europea en la era post-brexit</em>. Dykinson. https://elibro.net/es/ereader/ieu/253350</div>
+    <div class="ref">The Malaysian Reserve. (2020, 24 de junio). Italy's newest political party wants to pull country out of EU. <em>The Malaysian Reserve</em>. https://themalaysianreserve.com/2020/06/24/italys-newest-political-party-wants-country-out-of-the-eu/</div>
+    <div class="ref">Unión Europea. (1997, 10 de noviembre). <em>Tratado de Ámsterdam por el que se modifican el Tratado de la Unión Europea, los Tratados constitutivos de las Comunidades Europeas y determinados actos conexos</em>. EUR-Lex. https://eur-lex.europa.eu/ES/legal-content/summary/the-amsterdam-treaty.html</div>
+    <div class="ref">Unión Europea. (2024). <em>Hechos y cifras clave</em>. https://european-union.europa.eu/principles-countries-history/facts-and-figures-european-union_es</div>
+    <div class="ref">Valenciano, J. D. (Coord.). (2021). <em>Los nuevos desafíos estratégicos en la Unión Europea</em>. Delta Publicaciones. https://elibro.net/es/ereader/ieu/227411</div>
+  </div>
+
+</div>
+</div><!-- end s-m3 -->
+
+<!-- ══════════════════════════════════════════
+     RESULTS SCREEN
+══════════════════════════════════════════ -->
+<div class="screen" id="s-results">
+  <div class="res-trophy">🏆</div>
+  <div class="res-h1">¡TRANSMISIÓN EXITOSA!</div>
+  <p style="color:var(--muted);font-size:.92rem;margin-bottom:14px">Tu cobertura desde Bruselas fue impecable, Correspondal.</p>
+  <div class="res-xp">⚡ <span id="final-xp">0</span> XP TOTALES</div>
+  <div class="res-stats">
+    <div class="rstat"><div class="rv" id="r-correct">0</div><div class="rl">Correctas</div></div>
+    <div class="rstat"><div class="rv" id="r-level">—</div><div class="rl">Nivel alcanzado</div></div>
+    <div class="rstat"><div class="rv">3/3</div><div class="rl">Misiones</div></div>
+  </div>
+  <button class="btn-cert" onclick="showCert()">🏅 VER CERTIFICADO</button>
+  <button class="btn-retry" onclick="resetGame()">🔄 Jugar de nuevo</button>
+  <div class="stripe" style="margin-top:36px"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+/* ── STATE ── */
+let XP = 0, correct = 0;
+let answered = {}, sectorsDone = {}, simDone = {};
+let m1prog = 0, m2prog = 0, m3prog = 0;
+let casesSolved = { a:false, b:false, c:false };
+let m2XP = 0, m2correct = 0;
+
+const LEVELS = [
+  {min:0,  name:'Novato en Bruselas'},
+  {min:60, name:'Analista Comunitario'},
+  {min:150,name:'Negociador de la Comisión'},
+  {min:280,name:'Diplomático de Élite'},
+  {min:420,name:'Maestro de la Eurozona'},
+];
+function getLevel(x){ let l=LEVELS[0]; for(const lv of LEVELS) if(x>=lv.min) l=lv; return l; }
+
+/* ── XP ── */
+function addXP(pts, msg){
+  XP += pts; correct++;
+  document.getElementById('xp-num').textContent = XP;
+  const cur = getLevel(XP);
+  const nxt = LEVELS.find(l=>l.min>XP)||LEVELS[LEVELS.length-1];
+  const pct = nxt.min>cur.min ? Math.min(100,((XP-cur.min)/(nxt.min-cur.min))*100) : 100;
+  document.getElementById('xpbar').style.width = pct+'%';
+  document.getElementById('level-lbl').textContent = cur.name;
+  toast(`+${pts} XP — ${msg}`);
+}
+
+/* ── TOAST ── */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('pop');
+  setTimeout(()=>t.classList.remove('pop'),2600);
+}
+
+/* ── NAV ── */
+function nav(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.hud-tab').forEach(t=>t.classList.remove('active'));
+  const sc = document.getElementById('s-'+id);
+  if(sc) sc.classList.add('show');
+  const tb = document.getElementById('tab-'+id);
+  if(tb) tb.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ── ACCORDION ── */
+function toggleAcc(id){
+  const body = document.getElementById('bd-'+id);
+  const arrow = document.getElementById('ar-'+id);
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+/* ══════════════════════════════════
+   MISSION 1 — DRAG & DROP
+══════════════════════════════════ */
+let dragging = null, placed = {};
+
+function ds(ev, id){ dragging=id; ev.dataTransfer.effectAllowed='move'; }
+function dov(ev){ ev.preventDefault(); ev.currentTarget.classList.add('over'); }
+function dlv(ev){ ev.currentTarget.classList.remove('over'); }
+function dropPool(ev){ ev.preventDefault(); }
+
+function ddr(ev, zone){
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('over');
+  if(!dragging) return;
+  const el=document.getElementById(dragging);
+  if(!el) return;
+  el.classList.add('placed');
+  const cl=el.cloneNode(true);
+  cl.draggable=false; cl.id=dragging+'_c';
+  cl.dataset.orig=dragging;
+  cl.style.display=''; cl.classList.remove('placed');
+  cl.style.width='100%'; cl.style.marginBottom='5px'; cl.style.cursor='default';
+  ev.currentTarget.appendChild(cl);
+  placed[dragging]=zone;
+  dragging=null;
+}
+
+function checkDrag(){
+  const all = document.querySelectorAll('[data-orig]');
+  let ok=0,tot=0;
+  all.forEach(item=>{
+    const orig=item.dataset.orig;
+    const correct_zone=document.getElementById(orig).dataset.cat;
+    const user_zone=placed[orig];
+    tot++;
+    if(user_zone===correct_zone){ ok++; item.style.borderColor='var(--green)'; item.style.color='var(--green)'; }
+    else { item.style.borderColor='var(--red)'; item.style.color='var(--red)'; }
+  });
+  const fb=document.getElementById('fb-drag');
+  if(ok===9||tot===0){
+    fb.textContent='🎉 ¡Clasificación perfecta! +60 XP. Recuerda: el Euro (2002) es la culminación de la UEM, no el punto de partida.';
+    fb.className='fb show ok'; addXP(60,'¡Clasificación perfecta!');
+  } else if(ok>=6){
+    fb.textContent=`✅ ${ok}/${tot} correctas. +30 XP. Revisa los conceptos incorrectos (marcados en rojo).`;
+    fb.className='fb show ok'; addXP(30,'Buena clasificación');
+  } else {
+    fb.textContent=`❌ ${ok}/${tot} correctas. Pista: las Etapas de Integración son el proceso histórico de la CEE; los Retos Demográficos son los desafíos poblacionales actuales.`;
+    fb.className='fb show fail';
+  }
+  document.getElementById('btn-check-drag').disabled=true;
+  updateProg(1, ok>=6?1:0, 3);
+}
+
+/* ── GENERIC QUIZ ── */
+const QFB = {
+  'q1a':{ c:'✅ Correcto. El sistema siempre da esa pista específica porque el euro como moneda física circuló en 2002, no en 1957. El Tratado de Roma solo creó el Mercado Común.', w:'❌ Incorrecto. La pista exacta del sistema es: "¡Cuidado! El euro se materializó físicamente mucho después, en 2002". Eso refleja que el euro no es del período fundacional.' },
+  'q1b':{ c:'✅ Correcto. La migración es "estructural" porque responde a una necesidad demográfica permanente: la baja natalidad (1.38 hijos/mujer) y el envejecimiento crean una escasez crónica de trabajadores.', w:'❌ Incorrecto. La solución estructural no es sobre costos laborales ni natalidad inmediata, sino compensar la disminución de la PEA causada por el envejecimiento y la baja fecundidad.' },
+  'qfinal':{ c:'✅ Correcto. La dependencia energética de Rusia y las amenazas híbridas (desinformación, ciberataques, dependencia energética) fueron las vulnerabilidades más expuestas tras la invasión a Ucrania.', w:'❌ Incorrecto. La principal vulnerabilidad expuesta fue la dependencia energética rusa y las limitaciones defensivas ante amenazas híbridas, no vínculos comerciales con otras regiones.' },
+};
+
+function qa(id, btn, res){
+  if(answered[id]) return;
+  answered[id]=true;
+  btn.closest('.qopts').querySelectorAll('.qbtn').forEach(b=>b.disabled=true);
+  btn.classList.add(res==='c'?'correct':'wrong');
+  const fb=document.getElementById('fb-'+id);
+  fb.textContent=QFB[id][res]; fb.className='fb show '+(res==='c'?'ok':'fail');
+  if(res==='c'){ addXP(25,'¡Respuesta correcta!'); }
+  if(id==='q1a'||id==='q1b') updateProg(1, res==='c'?1:0, 3);
+  if(id==='qfinal') updateProg(3, res==='c'?1:0, 3);
+}
+
+/* ── MISSION 1 PROGRESS ── */
+function updateProg(m, add, total){
+  if(m===1){ m1prog=Math.min(m1prog+add,total); const p=Math.round((m1prog/total)*100); document.getElementById('pg1').style.width=p+'%'; document.getElementById('pg1-txt').textContent=`${m1prog} / ${total}`; if(m1prog>=total) document.getElementById('tab-m1').classList.add('done'); }
+  if(m===2){ m2prog=Math.min(m2prog+add,total); const p=Math.round((m2prog/total)*100); document.getElementById('pg2').style.width=p+'%'; document.getElementById('pg2-txt').textContent=`${m2prog} / ${total}`; if(m2prog>=total) document.getElementById('tab-m2').classList.add('done'); }
+  if(m===3){ m3prog=Math.min(m3prog+add,total); const p=Math.round((m3prog/total)*100); document.getElementById('pg3').style.width=p+'%'; document.getElementById('pg3-txt').textContent=`${m3prog} / ${total}`; if(m3prog>=total) document.getElementById('tab-m3').classList.add('done'); }
+}
+
+/* ══════════════════════════════════
+   MISSION 2 — BREXIT SIMULATOR
+══════════════════════════════════ */
+const SIM_FB = {
+  1:{ good:'✅ Decisión correcta. Mantener acceso parcial al Mercado Único minimiza los costos económicos de transición. La salida total creó nuevas barreras burocráticas que sofocaron el comercio bilateral. +35 XP', bad:'❌ Decisión estratégicamente débil. Salir completamente del Mercado Único generó enormes costos: las exportaciones e importaciones enfrentan nuevas barreras que ralentizan el comercio. Resultado real: el RU perdió.' },
+  2:{ good:'✅ Decisión correcta. Un negociador hábil busca recuperar autonomía sin perder toda influencia. La soberanía total sin acuerdos resultó en pérdida de influencia global: el RU pasó de actor central a posición periférica. +35 XP', bad:'❌ Decisión estratégicamente costosa. La soberanía total sin vínculos significó pérdida completa de influencia en decisiones europeas que siguen afectando al RU. En política internacional, aislar no es poder.' }
+};
+
+function simChoose(stage, res, btnId, otherId){
+  if(simDone[stage]) return;
+  simDone[stage]=true;
+  document.getElementById(btnId).classList.add(res==='good'?'chosen-good':'chosen-bad');
+  document.getElementById(otherId).disabled=true;
+  document.getElementById(btnId).disabled=true;
+  const fb=document.getElementById('fb-sim'+stage);
+  fb.textContent=SIM_FB[stage][res]; fb.className='fb show '+(res==='good'?'ok':'fail');
+  if(res==='good'){ addXP(35,'¡Decisión estratégica correcta!'); m2XP+=35; m2correct++; }
+  document.getElementById('sc-correct').textContent = m2correct;
+  document.getElementById('sc-xp').textContent = m2XP;
+  updateProg(2,1,3);
+}
+
+const SECTORS = {
+  sc1:{ correct:'loser', label:'🏦 Sector Financiero',  reason:'PERDEDOR ✅ Correcto. Londres perdió el "pasaporte financiero" que le daba acceso privilegiado al mercado europeo. Bancos y fondos trasladaron operaciones a Frankfurt, París y Dublín.'},
+  sc2:{ correct:'loser', label:'🚢 Comercio bilateral', reason:'PERDEDOR ✅ Correcto. Las nuevas barreras burocráticas aduaneras sofocaron el comercio RU-UE. Empresas enfrentan costos adicionales y demoras.'},
+  sc3:{ correct:'winner',label:'🎣 Pesca artesanal',    reason:'GANADOR ✅ Correcto. El RU recuperó control sobre sus aguas territoriales y cuotas pesqueras, uno de los argumentos más poderosos del Brexit para las comunidades pesqueras.'},
+  sc4:{ correct:'loser', label:'🌐 Influencia política', reason:'PERDEDOR ✅ Correcto. El RU pasó de ser actor central en decisiones europeas a una posición más periférica en el escenario internacional.'},
+  sc5:{ correct:'winner',label:'🛂 Autonomía migratoria',reason:'GANADOR ✅ Correcto. El RU recuperó control sobre sus fronteras y política migratoria. Ahora aplica un sistema de puntos para inmigrantes, sin obligación de aceptar libre circulación europea.'},
+  sc6:{ correct:'loser', label:'✈️ Movilidad ciudadanos',reason:'PERDEDOR ✅ Correcto. Los ciudadanos británicos perdieron el derecho de libre circulación, residencia y trabajo en los 27 países de la UE. Ahora necesitan visados para estancias largas.'},
+};
+
+let sectorsCorrect=0;
+
+function sectorPick(id, guess, label){
+  if(sectorsDone[id]) return;
+  sectorsDone[id]=true;
+  const el=document.getElementById(id);
+  el.classList.add('locked');
+  const s=SECTORS[id];
+  const isCorrect = guess===s.correct;
+  el.classList.add(isCorrect?s.correct:'locked');
+  el.style.borderColor=isCorrect?'var(--green)':'var(--red)';
+  el.style.color=isCorrect?'var(--green)':'var(--red)';
+  const fb=document.getElementById('fb-sectors');
+  fb.textContent=(isCorrect?'':('❌ '+label+' fue '+s.correct.toUpperCase()+'. '))+s.reason;
+  fb.className='fb show '+(isCorrect?'ok':'fail');
+  if(isCorrect){ addXP(20,'Sector identificado correctamente'); sectorsCorrect++; m2XP+=20; }
+  document.getElementById('sc-correct').textContent = m2correct+sectorsCorrect;
+  document.getElementById('sc-xp').textContent = m2XP;
+  updateProg(2,1,3);
+}
+
+/* ══════════════════════════════════
+   MISSION 3 — CASES
+══════════════════════════════════ */
+const CASE_FB = {
+  a:{ correct:'✅ ¡Decisión correcta! Europol, con su Centro Europeo de Ciberdelincuencia (EC3), fue exactamente la institución que respondió al WannaCry en 2017. Formó el J-CAT, coordinó con policías nacionales y desarrolló herramientas de recuperación gratuitas. +40 XP', wrong:'❌ Incorrecto para este caso. WannaCry fue un ciberataque, el dominio de Europol/EC3. Eurojust coordina judicialmente y la Euroorden agiliza extradiciones, pero no lideran respuesta a ciberincidentes activos.' },
+  b:{ correct:'✅ ¡Correcto! La Euroorden (implementada en 2002) transformó los procesos de extradición. Permite entregar al sospechoso sin largos trámites diplomáticos. Se activa para penas >1 año y requiere reconocimiento judicial mutuo. +40 XP', wrong:'❌ Incorrecto. La Euroorden es el instrumento específico para extradiciones entre países UE. Europol analiza e intercambia información; Eurojust coordina investigaciones conjuntas; pero la entrega física del sospechoso requiere la Euroorden.' },
+  c:{ correct:'✅ ¡Correcto! Eurojust es exactamente para esto: coordinar investigaciones penales conjuntas entre fiscales y jueces de múltiples países. Permite que un caso transnacional sea perseguido con una estrategia judicial unificada. +40 XP', wrong:'❌ Incorrecto. Europol es el brazo policial (análisis, información); la Euroorden sirve para entregar sospechosos ya identificados. Eurojust es el mecanismo de coordinación judicial penal para investigaciones que cruzan fronteras, como este caso.' },
+};
+
+function solveCase(cas, res, btnId, o1, o2){
+  if(casesSolved[cas]) return;
+  casesSolved[cas]=true;
+  document.getElementById(btnId).classList.add(res==='correct'?'correct-inst':'wrong-inst');
+  [o1,o2].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b){ b.disabled=true; b.style.opacity='.4'; }
+  });
+  document.getElementById(btnId).disabled=true;
+  const verd=document.getElementById('verd-'+cas);
+  verd.textContent=CASE_FB[cas][res];
+  verd.className='case-verdict show '+(res==='correct'?'ok':'fail');
+  if(res==='correct'){
+    addXP(40,'¡Caso resuelto correctamente!');
+    document.getElementById('stamp-'+cas).classList.add('show');
+    document.getElementById('case-'+cas).classList.add('solved');
+  }
+  updateProg(3,1,3);
+}
+
+/* ══════════════════════════════════
+   FINISH / RESULTS
+══════════════════════════════════ */
+function finish(){
+  nav('results');
+  document.getElementById('s-results').classList.add('show');
+  document.getElementById('final-xp').textContent=XP;
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-level').textContent=getLevel(XP).name;
+}
+
+/* ══════════════════════════════════
+   CERTIFICATE
+══════════════════════════════════ */
+function showCert(){
+  document.getElementById('c-date').textContent='Fecha: '+new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('c-score').textContent=`XP Total: ${XP} · Correctas: ${correct} · Nivel: ${getLevel(XP).name}`;
+  document.getElementById('cert-overlay').classList.add('show');
+}
+function closeCert(){ document.getElementById('cert-overlay').classList.remove('show'); }
+function printCert(){
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Certificado IEU</title>
+  <style>
+    body{font-family:Georgia,serif;text-align:center;padding:50px 40px;background:#0D0804;color:#f0e0cc;}
+    h1{font-size:2.2rem;color:#E8440A;margin:0 0 4px;letter-spacing:.06em;}
+    .sub{font-size:.8rem;color:#9a7060;margin-bottom:20px;font-family:monospace;}
+    .stripe{height:4px;background:linear-gradient(90deg,#E8440A,#FFB347,#FF8040);margin:18px auto;max-width:500px;border-radius:2px;}
+    .name{font-size:2rem;color:#FFB347;margin:10px 0 4px;}
+    .bloque{color:#FF8040;font-size:1.1rem;font-weight:bold;margin:6px 0 16px;}
+    .score{font-size:.78rem;color:#9a7060;font-family:monospace;}
+  </style></head><body>
+  <div class="stripe"></div>
+  <h1>🏅 CERTIFICADO DE LOGRO</h1>
+  <div class="sub">COMERCIO GLOBAL INTERNACIONAL · IEU · BLOQUE III</div>
+  <p>Este certificado acredita que</p>
+  <div class="name">${document.getElementById('c-name').textContent}</div>
+  <p>completó satisfactoriamente el módulo</p>
+  <p style="font-style:italic;color:#FF8040">Misión: Corresponsal en la Eurozona</p>
+  <div class="bloque">Bloque III · Integración Económica de Europa</div>
+  <div class="score">${document.getElementById('c-score').textContent}</div>
+  <div class="stripe"></div>
+  <div class="score">${document.getElementById('c-date').textContent}</div>
+  </body></html>`);
+  w.document.close(); w.print();
+}
+
+/* ══════════════════════════════════
+   RESET
+══════════════════════════════════ */
+function resetGame(){
+  XP=0; correct=0; answered={}; sectorsDone={}; simDone={};
+  m1prog=0; m2prog=0; m3prog=0; m2XP=0; m2correct=0; sectorsCorrect=0;
+  casesSolved={a:false,b:false,c:false};
+  // XP UI
+  document.getElementById('xp-num').textContent='0';
+  document.getElementById('xpbar').style.width='0%';
+  document.getElementById('level-lbl').textContent='Novato en Bruselas';
+  // Progs
+  ['pg1','pg2','pg3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width='0%';});
+  document.getElementById('pg1-txt').textContent='0 / 3';
+  document.getElementById('pg2-txt').textContent='0 / 3';
+  document.getElementById('pg3-txt').textContent='0 / 3';
+  // Tabs
+  document.querySelectorAll('.hud-tab').forEach(t=>t.classList.remove('done','active'));
+  // Drag items
+  document.querySelectorAll('.ditem').forEach(d=>{d.classList.remove('placed');d.style.display='';});
+  document.querySelectorAll('[data-orig]').forEach(c=>c.remove());
+  document.getElementById('btn-check-drag').disabled=false;
+  // Quiz buttons
+  document.querySelectorAll('.qbtn,.sim-btn,.inst-btn').forEach(b=>{b.disabled=false;b.classList.remove('correct','wrong','chosen-good','chosen-bad','correct-inst','wrong-inst');b.style.opacity='';});
+  document.querySelectorAll('.sector-card').forEach(c=>{c.classList.remove('winner','loser','locked');c.style.borderColor='';c.style.color='';});
+  document.querySelectorAll('.fb,.case-verdict').forEach(f=>{f.classList.remove('show');f.textContent='';});
+  document.querySelectorAll('.solved-stamp').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.case-card').forEach(c=>c.classList.remove('solved'));
+  // Scoreboard
+  document.getElementById('sc-correct').textContent='0';
+  document.getElementById('sc-xp').textContent='0';
+  // Cert overlay
+  document.getElementById('cert-overlay').classList.remove('show');
+  // Results screen
+  document.getElementById('s-results').classList.remove('show');
+  nav('intro');
+}
+
+/* ══ FIX: enable first inst-btn in case-a on load ══ */
+window.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('ca1').disabled=false;
+});
+</script>
+</body>
+</html>
