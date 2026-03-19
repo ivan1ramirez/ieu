@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="SPA educativa IEU: Domina la Trilogía de Juran, gestión de marcas de servicio y estrategias post-venta de Kotler en el Mercado de Servicios."/>
+<title>Tiktoker del Mercado de Servicios · VIyS S3 · IEU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════
+   VARIABLES
+══════════════════════════════════════ */
+:root{
+  --bg:#0D0804;
+  --pri:#E8440A;
+  --sec:#FF8040;
+  --amb:#FFB347;
+  --sur:#16100A;
+  --sur2:#201408;
+  --brd:#3a1c0a;
+  --txt:#f2dfc8;
+  --mut:#9a7050;
+  --grn:#4ade80;
+  --red:#f87171;
+  --blu:#60a5fa;
+  --cya:#2dd4bf;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Manrope',sans-serif;
+  background:var(--bg);color:var(--txt);
+  min-height:100vh;
+  background-image:radial-gradient(circle,rgba(232,68,10,.12) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+
+/* ══════ HUD ══════ */
+#hud{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  background:rgba(13,8,4,.95);
+  border-bottom:2.5px solid var(--pri);
+  backdrop-filter:blur(16px);
+  height:62px;
+  display:flex;align-items:center;
+  padding:0 18px;gap:14px;
+}
+.hud-brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hud-brand img{height:33px;object-fit:contain;
+  filter:drop-shadow(0 0 6px rgba(232,68,10,.4))}
+.hud-brand-txt .t1{
+  font-family:'Bebas Neue',sans-serif;font-size:.95rem;
+  color:var(--pri);letter-spacing:.08em;line-height:1}
+.hud-brand-txt .t2{font-size:.58rem;color:var(--mut);font-family:'JetBrains Mono',monospace}
+.hud-sp{flex:1}
+/* tabs */
+.htabs{display:flex;gap:3px;flex-shrink:0}
+.htab{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  background:var(--sur2);border:1px solid var(--brd);
+  border-radius:5px;padding:4px 9px;cursor:pointer;
+  color:var(--mut);transition:all .18s;white-space:nowrap;
+}
+.htab:hover{border-color:var(--sec);color:var(--sec)}
+.htab.on{background:var(--pri);border-color:var(--pri);color:#000;font-weight:700}
+.htab.ok{border-color:var(--grn);color:var(--grn)}
+/* xp */
+.hxp{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.hxp-bg{width:72px;height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
+.hxp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--pri),var(--amb));
+  border-radius:3px;transition:width .5s ease}
+.hxp-n{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--pri)}
+.hlvl{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  border:1px solid var(--amb);color:var(--amb);
+  border-radius:20px;padding:3px 10px;white-space:nowrap;flex-shrink:0;
+}
+@media(max-width:680px){.htabs{display:none}.hxp-bg{width:44px}}
+
+/* ══════ SCREENS ══════ */
+.scr{display:none;padding-top:70px;min-height:100vh}
+.scr.on{display:block}
+.w{max-width:900px;margin:0 auto;padding:28px 18px 64px}
+
+/* ══════ INTRO ══════ */
+#si{
+  display:none;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;
+  padding:88px 18px 60px;min-height:100vh;
+}
+#si.on{display:flex}
+.ic{font-size:4.5rem;animation:icf 3s ease-in-out infinite;display:block;margin-bottom:12px}
+@keyframes icf{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.06)}}
+.ih{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,9vw,6rem);
+  line-height:.9;letter-spacing:.02em;
+  background:linear-gradient(135deg,#fff 20%,var(--sec) 55%,var(--amb));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:10px;
+}
+.isb{color:var(--mut);font-size:.92rem;line-height:1.7;max-width:500px;margin:0 auto 28px}
+.icards{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+.icard{
+  background:var(--sur);border:1px solid var(--brd);
+  border-radius:14px;padding:16px 18px;width:185px;text-align:left;
+  transition:all .2s;
+}
+.icard:hover{border-color:var(--pri);transform:translateY(-4px);
+  box-shadow:0 12px 30px rgba(232,68,10,.18)}
+.icard-ic{font-size:1.9rem;margin-bottom:8px}
+.icard-n{font-family:'Bebas Neue',sans-serif;color:var(--pri);
+  font-size:.95rem;letter-spacing:.05em;margin-bottom:4px}
+.icard-d{font-size:.7rem;color:var(--mut);line-height:1.5}
+.btngo{
+  background:linear-gradient(135deg,var(--pri),var(--sec));
+  color:#000;font-family:'Bebas Neue',sans-serif;
+  font-size:1.5rem;letter-spacing:.1em;
+  border:none;border-radius:10px;padding:14px 46px;cursor:pointer;
+  box-shadow:0 0 40px rgba(232,68,10,.5);
+  transition:transform .15s,box-shadow .15s;
+}
+.btngo:hover{transform:scale(1.05);box-shadow:0 0 60px rgba(232,68,10,.7)}
+.stripe{
+  height:5px;width:100%;max-width:500px;margin-top:38px;
+  background:linear-gradient(90deg,var(--pri),var(--amb),var(--sec),var(--amb),var(--pri));
+  border-radius:3px;
+}
+
+/* ══════ MISSION HEADER ══════ */
+.mbadge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--pri);color:#000;
+  font-family:'Bebas Neue',sans-serif;letter-spacing:.08em;font-size:.9rem;
+  border-radius:5px;padding:3px 13px;margin-bottom:10px;
+}
+.mh{font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.8rem,5vw,2.9rem);line-height:1;color:#fff;margin-bottom:6px}
+.ml{color:var(--mut);font-size:.88rem;line-height:1.65;max-width:600px;margin-bottom:20px}
+.prow{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.plbl{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--mut);white-space:nowrap}
+.pbg{flex:1;height:4px;background:var(--brd);border-radius:2px;overflow:hidden}
+.pfil{height:100%;background:linear-gradient(90deg,var(--pri),var(--amb));
+  border-radius:2px;transition:width .5s}
+
+/* ══════ ACCORDION ══════ */
+.acc{
+  background:var(--sur);border:1px solid var(--brd);
+  border-radius:12px;margin-bottom:12px;overflow:hidden;
+  transition:border-color .2s;
+}
+.acc:hover{border-color:var(--sec)}
+.accH{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 18px;cursor:pointer;
+}
+.accH-ic{font-size:1.25rem;flex-shrink:0}
+.accH-t{font-family:'Bebas Neue',sans-serif;font-size:.98rem;
+  letter-spacing:.06em;color:var(--sec);flex:1}
+.accH-ar{color:var(--mut);font-size:.85rem;transition:transform .3s;flex-shrink:0}
+.accH-ar.op{transform:rotate(180deg)}
+.accB{
+  max-height:0;overflow:hidden;transition:max-height .42s ease;
+  padding:0 18px;font-size:.85rem;line-height:1.75;color:var(--txt);
+}
+.accB.op{max-height:1500px;padding:0 18px 16px}
+.accB p{margin-bottom:9px}
+.accB ul{padding-left:18px;margin-bottom:9px}
+.accB li{margin-bottom:5px}
+.hl{color:var(--amb);font-weight:700}
+.chip{
+  display:inline-block;background:var(--sur2);
+  border:1px solid var(--brd);border-radius:4px;
+  padding:1px 7px;font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;color:var(--sec);margin:2px;
+}
+.ib{
+  background:var(--sur2);border-left:3px solid var(--pri);
+  border-radius:0 8px 8px 0;padding:10px 14px;
+  margin:10px 0;font-size:.82rem;color:var(--amb);line-height:1.5;
+}
+
+/* ══════ QUIZ ══════ */
+.stit{
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
+  color:var(--pri);letter-spacing:.06em;
+  margin:28px 0 14px;display:flex;align-items:center;gap:8px;
+}
+.qc{
+  background:var(--sur2);border:1px solid var(--brd);
+  border-radius:10px;padding:18px 20px;margin-bottom:16px;
+}
+.qt{font-size:.92rem;margin-bottom:14px;line-height:1.65}
+.qo{display:flex;flex-direction:column;gap:7px}
+.qb{
+  background:var(--sur);border:1px solid var(--brd);
+  border-radius:7px;padding:10px 14px;color:var(--txt);
+  font-family:'Manrope',sans-serif;font-size:.83rem;
+  cursor:pointer;text-align:left;transition:all .18s;
+}
+.qb:hover:not(:disabled){border-color:var(--sec);background:rgba(255,128,64,.07)}
+.qb.cor{border-color:var(--grn);background:rgba(74,222,128,.1);color:var(--grn)}
+.qb.wr{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.qb:disabled{cursor:default}
+.fb{margin-top:9px;padding:8px 12px;border-radius:6px;font-size:.82rem;display:none}
+.fb.on{display:block}
+.fb.ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:var(--grn)}
+.fb.no{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+
+/* ══════ DRAG & DROP ══════ */
+.dpool{
+  display:flex;flex-wrap:wrap;gap:8px;
+  background:var(--sur2);border:1px dashed var(--brd);
+  border-radius:10px;padding:14px;min-height:68px;margin-bottom:18px;
+}
+.dit{
+  background:var(--sur);border:1px solid var(--sec);
+  border-radius:6px;padding:7px 13px;font-size:.78rem;
+  cursor:grab;color:var(--txt);user-select:none;
+  transition:opacity .2s,transform .15s,border-color .18s;
+}
+.dit:active{cursor:grabbing;opacity:.6;transform:scale(.94)}
+.dit.pl{display:none}
+.dzwrap{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:580px){.dzwrap{grid-template-columns:1fr}}
+.dz{
+  background:var(--sur2);border:2px dashed var(--brd);
+  border-radius:10px;padding:12px;min-height:120px;
+  transition:border-color .2s,background .2s;
+}
+.dz.ov{border-color:var(--pri);background:rgba(232,68,10,.07)}
+.dz-t{
+  font-family:'Bebas Neue',sans-serif;font-size:.82rem;
+  color:var(--amb);letter-spacing:.05em;
+  margin-bottom:8px;text-align:center;
+  border-bottom:1px solid var(--brd);padding-bottom:5px;
+}
+.dz .dit{width:100%;margin-bottom:5px;cursor:default;font-size:.74rem}
+.btnchk{
+  background:linear-gradient(135deg,var(--pri),var(--sec));
+  color:#000;font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;letter-spacing:.08em;
+  border:none;border-radius:8px;padding:11px 24px;cursor:pointer;
+  transition:transform .15s;margin-right:8px;
+}
+.btnchk:hover:not(:disabled){transform:scale(1.04)}
+.btnchk:disabled{opacity:.4;cursor:default}
+.btnnx{
+  background:transparent;border:2px solid var(--sec);color:var(--sec);
+  font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.08em;
+  border-radius:8px;padding:10px 22px;cursor:pointer;
+  transition:all .18s;
+}
+.btnnx:hover{background:var(--sec);color:#000}
+
+/* ══════ SIMULATOR (M2) ══════ */
+.simcard{
+  background:var(--sur);border:1px solid var(--brd);
+  border-radius:12px;padding:20px;margin-bottom:16px;
+  transition:border-color .2s;
+}
+.simcard:hover{border-color:var(--sec)}
+.simH{font-family:'Bebas Neue',sans-serif;color:var(--sec);
+  font-size:1.02rem;letter-spacing:.06em;margin-bottom:8px}
+.simp{font-size:.84rem;color:var(--mut);line-height:1.65;margin-bottom:14px}
+/* metric sliders */
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:480px){.metric-grid{grid-template-columns:1fr}}
+.metric-box{
+  background:var(--sur2);border:1px solid var(--brd);
+  border-radius:9px;padding:14px;
+}
+.metric-label{font-family:'Bebas Neue',sans-serif;font-size:.82rem;
+  color:var(--amb);letter-spacing:.05em;margin-bottom:6px}
+.metric-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;
+  color:var(--pri);margin-bottom:8px}
+.metric-slider{
+  width:100%;appearance:none;height:5px;
+  background:var(--brd);border-radius:3px;outline:none;cursor:pointer;
+}
+.metric-slider::-webkit-slider-thumb{
+  appearance:none;width:16px;height:16px;
+  background:var(--pri);border-radius:50%;cursor:pointer;
+  box-shadow:0 0 6px rgba(232,68,10,.5);
+}
+.reliability-meter{
+  background:var(--sur2);border:1px solid var(--brd);
+  border-radius:10px;padding:16px;margin-top:12px;
+}
+.rel-label{font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--txt);
+  letter-spacing:.05em;margin-bottom:8px;display:flex;justify-content:space-between}
+.rel-bar-bg{height:14px;background:var(--brd);border-radius:7px;overflow:hidden}
+.rel-bar{height:100%;border-radius:7px;
+  background:linear-gradient(90deg,var(--red),var(--amb),var(--grn));
+  transition:width .5s;width:50%}
+.rel-pct{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--mut);
+  margin-top:5px;text-align:right}
+/* decision btns */
+.dec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:480px){.dec-grid{grid-template-columns:1fr}}
+.decbtn{
+  background:var(--sur2);border:2px solid var(--brd);
+  border-radius:9px;padding:14px 16px;cursor:pointer;
+  font-family:'Manrope',sans-serif;font-size:.81rem;color:var(--txt);
+  text-align:left;transition:all .2s;
+}
+.decbtn:hover:not(:disabled){border-color:var(--pri);background:rgba(232,68,10,.08)}
+.decbtn.good{border-color:var(--grn);background:rgba(74,222,128,.1);color:var(--grn)}
+.decbtn.bad{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.decbtn:disabled{cursor:default}
+.decbtn-ic{display:block;font-size:1.5rem;margin-bottom:5px}
+.decbtn-t{font-weight:700;font-size:.84rem;margin-bottom:4px}
+.decbtn-d{font-size:.73rem;color:var(--mut);line-height:1.4}
+
+/* ══════ KOTLER CASES (M3) ══════ */
+.kcase{
+  background:var(--sur);border:2px solid var(--brd);
+  border-radius:12px;padding:20px;margin-bottom:20px;
+  position:relative;transition:border-color .2s;
+}
+.kcase.solved{border-color:var(--grn)}
+.kbadge{
+  position:absolute;top:-10px;left:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:.06em;
+  border-radius:4px;padding:2px 10px;color:#000;
+}
+.kb-a{background:var(--pri)}
+.kb-b{background:var(--cya)}
+.kb-c{background:var(--amb)}
+.kstamp{
+  display:none;position:absolute;top:14px;right:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:.08em;
+  color:var(--grn);border:1.5px solid var(--grn);border-radius:4px;padding:2px 8px;
+}
+.kstamp.on{display:block}
+.kcase-t{font-family:'Bebas Neue',sans-serif;font-size:1.08rem;
+  color:var(--txt);margin:8px 0 6px}
+.kcase-b{font-size:.84rem;color:var(--mut);line-height:1.65;margin-bottom:14px}
+.kopts{display:flex;flex-direction:column;gap:8px}
+.kbtn{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--sur2);border:1px solid var(--brd);
+  border-radius:8px;padding:12px 14px;cursor:pointer;
+  transition:all .2s;text-align:left;
+}
+.kbtn:hover:not(:disabled){border-color:var(--sec)}
+.kbtn.cor-k{border-color:var(--grn);background:rgba(74,222,128,.1)}
+.kbtn.wr-k{border-color:var(--red);background:rgba(248,113,113,.1)}
+.kbtn:disabled{cursor:default}
+.kbtn-ic{font-size:1.35rem;flex-shrink:0;margin-top:1px}
+.kbtn-n{font-family:'Bebas Neue',sans-serif;font-size:.88rem;color:var(--amb);letter-spacing:.04em}
+.kbtn-d{font-size:.71rem;color:var(--mut);margin-top:2px;line-height:1.4}
+.kverd{
+  margin-top:10px;padding:9px 13px;border-radius:6px;
+  font-size:.82rem;display:none;
+}
+.kverd.on{display:block}
+.kverd.ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:var(--grn)}
+.kverd.no{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+
+/* ══════ TOAST ══════ */
+#toast{
+  position:fixed;bottom:22px;right:22px;z-index:500;
+  background:var(--sur);border:1px solid var(--pri);
+  border-radius:10px;padding:11px 18px;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--amb);
+  box-shadow:0 12px 40px #000a;max-width:260px;
+  transform:translateY(80px);opacity:0;
+  transition:all .38s cubic-bezier(.34,1.56,.64,1);
+}
+#toast.pop{transform:translateY(0);opacity:1}
+
+/* ══════ RESULTS ══════ */
+#sr{
+  display:none;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;
+  padding:82px 18px 60px;min-height:100vh;
+}
+#sr.on{display:flex}
+.rtrophy{font-size:5rem;animation:rpop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes rpop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.rh{font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,6vw,3.6rem);color:#fff;margin:10px 0 4px}
+.rxp{
+  font-family:'Bebas Neue',sans-serif;font-size:2rem;
+  background:linear-gradient(135deg,var(--pri),var(--amb));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:22px;
+}
+.rstats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:26px}
+.rstat{background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:13px 18px;min-width:96px}
+.rstat .rv{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--amb)}
+.rstat .rl{font-size:.65rem;color:var(--mut);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.bcert{
+  background:transparent;border:2px solid var(--amb);color:var(--amb);
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.07em;
+  border-radius:8px;padding:11px 26px;cursor:pointer;margin:6px;
+  transition:all .2s;
+}
+.bcert:hover{background:var(--amb);color:#000}
+.bretry{
+  background:var(--pri);color:#000;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.07em;
+  border:none;border-radius:8px;padding:11px 26px;cursor:pointer;margin:6px;
+  transition:transform .15s;
+}
+.bretry:hover{transform:scale(1.04)}
+
+/* ══════ CERT ══════ */
+#cov{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.9);backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:18px;
+}
+#cov.on{display:flex}
+.cbox{
+  background:var(--bg);border:2px solid var(--pri);
+  border-radius:16px;max-width:640px;width:100%;
+  padding:34px 36px;text-align:center;position:relative;
+}
+.cclose{position:absolute;top:12px;right:15px;
+  background:none;border:none;color:var(--mut);font-size:1.3rem;cursor:pointer}
+.clogo{height:42px;object-fit:contain;margin-bottom:14px}
+.cstripe{height:4px;background:linear-gradient(90deg,var(--pri),var(--amb),var(--sec));
+  border-radius:2px;margin:14px 0}
+.ctit{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--pri);letter-spacing:.08em}
+.csub{font-size:.7rem;color:var(--mut);font-family:'JetBrains Mono',monospace;margin-bottom:16px}
+.cnamelbl{font-size:.76rem;color:var(--mut);margin-bottom:4px}
+.cname{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--amb);margin-bottom:4px}
+.ccourse{font-size:.86rem;color:var(--txt);margin-bottom:4px}
+.cbloque{font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:var(--sec);
+  letter-spacing:.05em;margin-bottom:14px}
+.cscore{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--mut);margin-bottom:12px}
+.cdate{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--mut)}
+.bdl{
+  background:var(--pri);color:#000;
+  font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.07em;
+  border:none;border-radius:7px;padding:8px 20px;cursor:pointer;margin-top:12px;
+  transition:transform .15s;
+}
+.bdl:hover{transform:scale(1.04)}
+
+/* ══════ REFS ══════ */
+.refwrap{max-width:900px;margin:0 auto;padding:0 18px 50px}
+.refh{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--pri);
+  letter-spacing:.06em;margin-bottom:14px;margin-top:36px}
+.ref{
+  font-size:.74rem;color:var(--mut);line-height:1.65;
+  margin-bottom:10px;padding-left:18px;text-indent:-18px;
+  font-family:'JetBrains Mono',monospace;
+}
+.ref a{color:var(--sec)}
+</style>
+</head>
+<body>
+
+<!-- ═══ HUD ═══ -->
+<div id="hud">
+  <div class="hud-brand">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Logo_Universidad_IEU.svg"
+         alt="Logo Universidad IEU — Institución de Educación Universitaria en línea, México" width="80" height="33"/>
+    <div class="hud-brand-txt">
+      <div class="t1">VIyS · Semana 3</div>
+      <div class="t2">Mercado de Servicios</div>
+    </div>
+  </div>
+  <div class="hud-sp"></div>
+  <div class="htabs">
+    <div class="htab on" id="tb-i" onclick="nav('i')">🏠</div>
+    <div class="htab" id="tb-m1" onclick="nav('m1')">🔄 M1</div>
+    <div class="htab" id="tb-m2" onclick="nav('m2')">🏷️ M2</div>
+    <div class="htab" id="tb-m3" onclick="nav('m3')">🛒 M3</div>
+  </div>
+  <div class="hxp">
+    <div class="hxp-bg"><div class="hxp-fill" id="xpbar"></div></div>
+    <div class="hxp-n">⚡<span id="xpn">0</span></div>
+  </div>
+  <div class="hlvl" id="lvllbl">Novato en Servicios</div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast"></div>
+
+<!-- ═══ CERT OVERLAY ═══ -->
+<div id="cov">
+  <div class="cbox">
+    <button class="cclose" onclick="closeCert()">✕</button>
+    <img class="clogo" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Logo_Universidad_IEU.svg"
+         alt="Logo IEU — Universidad en línea reconocida por la SEP, especializada en educación superior a distancia en México"
+         onerror="this.style.display='none'"/>
+    <div class="cstripe"></div>
+    <div class="ctit">🏅 CERTIFICADO DE LOGRO</div>
+    <div class="csub">VENTAS INDUSTRIALES Y DE SERVICIO · IEU ONLINE</div>
+    <div class="cnamelbl">Este certificado acredita que</div>
+    <div class="cname" id="cn">Estudiante IEU</div>
+    <div class="ccourse">completó satisfactoriamente el módulo</div>
+    <div class="cbloque">Semana 3 · Mercado de Servicios</div>
+    <div class="cbloque" style="font-size:.8rem;color:var(--mut)">Secciones 2.6 – 2.9 · Juran · Gronroos · Levy · Kotler</div>
+    <div class="cscore" id="cs"></div>
+    <div class="cstripe"></div>
+    <div class="cdate" id="cd"></div>
+    <button class="bdl" onclick="printCert()">⬇ Descargar / Imprimir</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     INTRO
+════════════════════════════════════════ -->
+<div class="scr on" id="si">
+  <span class="ic">📱</span>
+  <div class="ih">Tiktoker del<br/>Mercado de Servicios</div>
+  <p class="isb">
+    Te han contratado como consultor digital para ayudar a empresas a mejorar su competitividad.
+    Crea contenido viral explicando cómo administrar la calidad, marcas y soporte post-venta
+    para fidelizar clientes. ¡3 misiones, 1 objetivo: dominar los servicios!
+  </p>
+  <div class="icards">
+    <div class="icard">
+      <div class="icard-ic">🔄</div>
+      <div class="icard-n">M1 · El Ciclo de Juran</div>
+      <div class="icard-d">Clasifica acciones en la Trilogía: Planificación, Control y Mejora de la calidad.</div>
+    </div>
+    <div class="icard">
+      <div class="icard-ic">🏷️</div>
+      <div class="icard-n">M2 · Brand Manager</div>
+      <div class="icard-d">Equilibra fallas e interrupciones para gestionar servicios de apoyo al producto.</div>
+    </div>
+    <div class="icard">
+      <div class="icard-ic">🛒</div>
+      <div class="icard-n">M3 · El Dilema de Kotler</div>
+      <div class="icard-d">Elige la mejor estrategia post-venta para tres tipos de clientes reales.</div>
+    </div>
+  </div>
+  <button class="btngo" onclick="nav('m1')">🎬 INICIAR CONTENIDO</button>
+  <div class="stripe"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MISSION 1 — EL CICLO DE JURAN
+════════════════════════════════════════ -->
+<div class="scr" id="sm1">
+<div class="w">
+  <div class="mbadge">🔄 MISIÓN 1</div>
+  <h1 class="mh">Estratega de Calidad: El Ciclo de Juran</h1>
+  <p class="ml">
+    Como Tiktoker consultor debes dominar la <strong>Trilogía de Juran</strong> para explicar la administración
+    de calidad a las PYMES que te siguen. Estudia el contenido y clasifica las acciones correctamente.
+  </p>
+  <div class="prow">
+    <div class="plbl">Progreso M1</div>
+    <div class="pbg"><div class="pfil" id="pg1" style="width:0%"></div></div>
+    <div class="plbl" id="pt1">0 / 3</div>
+  </div>
+
+  <!-- THEORY -->
+  <div class="acc" id="a1">
+    <div class="accH" onclick="tog('a1')">
+      <span class="accH-ic">📋</span>
+      <span class="accH-t">2.6 Administración de la Calidad de los Servicios — La Trilogía de Juran</span>
+      <span class="accH-ar" id="ar-a1">▼</span>
+    </div>
+    <div class="accB" id="bd-a1">
+      <p>La administración de la calidad consiste en la <span class="hl">revisión constante</span> de procesos internos y externos para optimizar la operación y satisfacer al cliente. <strong>Juran (2002)</strong> propone un ciclo de 3 pasos interrelacionados:</p>
+      <ul>
+        <li><span class="hl">1. Planificación de la calidad:</span> Identificar a los clientes y sus necesidades → desarrollar un producto/servicio que las satisfaga → compartirlo con el personal de operaciones. Es el <em>antes</em>.</li>
+        <li><span class="hl">2. Control de calidad:</span> Monitoreo constante de las actividades que ocurren en el momento en que el cliente está consumiendo el servicio. Evalúa si se cumplen las expectativas. Es el <em>durante</em>.</li>
+        <li><span class="hl">3. Mejora de la calidad:</span> Análisis de áreas de oportunidad detectadas en el control. Diagnostica la causa del error y aplica una estrategia de mejora para corregirla. Es el <em>después</em>.</li>
+      </ul>
+      <p><strong>⚠️ Distinción clave:</strong> el <em>control</em> ocurre DURANTE la prestación; la <em>mejora</em> viene DESPUÉS del análisis del control.</p>
+      <div class="ib">💡 Beneficios de una buena administración (Dávila, 2013): reducción de costos → disminución de precios → presencia en el mercado → permanencia en el mercado → generación de empleos.</div>
+      <p><strong>13 Principios de calidad (Pérez, 2011):</strong> Hacer bien las cosas desde la primera vez · Satisfacer necesidades del cliente · Buscar soluciones · Ser optimista · Buen trato · Ser oportuno · Ser puntual · Colaborar con amabilidad · Reconocer errores · Ser humilde para aprender · Ser ordenado · Ser responsable · Simplificar lo complicado.</p>
+    </div>
+  </div>
+
+  <!-- DRAG & DROP JURAN -->
+  <div class="stit">🎯 MINIJUEGO — Arrastra cada acción a su etapa de la Trilogía de Juran</div>
+  <p style="font-size:.8rem;color:var(--mut);margin-bottom:14px">
+    ⚠️ Pista: Planificación = <em>antes</em> (diseñar) · Control = <em>durante</em> (monitorear) · Mejora = <em>después</em> (diagnosticar y corregir)
+  </p>
+
+  <div class="dpool" id="pool1">
+    <div class="dit" id="d1" draggable="true" ondragstart="ds(event,'d1')" data-cat="planif">Identificar necesidades del cliente</div>
+    <div class="dit" id="d2" draggable="true" ondragstart="ds(event,'d2')" data-cat="control">Monitorear procesos durante el consumo</div>
+    <div class="dit" id="d3" draggable="true" ondragstart="ds(event,'d3')" data-cat="mejora">Diagnosticar causas de errores detectados</div>
+    <div class="dit" id="d4" draggable="true" ondragstart="ds(event,'d4')" data-cat="planif">Desarrollar el producto o servicio acorde al cliente</div>
+    <div class="dit" id="d5" draggable="true" ondragstart="ds(event,'d5')" data-cat="control">Evaluar si el cliente está satisfecho en el momento del servicio</div>
+    <div class="dit" id="d6" draggable="true" ondragstart="ds(event,'d6')" data-cat="mejora">Aplicar estrategia de mejora y evitar que la falla se repita</div>
+    <div class="dit" id="d7" draggable="true" ondragstart="ds(event,'d7')" data-cat="planif">Compartir el plan con el personal de operaciones</div>
+    <div class="dit" id="d8" draggable="true" ondragstart="ds(event,'d8')" data-cat="control">Observar el comportamiento del cliente dentro del establecimiento</div>
+    <div class="dit" id="d9" draggable="true" ondragstart="ds(event,'d9')" data-cat="mejora">Reconocer áreas de oportunidad tras analizar similitudes negativas</div>
+  </div>
+
+  <div class="dzwrap">
+    <div class="dz" id="z-planif" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'planif')">
+      <div class="dz-t">📋 PLANIFICACIÓN<br/><small style="font-size:.65rem;color:var(--mut);font-family:'JetBrains Mono',monospace">Antes · Diseñar</small></div>
+    </div>
+    <div class="dz" id="z-control" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'control')">
+      <div class="dz-t">🔍 CONTROL<br/><small style="font-size:.65rem;color:var(--mut);font-family:'JetBrains Mono',monospace">Durante · Monitorear</small></div>
+    </div>
+    <div class="dz" id="z-mejora" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="ddr(event,'mejora')">
+      <div class="dz-t">⬆️ MEJORA<br/><small style="font-size:.65rem;color:var(--mut);font-family:'JetBrains Mono',monospace">Después · Diagnosticar</small></div>
+    </div>
+  </div>
+
+  <button class="btnchk" id="bchk1" onclick="chkDrag()">✅ VERIFICAR TRILOGÍA</button>
+  <div class="fb" id="fb-drag"></div>
+
+  <!-- Quiz M1 -->
+  <div class="stit" style="margin-top:30px">📡 PREGUNTAS DE VALIDACIÓN</div>
+
+  <div class="qc">
+    <div class="qt">1. Un cliente se queja mientras consume el servicio en el restaurante. ¿En qué etapa de Juran está el equipo si está anotando el problema en ese momento?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('q1','w',this)">Planificación — están ajustando el plan del menú</button>
+      <button class="qb" onclick="qa('q1','c',this)">Control de calidad — monitorean durante la prestación del servicio</button>
+      <button class="qb" onclick="qa('q1','w',this)">Mejora de calidad — están diagnosticando la causa del error</button>
+    </div>
+    <div class="fb" id="fb-q1"></div>
+  </div>
+
+  <div class="qc">
+    <div class="qt">2. ¿Por qué el sistema daría la pista "el control ocurre durante la prestación" si alguien confunde monitoreo con diagnóstico?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('q2','w',this)">Porque el diagnóstico también ocurre mientras el cliente consume el servicio</button>
+      <button class="qb" onclick="qa('q2','c',this)">Porque el diagnóstico (mejora) es posterior al análisis del control; son etapas distintas y secuenciales</button>
+      <button class="qb" onclick="qa('q2','w',this)">Porque el monitoreo y el diagnóstico son sinónimos dentro de la trilogía</button>
+    </div>
+    <div class="fb" id="fb-q2"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:24px">
+    <button class="btnnx" onclick="nav('m2')">Siguiente: Misión 2 🏷️ →</button>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MISSION 2 — BRAND MANAGER + SIMULADOR
+════════════════════════════════════════ -->
+<div class="scr" id="sm2">
+<div class="w">
+  <div class="mbadge">🏷️ MISIÓN 2</div>
+  <h1 class="mh">Brand Manager: Simulador de Soporte</h1>
+  <p class="ml">
+    Asumes el rol de gerente de servicios. Debes equilibrar la <strong>frecuencia de fallas</strong> y la
+    <strong>duración de la interrupción</strong> para mantener la confiabilidad. Decide estrategias de soporte
+    y administración de marcas para ganar XP.
+  </p>
+  <div class="prow">
+    <div class="plbl">Progreso M2</div>
+    <div class="pbg"><div class="pfil" id="pg2" style="width:0%"></div></div>
+    <div class="plbl" id="pt2">0 / 3</div>
+  </div>
+
+  <!-- Theory 2.7 -->
+  <div class="acc" id="a2">
+    <div class="accH" onclick="tog('a2')">
+      <span class="accH-ic">🏷️</span>
+      <span class="accH-t">2.7 Administración de Marcas de Servicios — Gronroos</span>
+      <span class="accH-ar" id="ar-a2">▼</span>
+    </div>
+    <div class="accB" id="bd-a2">
+      <p><strong>Gronroos (2005)</strong> define la administración de marcas de servicio como <em>"capacitar y motivar a los empleados para servir bien a los clientes mediante un proceso interactivo consistente para brindar una adecuada atención"</em>.</p>
+      <p>Los servicios son evaluados por <span class="hl">cualidades, experiencia y credibilidad</span>. Los consumidores confían más en el boca a boca que en la publicidad. La administración de marcas se enfoca en tres tareas:</p>
+      <ul>
+        <li><span class="hl">Diferenciación competitiva:</span> Crear un distintivo vs. la competencia — capacitación especializada, innovación en procesos, uso de símbolos y marcas.</li>
+        <li><span class="hl">Calidad del servicio:</span> Superar las expectativas formadas por experiencias pasadas y recomendaciones. El nuevo cliente ya se formó una idea mental antes de llegar.</li>
+        <li><span class="hl">Productividad:</span> Estandarizar procesos internos + selección adecuada de proveedores para entrega puntual y de calidad.</li>
+      </ul>
+      <div class="ib">💡 Equilibrio clave: estandarizar eleva la satisfacción, pero exceso de tecnología quita el servicio personalizado. El balance humano-tecnológico es la clave del éxito.</div>
+    </div>
+  </div>
+
+  <!-- Theory 2.8 -->
+  <div class="acc" id="a3">
+    <div class="accH" onclick="tog('a3')">
+      <span class="accH-ic">🔧</span>
+      <span class="accH-t">2.8 Administración de Servicios de Apoyo al Producto — Levy (2008)</span>
+      <span class="accH-ar" id="ar-a3">▼</span>
+    </div>
+    <div class="accB" id="bd-a3">
+      <p>Los servicios de apoyo son actividades intangibles secundarias que dan ventaja competitiva (ej: salas de espera en bancos, comida en aerolíneas). <strong>Levy (2008)</strong> establece 4 funciones a monitorear:</p>
+      <ul>
+        <li><span class="hl">Frecuencia de fallas:</span> ¿Con qué frecuencia el servicio no se ofrece adecuadamente? A mayor calidad → menores fallas → clientes más satisfechos.</li>
+        <li><span class="hl">Duración de la interrupción:</span> Más larga la interrupción = mayor costo para el usuario. El cliente valora resultados inmediatos.</li>
+        <li><span class="hl">Costos de mantenimiento y reparación:</span> Estimar el costo del ciclo de vida del servicio. El proveedor debe asumir costos de sus propios errores.</li>
+        <li><span class="hl">Confiabilidad:</span> Diseñar procesos que minimicen errores y faciliten reparaciones rápidas a costo mínimo.</li>
+      </ul>
+      <div class="ib">💡 Un servicio post-venta eficiente (como el taller especializado del fabricante) reduce costos a largo plazo y genera permanencia en el mercado.</div>
+    </div>
+  </div>
+
+  <!-- SIMULATOR -->
+  <div class="stit">🎛️ SIMULADOR — Ajusta métricas y decide la estrategia de soporte</div>
+  <p style="font-size:.8rem;color:var(--mut);margin-bottom:16px">
+    Ajusta los sliders para simular el estado del servicio. Luego elige la decisión correcta de gestión.
+  </p>
+
+  <div class="simcard">
+    <div class="simH">📊 Panel de Monitoreo — Levy (2008)</div>
+    <div class="metric-grid">
+      <div class="metric-box">
+        <div class="metric-label">Frecuencia de Fallas</div>
+        <div class="metric-val" id="mv-ff">5 / semana</div>
+        <input type="range" class="metric-slider" id="sl-ff" min="0" max="20" value="10"
+               oninput="updateSim()" aria-label="Slider para ajustar la frecuencia de fallas del servicio por semana, de 0 a 20 fallas"/>
+      </div>
+      <div class="metric-box">
+        <div class="metric-label">Duración de Interrupción</div>
+        <div class="metric-val" id="mv-di">30 min</div>
+        <input type="range" class="metric-slider" id="sl-di" min="0" max="120" value="60"
+               oninput="updateSim()" aria-label="Slider para ajustar la duración de la interrupción del servicio en minutos, de 0 a 120"/>
+      </div>
+    </div>
+    <div class="reliability-meter">
+      <div class="rel-label">
+        <span>Confiabilidad del Servicio</span>
+        <span id="rel-status">⚠️ Media</span>
+      </div>
+      <div class="rel-bar-bg"><div class="rel-bar" id="rel-bar"></div></div>
+      <div class="rel-pct" id="rel-pct">50%</div>
+    </div>
+  </div>
+
+  <div class="simcard">
+    <div class="simH">⚖️ DECISIÓN DE GESTIÓN — ¿Qué estrategia recomiendas?</div>
+    <div class="simp">Con los indicadores actuales del simulador, ¿cuál es la decisión correcta para mejorar la confiabilidad del servicio de apoyo?</div>
+    <div class="dec-grid">
+      <button class="decbtn" id="d2a" onclick="simDec('good','d2a','d2b')">
+        <span class="decbtn-ic">🔧</span>
+        <div class="decbtn-t">Invertir en taller especializado del fabricante</div>
+        <div class="decbtn-d">Reduce fallas, acorta interrupciones y garantiza piezas originales. Genera confianza y permanencia en el mercado.</div>
+      </button>
+      <button class="decbtn" id="d2b" onclick="simDec('bad','d2b','d2a')">
+        <span class="decbtn-ic">💸</span>
+        <div class="decbtn-t">Dejar que el cliente resuelva sus propias fallas</div>
+        <div class="decbtn-d">Reduce costos de soporte a corto plazo, pero aumenta insatisfacción, pérdida de garantías y baja permanencia en el mercado.</div>
+      </button>
+    </div>
+    <div class="fb" id="fb-sim"></div>
+  </div>
+
+  <!-- Quiz M2 -->
+  <div class="stit">📡 PREGUNTA RÁPIDA</div>
+  <div class="qc">
+    <div class="qt">3. Según Gronroos, ¿cuál es la tarea principal de la administración de marcas de servicios?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('q3','w',this)">Reducir los precios del servicio para ganar participación de mercado</button>
+      <button class="qb" onclick="qa('q3','c',this)">Capacitar y motivar empleados para brindar atención consistente, diferenciarse y elevar la productividad</button>
+      <button class="qb" onclick="qa('q3','w',this)">Aumentar la publicidad de la marca para que los clientes la reconozcan</button>
+    </div>
+    <div class="fb" id="fb-q3"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:24px">
+    <button class="btnnx" onclick="nav('m3')">Siguiente: Misión 3 🛒 →</button>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MISSION 3 — EL DILEMA DE KOTLER
+════════════════════════════════════════ -->
+<div class="scr" id="sm3">
+<div class="w">
+  <div class="mbadge">🛒 MISIÓN 3</div>
+  <h1 class="mh">Experto en Post-Venta: El Dilema de Kotler</h1>
+  <p class="ml">
+    Debes elegir la <strong>mejor estrategia de servicios posteriores a la venta</strong> (Kotler, 2008)
+    para tres tipos de clientes. Una decisión equivocada destruye la confianza ganada.
+  </p>
+  <div class="prow">
+    <div class="plbl">Progreso M3</div>
+    <div class="pbg"><div class="pfil" id="pg3" style="width:0%"></div></div>
+    <div class="plbl" id="pt3">0 / 4</div>
+  </div>
+
+  <!-- Theory 2.9 -->
+  <div class="acc" id="a4">
+    <div class="accH" onclick="tog('a4')">
+      <span class="accH-ic">🛒</span>
+      <span class="accH-t">2.9 Estrategias de Servicios Posteriores a la Venta — Kotler (2008)</span>
+      <span class="accH-ar" id="ar-a4">▼</span>
+    </div>
+    <div class="accB" id="bd-a4">
+      <p>El servicio post-venta es crítico para generar confianza y lealtad. <strong>Kotler (2008)</strong> propone 4 estrategias:</p>
+      <ul>
+        <li><span class="hl">A) Departamento propio del fabricante:</span> La empresa ofrece garantías y reparaciones directamente. <em>La más recomendable</em> — mayor seguridad al comprador. Ejemplo: talleres de agencias de automóviles.</li>
+        <li><span class="hl">B) Acuerdos con distribuidores y detallistas:</span> Corresponsabilidad: distribuidor cubre 1 mes (instalación/funcionamiento), la marca cubre hasta 1 año. Ejemplo: Liverpool/Sears con instalación de estufas.</li>
+        <li><span class="hl">C) Proveedores independientes:</span> Subcontratación para reparaciones especializadas o procesos complejos. Ejemplo: aseguradoras transfieren reparación de autos a talleres independientes.</li>
+        <li><span class="hl">D) Autoservicio del cliente:</span> El consumidor realiza sus propias reparaciones. <em>La menos recomendable</em> — en proceso de descontinuarse. Elimina garantías oficiales. Ejemplo: afinar/cambiar cuerdas de una guitarra uno mismo.</li>
+      </ul>
+      <div class="ib">💡 Lele (2010): los fabricantes aprenden a vender servicios que complementen el producto. Las opciones de servicio al cliente crecen más rápido, manteniendo precios bajos y utilidades altas.</div>
+    </div>
+  </div>
+
+  <!-- CASE A -->
+  <div class="kcase" id="kc-a">
+    <div class="kbadge kb-a">CASO A — Confianza Máxima</div>
+    <div class="kstamp" id="ks-a">✔ RESUELTO</div>
+    <h3 class="kcase-t">🚗 Una familia compra un auto nuevo y exige la máxima garantía y seguridad post-venta</h3>
+    <p class="kcase-b">Los clientes quieren saber que ante cualquier falla, la misma empresa será responsable. Tienen alta disposición a pagar por la tranquilidad de que un experto oficial atenderá el vehículo con piezas originales. ¿Qué estrategia de Kotler recomiendas?</p>
+    <div class="kopts">
+      <button class="kbtn" onclick="ksolve('a','cor','ka1','ka2','ka3','ka4')">
+        <span class="kbtn-ic">🏭</span>
+        <div><div class="kbtn-n">A) Departamento de servicio del fabricante</div>
+        <div class="kbtn-d">La agencia tiene taller propio. Piezas originales, mecánicos certificados. La más recomendable para máxima confianza.</div></div>
+      </button>
+      <button class="kbtn" id="ka2" onclick="ksolve('a','wr','ka2','ka1','ka3','ka4')">
+        <span class="kbtn-ic">🏪</span>
+        <div><div class="kbtn-n">B) Acuerdos con distribuidores</div>
+        <div class="kbtn-d">Garantías escalonadas entre marca y distribuidor. Menos seguridad para el comprador.</div></div>
+      </button>
+      <button class="kbtn" id="ka3" onclick="ksolve('a','wr','ka3','ka1','ka2','ka4')">
+        <span class="kbtn-ic">🔩</span>
+        <div><div class="kbtn-n">C) Proveedores independientes</div>
+        <div class="kbtn-d">Talleres externos. No garantiza piezas originales ni personal certificado.</div></div>
+      </button>
+      <button class="kbtn" id="ka4" onclick="ksolve('a','wr','ka4','ka1','ka2','ka3')">
+        <span class="kbtn-ic">🙋</span>
+        <div><div class="kbtn-n">D) Autoservicio del cliente</div>
+        <div class="kbtn-d">El cliente repara solo. Elimina garantías. La menos recomendable.</div></div>
+      </button>
+    </div>
+    <div class="kverd" id="kv-a"></div>
+  </div>
+
+  <!-- CASE B -->
+  <div class="kcase" id="kc-b">
+    <div class="kbadge kb-b">CASO B — Reparación Especializada</div>
+    <div class="kstamp" id="ks-b">✔ RESUELTO</div>
+    <h3 class="kcase-t">🚙 Una aseguradora necesita reparar 50 autos dañados con procesos complejos</h3>
+    <p class="kcase-b">Los autos requieren: conseguir piezas, sacar golpes, pintar, alinear y verificar seguridad. La aseguradora no tiene taller propio ni puede gestionar todos los procesos. El volumen es alto y los procesos son especializados y multifase. ¿Qué estrategia es la más adecuada?</p>
+    <div class="kopts">
+      <button class="kbtn" id="kb1" onclick="ksolve('b','wr','kb1','kb2','kb3','kb4')">
+        <span class="kbtn-ic">🏭</span>
+        <div><div class="kbtn-n">A) Departamento propio</div>
+        <div class="kbtn-d">La aseguradora no tiene taller. No aplicable en este caso.</div></div>
+      </button>
+      <button class="kbtn" id="kb2" onclick="ksolve('b','wr','kb2','kb1','kb3','kb4')">
+        <span class="kbtn-ic">🏪</span>
+        <div><div class="kbtn-n">B) Acuerdos con distribuidores</div>
+        <div class="kbtn-d">Funciona para instalación de productos, no para reparaciones de choque complejas.</div></div>
+      </button>
+      <button class="kbtn" id="kb3" onclick="ksolve('b','cor','kb3','kb1','kb2','kb4')">
+        <span class="kbtn-ic">🔩</span>
+        <div><div class="kbtn-n">C) Proveedores independientes</div>
+        <div class="kbtn-d">Talleres especializados externos gestionan piezas, pintura, alineación. Ideal para reparaciones complejas multi-proceso.</div></div>
+      </button>
+      <button class="kbtn" id="kb4" onclick="ksolve('b','wr','kb4','kb1','kb2','kb3')">
+        <span class="kbtn-ic">🙋</span>
+        <div><div class="kbtn-n">D) Autoservicio</div>
+        <div class="kbtn-d">Imposible para reparaciones de choque. No aplicable.</div></div>
+      </button>
+    </div>
+    <div class="kverd" id="kv-b"></div>
+  </div>
+
+  <!-- CASE C -->
+  <div class="kcase" id="kc-c">
+    <div class="kbadge kb-c">CASO C — Instalación Compleja</div>
+    <div class="kstamp" id="ks-c">✔ RESUELTO</div>
+    <h3 class="kcase-t">🏠 Una tienda departamental vende estufas industriales con instalación y garantía de un año</h3>
+    <p class="kcase-b">Liverpool vende una estufa profesional. La instalación requiere conexiones de gas especializadas. El cliente quiere saber que si algo falla en la instalación el primer mes, alguien responde; y si falla en los próximos 11 meses, también hay respaldo. Distribuidor y marca deben coordinarse. ¿Qué estrategia de Kotler aplica?</p>
+    <div class="kopts">
+      <button class="kbtn" id="kc1" onclick="ksolve('c','wr','kc1','kc2','kc3','kc4')">
+        <span class="kbtn-ic">🏭</span>
+        <div><div class="kbtn-n">A) Departamento propio del fabricante</div>
+        <div class="kbtn-d">La marca es responsable sola. No incluye corresponsabilidad del distribuidor para la instalación.</div></div>
+      </button>
+      <button class="kbtn" id="kc2" onclick="ksolve('c','cor','kc2','kc1','kc3','kc4')">
+        <span class="kbtn-ic">🏪</span>
+        <div><div class="kbtn-n">B) Acuerdos con distribuidores y detallistas</div>
+        <div class="kbtn-d">Liverpool cubre instalación (1 mes), la marca cubre el equipo (1 año). Corresponsabilidad perfecta para cubrir instalaciones complejas.</div></div>
+      </button>
+      <button class="kbtn" id="kc3" onclick="ksolve('c','wr','kc3','kc1','kc2','kc4')">
+        <span class="kbtn-ic">🔩</span>
+        <div><div class="kbtn-n">C) Proveedores independientes</div>
+        <div class="kbtn-d">No hay corresponsabilidad clara marca-distribuidor. Más adecuado para reparaciones especializadas, no instalación nueva.</div></div>
+      </button>
+      <button class="kbtn" id="kc4" onclick="ksolve('c','wr','kc4','kc1','kc2','kc3')">
+        <span class="kbtn-ic">🙋</span>
+        <div><div class="kbtn-n">D) Autoservicio</div>
+        <div class="kbtn-d">Peligroso para instalaciones de gas. No recomendable y sin garantías.</div></div>
+      </button>
+    </div>
+    <div class="kverd" id="kv-c"></div>
+  </div>
+
+  <!-- Final quiz -->
+  <div class="stit">📡 PREGUNTA FINAL</div>
+  <div class="qc">
+    <div class="qt">4. ¿Por qué el autoservicio del cliente (estrategia D de Kotler) tiende a descontinuarse y es la menos recomendable?</div>
+    <div class="qo">
+      <button class="qb" onclick="qa('qf','w',this)">Porque es más caro que contratar al fabricante</button>
+      <button class="qb" onclick="qa('qf','c',this)">Porque el cliente pierde las garantías oficiales al no usar especialistas con protocolos establecidos, lo que elimina la responsabilidad de la marca</button>
+      <button class="qb" onclick="qa('qf','w',this)">Porque los clientes no tienen habilidades técnicas suficientes en general</button>
+    </div>
+    <div class="fb" id="fb-qf"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="btngo" style="font-size:1.2rem;padding:12px 34px" onclick="finish()">🏆 COMPLETAR MISIONES</button>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="refwrap" style="padding-left:0;padding-right:0">
+    <div class="refh">📚 Referencias</div>
+    <div class="ref">Dávila, C. (2013). <em>Administración de la calidad en organizaciones de servicio</em>. Editorial McGraw-Hill.</div>
+    <div class="ref">Gronroos, C. (2005). <em>Service management and marketing: A customer relationship management approach</em> (3.ª ed.). Wiley.</div>
+    <div class="ref">Juran, J. M. (2002). <em>Juran on quality by design: The new steps for planning quality into goods and services</em>. Free Press.</div>
+    <div class="ref">Kotler, P. (2008). <em>Principios de marketing</em> (12.ª ed.). Pearson Prentice Hall.</div>
+    <div class="ref">Lele, M. M. (2010). <em>The customer is key: Gaining an unbeatable advantage through customer satisfaction</em>. Wiley.</div>
+    <div class="ref">Levy, M. (2008). <em>Retailing management</em> (7.ª ed.). McGraw-Hill Irwin.</div>
+    <div class="ref">Pérez, J. A. (2011). <em>Gestión por procesos: Cómo utilizar ISO 9001:2000 para mejorar la gestión de la organización</em> (4.ª ed.). ESIC Editorial.</div>
+    <div class="ref">Universidad IEU. (s.f.). <em>Ventas Industriales y de Servicio — Semana 3: Mercado de Servicios</em> [Apunte de curso]. IEU Online. Material compilado con fines académicos.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════
+     RESULTS
+════════════════════════════════════════ -->
+<div class="scr" id="sr">
+  <div class="rtrophy">🏆</div>
+  <h1 class="rh">¡CONTENIDO VIRAL COMPLETADO!</h1>
+  <p style="color:var(--mut);font-size:.9rem;margin-bottom:14px">Tu consultoría digital fue un éxito total, Tiktoker.</p>
+  <div class="rxp">⚡ <span id="rxp">0</span> XP TOTALES</div>
+  <div class="rstats">
+    <div class="rstat"><div class="rv" id="rcor">0</div><div class="rl">Correctas</div></div>
+    <div class="rstat"><div class="rv" id="rlvl">—</div><div class="rl">Nivel final</div></div>
+    <div class="rstat"><div class="rv">3/3</div><div class="rl">Misiones</div></div>
+  </div>
+  <button class="bcert" onclick="showCert()">🏅 VER CERTIFICADO</button>
+  <button class="bretry" onclick="reset()">🔄 Jugar de nuevo</button>
+  <div class="stripe" style="margin-top:36px"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+/* ── STATE ── */
+let XP=0,cor=0;
+let ans={},simDone=false,casesDone={a:false,b:false,c:false};
+let m1p=0,m2p=0,m3p=0;
+let dragging=null,placed={};
+
+const LEVELS=[
+  {min:0,name:'Novato en Servicios'},
+  {min:50,name:'Asistente de Calidad'},
+  {min:130,name:'Estratega de Calidad'},
+  {min:250,name:'Brand Manager Senior'},
+  {min:380,name:'Gurú del Post-Venta'},
+];
+const getLvl=x=>{ let l=LEVELS[0]; for(const lv of LEVELS) if(x>=lv.min) l=lv; return l; };
+
+/* ── XP ── */
+function addXP(p,msg){
+  XP+=p; cor++;
+  document.getElementById('xpn').textContent=XP;
+  const cur=getLvl(XP);
+  const nxt=LEVELS.find(l=>l.min>XP)||LEVELS[LEVELS.length-1];
+  const pct=nxt.min>cur.min?Math.min(100,((XP-cur.min)/(nxt.min-cur.min))*100):100;
+  document.getElementById('xpbar').style.width=pct+'%';
+  document.getElementById('lvllbl').textContent=cur.name;
+  toast(`+${p} XP — ${msg}`);
+}
+
+/* ── TOAST ── */
+function toast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('pop');
+  setTimeout(()=>t.classList.remove('pop'),2600);
+}
+
+/* ── NAV ── */
+function nav(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('on'));
+  const map={i:'si',m1:'sm1',m2:'sm2',m3:'sm3',r:'sr'};
+  const sc=document.getElementById(map[id]||'si');
+  if(sc) sc.classList.add('on');
+  const tb=document.getElementById('tb-'+id);
+  if(tb) tb.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+/* ── ACCORDION ── */
+function tog(id){
+  const b=document.getElementById('bd-'+id);
+  const a=document.getElementById('ar-'+id);
+  b.classList.toggle('op');a.classList.toggle('op');
+}
+
+/* ════ MISSION 1 — DRAG & DROP ════ */
+function ds(ev,id){ dragging=id; ev.dataTransfer.effectAllowed='move'; }
+function dov(ev){ ev.preventDefault(); ev.currentTarget.classList.add('ov'); }
+function dlv(ev){ ev.currentTarget.classList.remove('ov'); }
+
+function ddr(ev,zone){
+  ev.preventDefault(); ev.currentTarget.classList.remove('ov');
+  if(!dragging) return;
+  const el=document.getElementById(dragging);
+  if(!el) return;
+  el.classList.add('pl');
+  const cl=el.cloneNode(true);
+  cl.draggable=false; cl.id=dragging+'_c';
+  cl.dataset.orig=dragging; cl.classList.remove('pl');
+  cl.style.width='100%'; cl.style.marginBottom='5px'; cl.style.cursor='default';
+  ev.currentTarget.appendChild(cl);
+  placed[dragging]=zone; dragging=null;
+}
+
+function chkDrag(){
+  const all=document.querySelectorAll('[data-orig]');
+  let ok=0,tot=0;
+  all.forEach(item=>{
+    const orig=item.dataset.orig;
+    const correctZone=document.getElementById(orig).dataset.cat;
+    const userZone=placed[orig]; tot++;
+    if(userZone===correctZone){ ok++; item.style.borderColor='var(--grn)'; item.style.color='var(--grn)'; }
+    else{ item.style.borderColor='var(--red)'; item.style.color='var(--red)'; }
+  });
+  const fb=document.getElementById('fb-drag');
+  if(ok>=8||tot===0){
+    fb.textContent=`🎉 ¡Misión Cumplida! ${ok}/9 elementos correctos. +60 XP. El ciclo de Juran: Planificación (antes) → Control (durante) → Mejora (después).`;
+    fb.className='fb on ok'; addXP(60,'¡Trilogía de Juran dominada!');
+  } else if(ok>=6){
+    fb.textContent=`✅ ${ok}/${tot} correctas. +30 XP. Recuerda: el CONTROL ocurre DURANTE la prestación; la MEJORA viene DESPUÉS del diagnóstico del control.`;
+    fb.className='fb on ok'; addXP(30,'Buena clasificación de Juran');
+  } else {
+    fb.textContent=`❌ ${ok}/${tot} correctas. Pista: si "monitoreas" algo mientras el cliente está presente = CONTROL. Si "diagnosticas causas" después de analizar = MEJORA.`;
+    fb.className='fb on no';
+  }
+  document.getElementById('bchk1').disabled=true;
+  updProg(1, ok>=6?1:0, 3);
+}
+
+/* ════ QUIZ GENERIC ════ */
+const QFB={
+  q1:{c:'✅ ¡Correcto! El control de calidad es el monitoreo que ocurre DURANTE la prestación del servicio. El equipo está evaluando si se cumplen las expectativas en tiempo real.',
+      w:'❌ Incorrecto. Anotar un problema mientras el cliente está presente es CONTROL (durante la prestación). La planificación es antes, la mejora es después del análisis.'},
+  q2:{c:'✅ ¡Exacto! El control ocurre DURANTE la prestación (monitorear/observar). El diagnóstico y corrección son la MEJORA, que viene DESPUÉS de analizar los patrones del control. Son etapas secuenciales y distintas.',
+      w:'❌ Incorrecto. Monitoreo (control) y diagnóstico (mejora) son etapas distintas. El control observa en tiempo real; la mejora analiza, diagnostica y corrige DESPUÉS.'},
+  q3:{c:'✅ ¡Correcto! Gronroos (2005) define exactamente eso: capacitar/motivar empleados para atención consistente. Los tres pilares son: diferenciación competitiva, calidad del servicio y productividad.',
+      w:'❌ Incorrecto. La administración de marcas no se enfoca en precios ni publicidad directamente. Gronroos la define como capacitar/motivar empleados para brindar atención consistente y de calidad.'},
+  qf:{c:'✅ ¡Correcto! El autoservicio elimina las garantías oficiales porque al intervenir sin especialistas ni protocolos, la marca queda eximida de responsabilidad. Por eso tiende a descontinuarse.',
+      w:'❌ Incorrecto. La razón principal es la pérdida de garantías oficiales al actuar sin especialistas ni protocolos establecidos, no el costo o las habilidades del cliente.'},
+};
+
+function qa(id,res,btn){
+  if(ans[id]) return;
+  ans[id]=true;
+  btn.closest('.qo').querySelectorAll('.qb').forEach(b=>b.disabled=true);
+  btn.classList.add(res==='c'?'cor':'wr');
+  const fb=document.getElementById('fb-'+id);
+  fb.textContent=QFB[id][res]; fb.className='fb on '+(res==='c'?'ok':'no');
+  if(res==='c') addXP(25,'¡Respuesta correcta!');
+  const mMap={q1:1,q2:1,q3:2,qf:3};
+  if(mMap[id]) updProg(mMap[id],res==='c'?1:0,3);
+  if(id==='qf') updProg(3,res==='c'?1:0,4);
+}
+
+/* ════ PROGRESS ════ */
+function updProg(m,add,tot){
+  if(m===1){ m1p=Math.min(m1p+add,tot); _setP(1,m1p,tot,'m1'); }
+  if(m===2){ m2p=Math.min(m2p+add,tot); _setP(2,m2p,tot,'m2'); }
+  if(m===3){ m3p=Math.min(m3p+add,tot); _setP(3,m3p,tot,'m3'); }
+}
+function _setP(m,v,tot,tab){
+  const pct=Math.round((v/tot)*100);
+  const pg=document.getElementById('pg'+m);
+  const pt=document.getElementById('pt'+m);
+  if(pg) pg.style.width=pct+'%';
+  if(pt) pt.textContent=`${v} / ${tot}`;
+  if(v>=tot) document.getElementById('tb-'+tab)?.classList.add('ok');
+}
+
+/* ════ MISSION 2 — SIMULATOR ════ */
+function updateSim(){
+  const ff=parseInt(document.getElementById('sl-ff').value);
+  const di=parseInt(document.getElementById('sl-di').value);
+  document.getElementById('mv-ff').textContent=ff+' / semana';
+  document.getElementById('mv-di').textContent=di+' min';
+  // reliability: lower ff and di = higher reliability
+  const rel=Math.round(100 - (ff/20)*50 - (di/120)*50);
+  document.getElementById('rel-bar').style.width=rel+'%';
+  document.getElementById('rel-pct').textContent=rel+'%';
+  const stat=rel>=70?'✅ Alta':rel>=40?'⚠️ Media':'❌ Crítica';
+  document.getElementById('rel-status').textContent=stat;
+}
+updateSim();
+
+const SIM_FB={
+  good:'✅ ¡Decisión correcta! Un taller especializado del fabricante reduce la frecuencia de fallas (piezas originales), acorta la duración de las interrupciones (procesos certificados) y genera confiabilidad. +40 XP. Esto también genera presencia y permanencia en el mercado a largo plazo.',
+  bad:'❌ Decisión incorrecta. Dejar que el cliente resuelva sus propias fallas reduce costos a corto plazo, pero destruye la confiabilidad, aumenta la insatisfacción y elimina las garantías. Resultado: pérdida de clientes y merma en la permanencia del mercado.'
+};
+
+function simDec(res,btnId,othId){
+  if(simDone) return;
+  simDone=true;
+  document.getElementById(btnId).classList.add(res==='good'?'good':'bad');
+  document.getElementById(othId).disabled=true;
+  document.getElementById(btnId).disabled=true;
+  const fb=document.getElementById('fb-sim');
+  fb.textContent=SIM_FB[res]; fb.className='fb on '+(res==='good'?'ok':'no');
+  if(res==='good'){ addXP(40,'¡Decisión de soporte correcta!'); updProg(2,1,3); }
+}
+
+/* ════ MISSION 3 — KOTLER CASES ════ */
+const KFB={
+  a:{cor:'✅ ¡Misión Cumplida! La estrategia A (departamento propio del fabricante) es la más recomendable. La agencia tiene taller con mecánicos certificados y piezas originales. El cliente ve a la empresa como responsable directa. +40 XP',
+     wr:'❌ Incorrecto. Para la máxima confianza se necesita la estrategia A: el fabricante ofrece garantía directa con su propio departamento de servicio. Talleres oficiales de agencias son el ejemplo perfecto.'},
+  b:{cor:'✅ ¡Correcto! La estrategia C (proveedores independientes) es ideal cuando el servicio requiere múltiples procesos especializados. Las aseguradoras delegan exactamente eso: conseguir piezas, sacar golpes, pintar, alinear. +40 XP',
+     wr:'❌ Incorrecto. Para reparaciones de alta complejidad multi-proceso, la estrategia C (proveedores independientes) es la indicada. Las aseguradoras no pueden gestionar todos esos procesos internamente.'},
+  c:{cor:'✅ ¡Correcto! La estrategia B (acuerdos con distribuidores) aplica perfectamente: Liverpool cubre la instalación el primer mes, la marca cubre el equipo hasta un año. Corresponsabilidad que protege al cliente en ambas fases. +40 XP',
+     wr:'❌ Incorrecto. La estrategia B es la correcta: acuerdos distribuidor-marca crean corresponsabilidad. El distribuidor cubre instalación (1 mes) y la marca cubre el producto (hasta 1 año). Liverpool/Sears es el ejemplo del apunte.'},
+};
+
+function ksolve(cas,res,btnId,...others){
+  if(casesDone[cas]) return;
+  casesDone[cas]=true;
+  document.getElementById(btnId).classList.add(res==='cor'?'cor-k':'wr-k');
+  others.forEach(id=>{ const b=document.getElementById(id); if(b){b.disabled=true;b.style.opacity='.4';} });
+  document.getElementById(btnId).disabled=true;
+  const verd=document.getElementById('kv-'+cas);
+  verd.textContent=KFB[cas][res]; verd.className='kverd on '+(res==='cor'?'ok':'no');
+  if(res==='cor'){
+    addXP(40,'¡Caso post-venta resuelto!');
+    document.getElementById('ks-'+cas).classList.add('on');
+    document.getElementById('kc-'+cas).classList.add('solved');
+  }
+  updProg(3,1,4);
+}
+
+/* ════ FINISH ════ */
+function finish(){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('sr').classList.add('on');
+  document.getElementById('rxp').textContent=XP;
+  document.getElementById('rcor').textContent=cor;
+  document.getElementById('rlvl').textContent=getLvl(XP).name;
+  window.scrollTo(0,0);
+}
+
+/* ════ CERT ════ */
+function showCert(){
+  document.getElementById('cd').textContent='Fecha: '+new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('cs').textContent=`XP: ${XP} · Correctas: ${cor} · Nivel: ${getLvl(XP).name}`;
+  document.getElementById('cov').classList.add('on');
+}
+function closeCert(){ document.getElementById('cov').classList.remove('on'); }
+function printCert(){
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Certificado IEU VIyS</title>
+  <style>
+    body{font-family:Georgia,serif;text-align:center;padding:50px 40px;background:#0D0804;color:#f2dfc8}
+    h1{font-size:2.1rem;color:#E8440A;margin:0 0 4px;letter-spacing:.06em}
+    .s{font-size:.72rem;color:#9a7050;margin-bottom:18px;font-family:monospace}
+    .stripe{height:4px;background:linear-gradient(90deg,#E8440A,#FFB347,#FF8040);margin:16px auto;max-width:480px;border-radius:2px}
+    .name{font-size:1.9rem;color:#FFB347;margin:10px 0 4px}
+    .blq{color:#FF8040;font-size:1.05rem;font-weight:bold;margin:5px 0 14px}
+    .score{font-size:.74rem;color:#9a7050;font-family:monospace}
+  </style></head><body>
+  <div class="stripe"></div>
+  <h1>🏅 CERTIFICADO DE LOGRO</h1>
+  <div class="s">VENTAS INDUSTRIALES Y DE SERVICIO · IEU ONLINE</div>
+  <p>Este certificado acredita que</p>
+  <div class="name">${document.getElementById('cn').textContent}</div>
+  <p>completó satisfactoriamente el módulo</p>
+  <p style="font-style:italic;color:#FF8040">Tiktoker del Mercado de Servicios</p>
+  <div class="blq">Semana 3 · Mercado de Servicios</div>
+  <div class="s">Secciones 2.6–2.9 · Juran · Gronroos · Levy · Kotler</div>
+  <div class="score">${document.getElementById('cs').textContent}</div>
+  <div class="stripe"></div>
+  <div class="score">${document.getElementById('cd').textContent}</div>
+  </body></html>`);
+  w.document.close(); w.print();
+}
+
+/* ════ RESET ════ */
+function reset(){
+  XP=0;cor=0;ans={};simDone=false;casesDone={a:false,b:false,c:false};
+  m1p=0;m2p=0;m3p=0;dragging=null;placed={};
+  document.getElementById('xpn').textContent='0';
+  document.getElementById('xpbar').style.width='0%';
+  document.getElementById('lvllbl').textContent='Novato en Servicios';
+  ['pg1','pg2','pg3'].forEach(id=>{ const e=document.getElementById(id); if(e)e.style.width='0%'; });
+  document.getElementById('pt1').textContent='0 / 3';
+  document.getElementById('pt2').textContent='0 / 3';
+  document.getElementById('pt3').textContent='0 / 4';
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('ok','on'));
+  // drag
+  document.querySelectorAll('.dit').forEach(d=>{ d.classList.remove('pl'); d.style.display=''; });
+  document.querySelectorAll('[data-orig]').forEach(c=>c.remove());
+  document.getElementById('bchk1').disabled=false;
+  // quiz btns
+  document.querySelectorAll('.qb,.decbtn,.kbtn').forEach(b=>{
+    b.disabled=false; b.classList.remove('cor','wr','good','bad','cor-k','wr-k');
+    b.style.opacity=''; });
+  // fb
+  document.querySelectorAll('.fb,.kverd').forEach(f=>{ f.classList.remove('on'); f.textContent=''; });
+  // stamps
+  document.querySelectorAll('.kstamp').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.kcase').forEach(c=>c.classList.remove('solved'));
+  // sim
+  document.getElementById('sl-ff').value=10;
+  document.getElementById('sl-di').value=60;
+  updateSim();
+  document.getElementById('cov').classList.remove('on');
+  document.getElementById('sr').classList.remove('on');
+  nav('i');
+}
+</script>
+</body>
+</html>
