@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SPA educativa IEU: Comercialización, 7Ps, canales de distribución, CIM y fidelización de clientes. Aprende con misiones gamificadas en 60 minutos.">
+<title>IVC · Bloque 4 | El Imperio Comercial</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;900&display=swap');
+:root{
+  --bg:#0D0804;--primary:#E8440A;--secondary:#FF8040;--amber:#FFB347;
+  --surface:#1a1008;--surface2:#251608;--text:#f5ede3;--muted:#a08060;
+  --success:#4ade80;--danger:#f87171;--card:rgba(232,68,10,0.07);--border:rgba(232,68,10,0.25);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(232,68,10,0.15) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,8,4,0.94);border-bottom:2px solid var(--primary);backdrop-filter:blur(12px);padding:8px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#hud img{height:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(232,68,10,0.5))}
+.hud-title{font-family:'Bebas Neue';font-size:16px;color:var(--secondary);letter-spacing:1px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.xp-block{display:flex;align-items:center;gap:5px}
+.xp-label{color:var(--amber);font-weight:700;font-size:11px;letter-spacing:1px}
+.xp-val{color:var(--primary);font-weight:900;font-size:18px;font-family:'Bebas Neue'}
+#progress-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;max-width:160px;min-width:50px}
+#progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--amber));border-radius:3px;transition:width .6s ease;width:0%}
+.lvl-badge{background:linear-gradient(135deg,var(--primary),var(--amber));color:#000;font-weight:900;font-size:10px;padding:3px 9px;border-radius:20px;letter-spacing:1px;white-space:nowrap}
+.m-badges{display:flex;gap:4px}
+.m-badge{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;background:var(--surface);transition:all .3s}
+.m-badge.done{border-color:var(--primary);background:rgba(232,68,10,0.2)}
+
+/* SCREENS */
+.screen{min-height:100vh;display:none;padding-top:58px;position:relative;z-index:1}
+.screen.active{display:flex;flex-direction:column}
+
+/* TOAST */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--border);border-radius:50px;padding:10px 24px;font-weight:700;font-size:13px;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:999;pointer-events:none;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.success{border-color:var(--success);color:var(--success);background:rgba(74,222,128,0.1)}
+#toast.error{border-color:var(--danger);color:var(--danger);background:rgba(248,113,113,0.1)}
+#toast.xp{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.1)}
+
+/* INTRO */
+#screen-intro{align-items:center;justify-content:center;text-align:center;padding:80px 24px 0}
+.intro-logo{height:54px;object-fit:contain;margin-bottom:22px;filter:drop-shadow(0 0 20px rgba(232,68,10,0.4))}
+.intro-eyebrow{color:var(--secondary);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+.intro-title{font-family:'Bebas Neue';font-size:clamp(50px,9vw,98px);line-height:.92;background:linear-gradient(135deg,#fff 25%,var(--secondary) 65%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
+.intro-sub{color:var(--muted);font-size:14px;max-width:500px;margin:0 auto 24px;line-height:1.65}
+.name-wrap{margin-bottom:26px}
+.name-wrap label{display:block;color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.name-wrap input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 15px;color:var(--text);font-family:'Outfit';font-size:14px;width:100%;max-width:320px;outline:none;transition:border-color .2s}
+.name-wrap input:focus{border-color:var(--primary)}
+.name-wrap input::placeholder{color:var(--muted)}
+.mp-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.mp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 16px;text-align:left;min-width:155px;max-width:195px;transition:transform .2s,border-color .2s}
+.mp-card:hover{transform:translateY(-4px);border-color:var(--primary)}
+.mp-card .icon{font-size:24px;margin-bottom:5px}
+.mp-card .mt{font-weight:700;font-size:11px;color:var(--secondary);margin-bottom:2px}
+.mp-card .md{color:var(--muted);font-size:10px;line-height:1.4}
+.btn-start{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;border:none;padding:14px 46px;border-radius:50px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 0 30px rgba(232,68,10,0.4)}
+.btn-start:hover{transform:scale(1.05);box-shadow:0 0 50px rgba(232,68,10,0.6)}
+.stripe{width:100%;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--amber));height:6px;margin-top:52px}
+
+/* CONTENT */
+#screen-content{padding:68px 18px 36px;max-width:940px;margin:0 auto;width:100%}
+.tab-nav{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:22px;overflow-x:auto;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;min-width:65px;padding:8px 11px;background:transparent;border:none;color:var(--muted);font-family:'Outfit';font-weight:600;font-size:11px;border-radius:7px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab-btn.active{background:var(--primary);color:#fff}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.s-hero{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin-bottom:18px}
+.s-hero .tag{display:inline-block;background:var(--primary);color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:20px;margin-bottom:9px}
+.s-hero h2{font-family:'Bebas Neue';font-size:34px;color:var(--secondary);margin-bottom:7px;line-height:1}
+.s-hero p{color:var(--muted);font-size:13px;line-height:1.7}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:16px}
+.ic{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px}
+.ic h3{color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px}
+.ic ul{list-style:none}
+.ic ul li{padding:4px 0;font-size:12px;color:var(--text);border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.5}
+.ic ul li:last-child{border-bottom:none}
+.ic ul li::before{content:'▸ ';color:var(--primary)}
+.cards-7p{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.p-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px;text-align:center;transition:border-color .2s}
+.p-card:hover{border-color:var(--primary)}
+.p-card .picon{font-size:26px;margin-bottom:6px}
+.p-card .pname{font-weight:700;font-size:12px;color:var(--secondary);margin-bottom:4px}
+.p-card .pdesc{font-size:10px;color:var(--muted);line-height:1.4}
+.flow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border-left:3px solid var(--primary)}
+.flow-node{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 11px;font-size:11px;font-weight:600;color:var(--text);white-space:nowrap}
+.flow-arrow{color:var(--primary);font-size:14px;font-weight:700}
+.flow-label{font-size:11px;color:var(--amber);font-weight:700;margin-right:6px}
+.nav-row{display:flex;gap:10px;margin-top:22px;justify-content:flex-end}
+.btn-nav{background:var(--primary);color:#fff;border:none;padding:9px 24px;border-radius:8px;font-family:'Outfit';font-weight:700;font-size:13px;cursor:pointer;transition:background .2s}
+.btn-nav:hover{background:var(--secondary)}
+.btn-nav.sec{background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.btn-nav.sec:hover{border-color:var(--primary);color:var(--text)}
+
+/* MINI QUIZ */
+.mq{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px 20px;margin-top:16px}
+.mq h4{color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:11px}
+.mq-q{font-size:14px;color:var(--text);margin-bottom:11px;font-weight:500;line-height:1.5}
+.mq-opts{display:flex;flex-direction:column;gap:6px}
+.mq-opt{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:7px;padding:9px 13px;cursor:pointer;font-size:12px;transition:all .2s;text-align:left;color:var(--text)}
+.mq-opt:hover{border-color:var(--secondary);background:rgba(255,128,64,0.06)}
+.mq-opt.correct{border-color:var(--success);background:rgba(74,222,128,0.08);color:var(--success)}
+.mq-opt.wrong{border-color:var(--danger);background:rgba(248,113,113,0.08);color:var(--danger)}
+.mq-opt:disabled{cursor:default}
+.mq-fb{margin-top:9px;font-size:12px;padding:8px;border-radius:7px;display:none;line-height:1.5}
+.mq-fb.show{display:block}
+.mq-fb.ok{background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+.mq-fb.ko{background:rgba(248,113,113,0.08);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+
+/* MISSIONS */
+#screen-missions{padding:68px 18px 36px;max-width:860px;margin:0 auto;width:100%}
+.m-header{text-align:center;margin-bottom:26px}
+.m-header .ey{color:var(--secondary);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:5px}
+.m-header h2{font-family:'Bebas Neue';font-size:50px;color:var(--text);line-height:1}
+.m-panel{display:none}
+.m-panel.active{display:block}
+.m-title{font-family:'Bebas Neue';font-size:28px;color:var(--secondary);margin-bottom:5px}
+.m-desc{color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.5}
+
+/* MISSION 1 DRAG */
+.dd-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:580px){.dd-wrap{grid-template-columns:1fr}}
+.chip-pool-box{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:13px}
+.chip-pool-box h4{color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px}
+.drop-zones-col{display:flex;flex-direction:column;gap:9px}
+.dz{background:var(--card);border:2px dashed var(--border);border-radius:9px;padding:11px;min-height:68px;transition:all .2s}
+.dz.drag-over{border-color:var(--primary);background:rgba(232,68,10,0.1)}
+.dz h4{font-size:10px;color:var(--secondary);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.dz-chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:4px 11px;font-size:11px;font-weight:600;cursor:grab;margin:3px;transition:all .2s;user-select:none}
+.chip:hover{border-color:var(--secondary);background:rgba(255,128,64,0.1)}
+.chip.dragging{opacity:.4}
+.chip.ok{border-color:var(--success);background:rgba(74,222,128,0.1);color:var(--success);cursor:default}
+.chip.ko{border-color:var(--danger);background:rgba(248,113,113,0.1);color:var(--danger)}
+#m1-result{text-align:center;font-size:13px;color:var(--muted);margin-bottom:12px;min-height:18px}
+
+/* MISSION 2 CHANNEL SIM */
+.prod-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.pt{padding:7px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s}
+.pt.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.product-panel{display:none}
+.product-panel.active{display:block}
+.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:14px}
+.prod-card h4{color:var(--amber);font-size:13px;font-weight:700;margin-bottom:8px}
+.prod-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.routes{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.route-opt{background:rgba(255,255,255,0.03);border:2px solid var(--border);border-radius:9px;padding:12px 14px;cursor:pointer;transition:all .2s}
+.route-opt:hover{border-color:var(--secondary);background:rgba(255,128,64,0.05)}
+.route-opt.selected-ok{border-color:var(--success);background:rgba(74,222,128,0.07)}
+.route-opt.selected-ko{border-color:var(--danger);background:rgba(248,113,113,0.07)}
+.route-opt .rf{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.route-opt .rn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:10px;font-weight:600}
+.route-opt .ra{color:var(--primary);font-weight:700}
+.route-opt .rdesc{font-size:11px;color:var(--muted);margin-top:4px}
+.route-fb{padding:12px;border-radius:9px;font-size:12px;line-height:1.6;margin-bottom:12px;display:none}
+.route-fb.show{display:block}
+.route-fb.ok{background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+.route-fb.ko{background:rgba(248,113,113,0.08);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+.m2-progress{font-size:12px;color:var(--muted);margin-bottom:14px}
+
+/* MISSION 3 CIM */
+.budget-bar-wrap{background:rgba(255,255,255,0.07);border-radius:6px;height:12px;margin-bottom:18px;overflow:hidden}
+.budget-bar{height:100%;background:linear-gradient(90deg,var(--success),#86efac);border-radius:6px;transition:width .4s}
+.budget-label{font-size:12px;color:var(--muted);margin-bottom:6px}
+.cim-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.cim-tool{background:var(--card);border:2px solid var(--border);border-radius:11px;padding:14px;cursor:pointer;transition:all .25s;text-align:center}
+.cim-tool:hover{border-color:var(--secondary);transform:translateY(-2px)}
+.cim-tool.selected{border-color:var(--primary);background:rgba(232,68,10,0.12)}
+.cim-tool .ticon{font-size:28px;margin-bottom:6px}
+.cim-tool .tname{font-weight:700;font-size:12px;color:var(--text);margin-bottom:4px}
+.cim-tool .tcost{font-size:11px;color:var(--amber);font-weight:600;margin-bottom:3px}
+.cim-tool .tdesc{font-size:10px;color:var(--muted);line-height:1.4}
+.cim-tool .tcount{font-size:10px;color:var(--primary);font-weight:700;margin-top:4px}
+.cim-mix-display{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;min-height:46px}
+.cim-mix-display h5{color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.cim-fb{padding:13px;border-radius:9px;font-size:12px;line-height:1.6;margin-bottom:12px;display:none}
+.cim-fb.show{display:block}
+.cim-fb.ok{background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+.cim-fb.ko{background:rgba(248,113,113,0.08);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+
+/* MISSION FINAL */
+.client-card{background:linear-gradient(135deg,rgba(232,68,10,0.1),rgba(255,128,64,0.05));border:1px solid var(--primary);border-radius:13px;padding:20px;margin-bottom:18px}
+.client-card h4{color:var(--primary);font-family:'Bebas Neue';font-size:26px;margin-bottom:9px}
+.client-card p{font-size:13px;color:var(--muted);line-height:1.6}
+.fidel-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:520px){.fidel-opts{grid-template-columns:1fr}}
+.fo{background:var(--surface);border:2px solid var(--border);border-radius:11px;padding:15px;cursor:pointer;transition:all .25s}
+.fo:hover{border-color:var(--secondary);transform:translateY(-2px)}
+.fo.chosen-ok{border-color:var(--success);background:rgba(74,222,128,0.07)}
+.fo.chosen-ko{border-color:var(--danger);background:rgba(248,113,113,0.07)}
+.fo h5{font-size:13px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.fo p{font-size:11px;color:var(--muted);line-height:1.5}
+.mf-fb{padding:14px;border-radius:10px;font-size:13px;line-height:1.7;margin-bottom:13px;display:none}
+.mf-fb.show{display:block}
+.mf-fb.ok{background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+.mf-fb.ko{background:rgba(248,113,113,0.08);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+
+/* RESULTS */
+#screen-results{align-items:center;justify-content:center;text-align:center;padding:76px 22px 0}
+.r-trophy{font-size:74px;margin-bottom:13px;animation:bounce 1s ease infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-11px)}}
+.r-title{font-family:'Bebas Neue';font-size:clamp(42px,8vw,78px);background:linear-gradient(135deg,var(--secondary),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:7px}
+.r-sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+.r-stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+.stat-pill{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:9px 22px;font-size:12px}
+.stat-pill span{color:var(--primary);font-weight:800;font-family:'Bebas Neue';font-size:19px}
+.btn-cert{background:linear-gradient(135deg,var(--primary),var(--amber));color:#000;font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;border:none;padding:12px 36px;border-radius:50px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 0 28px rgba(232,68,10,0.4);margin:6px}
+.btn-cert:hover{transform:scale(1.04)}
+.btn-replay{background:transparent;color:var(--muted);border:1px solid var(--border);font-family:'Outfit';font-size:13px;font-weight:600;padding:10px 28px;border-radius:50px;cursor:pointer;margin:6px;transition:border-color .2s,color .2s}
+.btn-replay:hover{border-color:var(--secondary);color:var(--secondary)}
+#cert-wrap{display:none;margin:24px auto;max-width:680px}
+#cert-wrap.visible{display:block}
+#certificate{background:linear-gradient(135deg,#1a0f05,#0d0804);border:3px solid var(--primary);border-radius:15px;padding:36px;text-align:center;position:relative;overflow:hidden}
+#certificate::before{content:'';position:absolute;inset:7px;border:1px solid rgba(232,68,10,0.3);border-radius:9px;pointer-events:none}
+.cc{position:absolute;font-size:64px;opacity:.05}
+.cc.tl{top:7px;left:7px}.cc.br{bottom:7px;right:7px}
+#certificate img{height:43px;object-fit:contain;margin-bottom:13px}
+.ct{font-family:'Bebas Neue';font-size:42px;color:var(--primary);letter-spacing:4px;margin-bottom:3px}
+.cs{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}
+.cn{font-family:'Bebas Neue';font-size:32px;color:var(--amber);margin-bottom:6px}
+.cx{font-size:11px;color:var(--muted);line-height:1.6;max-width:380px;margin:0 auto 18px}
+.cc2{font-weight:700;font-size:14px;color:var(--secondary);margin-bottom:18px}
+.cf{display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--border);padding-top:16px}
+.cfv{font-weight:700;color:var(--text);font-size:12px}
+.cfl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.cxp{font-family:'Bebas Neue';font-size:34px;color:var(--primary)}
+.btn-dl{background:var(--surface);color:var(--secondary);border:1px solid var(--primary);font-family:'Outfit';font-size:12px;font-weight:700;padding:8px 24px;border-radius:50px;cursor:pointer;margin:6px;transition:all .2s}
+.btn-dl:hover{background:var(--primary);color:#fff}
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" alt="Logo Universidad IEU, institución educativa privada de Mexico especializada en negocios y comercialización">
+  <div class="hud-title">IVC · BLOQUE 4 · CMO STARTUP</div>
+  <div class="xp-block"><span class="xp-label">XP</span><span class="xp-val" id="xpVal">0</span></div>
+  <div id="progress-bar-wrap"><div id="progress-bar-fill"></div></div>
+  <div class="lvl-badge" id="lvlBadge">APRENDIZ</div>
+  <div class="m-badges">
+    <div class="m-badge" id="mb1" title="Misión 1">1</div>
+    <div class="m-badge" id="mb2" title="Misión 2">2</div>
+    <div class="m-badge" id="mb3" title="Misión 3">3</div>
+    <div class="m-badge" id="mb4" title="Misión Final">F</div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<!-- ===== INTRO ===== -->
+<div id="screen-intro" class="screen active">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" class="intro-logo" alt="Universidad IEU logo">
+  <div class="intro-eyebrow">Introducción a Ventas y Comercialización</div>
+  <div class="intro-title">EL DESPEGUE<br>DEL IMPERIO<br>COMERCIAL</div>
+  <p class="intro-sub">Eres el nuevo CMO de una startup innovadora. Diseña la estrategia perfecta, optimiza canales y fideliza clientes para dominar el mercado.</p>
+  <div class="name-wrap">
+    <label>Tu nombre (para el certificado)</label>
+    <input type="text" id="studentName" placeholder="Ej. María González Pérez" maxlength="50">
+  </div>
+  <div class="mp-row">
+    <div class="mp-card"><div class="icon">🎯</div><div class="mt">Misión 1</div><div class="md">Maestro de las 7 Ps — Drag & Drop de la mezcla de mercadotecnia</div></div>
+    <div class="mp-card"><div class="icon">🚚</div><div class="mt">Misión 2</div><div class="md">Arquitecto de Canales — Elige la ruta de distribución correcta</div></div>
+    <div class="mp-card"><div class="icon">📣</div><div class="mt">Misión 3</div><div class="md">Estratega CIM — Mezcla herramientas de comunicación con presupuesto limitado</div></div>
+    <div class="mp-card"><div class="icon">❤️</div><div class="mt">Misión Final</div><div class="md">Guardián de la Fidelidad — Retener o fidelizar al cliente insatisfecho</div></div>
+  </div>
+  <button class="btn-start" onclick="startApp()">🚀 INICIAR MISIÓN</button>
+  <div class="stripe"></div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div id="screen-content" class="screen">
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('comercializacion',this)">📊 Proceso</button>
+    <button class="tab-btn" onclick="switchTab('7ps',this)">🎯 7 Ps</button>
+    <button class="tab-btn" onclick="switchTab('canales',this)">🚚 Canales</button>
+    <button class="tab-btn" onclick="switchTab('cim',this)">📣 CIM</button>
+    <button class="tab-btn" onclick="switchTab('fidelizacion',this)">❤️ Fidelización</button>
+    <button class="tab-btn" onclick="switchTab('quiz',this)">⚡ Quiz</button>
+  </div>
+
+  <div id="tab-comercializacion" class="tab-panel active">
+    <div class="s-hero">
+      <span class="tag">SECCIÓN 5 · PROCESO DE MARKETING</span>
+      <h2>El Proceso de Comercialización</h2>
+      <p>Según Kotler y Armstrong (2012), el marketing es el arte y la ciencia de elegir mercados meta y establecer relaciones redituables. El proceso se administra en 4 etapas clave.</p>
+    </div>
+    <div class="info-grid">
+      <div class="ic"><h3>📋 1. Planeación</h3><ul><li>Determina qué, cuándo, cómo y quién</li><li>Elabora misión, visión y objetivos</li><li>Reduce incertidumbre y marca el rumbo</li><li>Base de toda estrategia comercial</li></ul></div>
+      <div class="ic"><h3>🏗️ 2. Organización</h3><ul><li>Delimita responsabilidades y asigna tareas</li><li>Define funciones del equipo de marketing</li><li>Forma organigramas y estructuras</li><li>Pone en práctica el plan</li></ul></div>
+      <div class="ic"><h3>🎯 3. Dirección</h3><ul><li>Coordina actividades hacia los objetivos</li><li>Toma decisiones ante problemas imprevistos</li><li>Gestiona recursos y tiempos</li><li>Lidera la ejecución del plan</li></ul></div>
+      <div class="ic"><h3>📏 4. Control</h3><ul><li>Revisa y evalúa los planes de marketing</li><li>Compara resultado real vs. deseado</li><li>Corrige acciones que no cumplen objetivos</li><li>Cierra el ciclo de mejora continua</li></ul></div>
+    </div>
+    <div class="ic" style="margin-bottom:16px">
+      <h3>💡 Objetivos de la Comercialización (García, 2017)</h3>
+      <ul>
+        <li><strong style="color:var(--secondary)">Financieros:</strong> Ventas, rentabilidad y posicionamiento de marca</li>
+        <li><strong style="color:var(--secondary)">De cliente:</strong> Estrategias de captación y retención de clientes actuales</li>
+        <li><strong style="color:var(--secondary)">Estratégicos:</strong> Identificar grupos de compradores con una necesidad común</li>
+        <li><strong style="color:var(--secondary)">Trilogía de Juran:</strong> Planificación + Control + Mejora continua de la calidad</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-7ps" class="tab-panel">
+    <div class="s-hero">
+      <span class="tag">MEZCLA DE MERCADOTECNIA EXTENDIDA</span>
+      <h2>Las 7 Ps del Marketing</h2>
+      <p>Booms y Bitner ampliaron las 4 Ps originales con 3 nuevas dimensiones clave para servicios, marketing B2B y el mundo digital. El cliente siempre es el centro.</p>
+    </div>
+    <div class="cards-7p">
+      <div class="p-card"><div class="picon">📦</div><div class="pname">Producto</div><div class="pdesc">Bienes y servicios que satisfacen necesidades del cliente</div></div>
+      <div class="p-card"><div class="picon">💰</div><div class="pname">Precio</div><div class="pdesc">Valor monetario que genera ganancia y es asequible</div></div>
+      <div class="p-card"><div class="picon">🗺️</div><div class="pname">Plaza</div><div class="pdesc">Cómo llegan los bienes/servicios al cliente final</div></div>
+      <div class="p-card"><div class="picon">📢</div><div class="pname">Promoción</div><div class="pdesc">Acciones para informar sobre el producto o servicio</div></div>
+      <div class="p-card"><div class="picon">👥</div><div class="pname">Personas</div><div class="pdesc">Personal que interviene para que el cliente quede conforme</div></div>
+      <div class="p-card"><div class="picon">⚙️</div><div class="pname">Procesos</div><div class="pdesc">Organización del trabajo para fabricar o prestar el servicio</div></div>
+      <div class="p-card"><div class="picon">🏢</div><div class="pname">Pruebas Físicas</div><div class="pdesc">Tangibles que forman la imagen de la empresa en el cliente</div></div>
+    </div>
+    <div class="ic">
+      <h3>⚠️ Reflexión clave</h3>
+      <ul>
+        <li>Las PERSONAS son el personal clave que crea la ventaja competitiva — no confundir con Promoción</li>
+        <li>Las Pruebas Físicas incluyen instalaciones, mobiliario, uniformes y todo lo tangible</li>
+        <li>Los Procesos definen el flujo de trabajo para ofrecer el servicio consistentemente</li>
+        <li>Los 7 elementos deben ser coherentes y unificados en el plan de comercialización</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-canales" class="tab-panel">
+    <div class="s-hero">
+      <span class="tag">SECCIÓN 5.4 · DISTRIBUCIÓN Y LOGÍSTICA</span>
+      <h2>Canales de Distribución</h2>
+      <p>La Plaza transfiere productos desde el origen hasta el consumo final, añadiendo valor en cada etapa. Según Kotler (2012), cada eslabón del canal pertenece a la red de transferencia de valor al cliente.</p>
+    </div>
+    <div style="margin-bottom:16px">
+      <div class="flow-label" style="display:block;color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">🛒 Bienes de Consumo</div>
+      <div class="flow-row"><div class="flow-node">Fabricante</div><div class="flow-arrow">→</div><div class="flow-node">Mayorista</div><div class="flow-arrow">→</div><div class="flow-node">Minorista</div><div class="flow-arrow">→</div><div class="flow-node">Consumidor</div></div>
+      <div class="flow-row"><div class="flow-node">Productor</div><div class="flow-arrow">→</div><div class="flow-node">Minorista</div><div class="flow-arrow">→</div><div class="flow-node">Consumidor</div></div>
+      <div style="margin-top:12px" class="flow-label" style="display:block;color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">🏭 Bienes Industriales</div>
+      <div class="flow-row"><div class="flow-node">Fabricante</div><div class="flow-arrow">→</div><div class="flow-node">Cliente Industrial</div></div>
+      <div class="flow-row"><div class="flow-node">Fabricante</div><div class="flow-arrow">→</div><div class="flow-node">Distribuidor</div><div class="flow-arrow">→</div><div class="flow-node">Cliente Industrial</div></div>
+      <div style="margin-top:12px" class="flow-label" style="display:block;color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">🎭 Servicios</div>
+      <div class="flow-row"><div class="flow-node">Productor</div><div class="flow-arrow">→</div><div class="flow-node">Consumidor</div></div>
+      <div class="flow-row"><div class="flow-node">Productor</div><div class="flow-arrow">→</div><div class="flow-node">Agente</div><div class="flow-arrow">→</div><div class="flow-node">Consumidor</div></div>
+    </div>
+    <div class="ic">
+      <h3>🔑 Características de la Distribución (Rodríguez, 2010)</h3>
+      <ul>
+        <li><strong style="color:var(--secondary)">Estructural:</strong> Se puede modificar con el tiempo; implica relaciones contractuales</li>
+        <li><strong style="color:var(--secondary)">Imprescindible:</strong> Sin distribución no hay venta; impacta precio e imagen</li>
+        <li><strong style="color:var(--secondary)">Dificulta el control:</strong> El fabricante no siempre controla el canal; requiere negociación</li>
+        <li><strong style="color:var(--secondary)">Influye en el marketing mix:</strong> Coherencia entre posicionamiento y canal elegido</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-cim" class="tab-panel">
+    <div class="s-hero">
+      <span class="tag">SECCIÓN 5.6 · COMUNICACIÓN INTEGRAL</span>
+      <h2>Comunicación Integral de Marketing (CIM)</h2>
+      <p>Según Clow y Baack (2010): coordinación e integración de todas las herramientas de comunicación para maximizar el impacto sobre clientes al menor costo posible.</p>
+    </div>
+    <div class="info-grid">
+      <div class="ic">
+        <h3>🎯 Propósitos de la CIM</h3>
+        <ul>
+          <li>Garantizar que el cliente perciba el mensaje</li>
+          <li>Hablar en el mismo lenguaje e idioma del cliente</li>
+          <li>Buscar elementos afines al mercado meta</li>
+          <li>Plantear propuestas atractivas e informativas</li>
+          <li>Evaluar resultados y hacer modificaciones</li>
+        </ul>
+      </div>
+      <div class="ic">
+        <h3>🛠️ Herramientas CIM (Treviño, 2010)</h3>
+        <ul>
+          <li><strong style="color:var(--secondary)">Publicidad:</strong> Para alcance masivo al mercado meta</li>
+          <li><strong style="color:var(--secondary)">Propaganda:</strong> Comunicación no pagada sobre la empresa</li>
+          <li><strong style="color:var(--secondary)">Publicity:</strong> Cobertura mediática espontánea</li>
+          <li><strong style="color:var(--secondary)">Ventas personales:</strong> Contacto directo y persuasión</li>
+          <li><strong style="color:var(--secondary)">Relaciones públicas:</strong> Imagen interna y externa</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ic">
+      <h3>📋 Estrategia de Publicidad (Wells, Moriarty y Burnett, 2007)</h3>
+      <ul>
+        <li><strong style="color:var(--secondary)">Estrategia:</strong> Plan con acciones para alcanzar los objetivos comerciales</li>
+        <li><strong style="color:var(--secondary)">Idea creativa:</strong> Concepto central que capta la atención y diferencia del anuncio</li>
+        <li><strong style="color:var(--secondary)">Ejecución creativa:</strong> Materialización: fotografía, tono, música, presentación</li>
+        <li><strong style="color:var(--secondary)">Uso creativo de medios:</strong> Elección según alcance, costo y preferencias del público</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-fidelizacion" class="tab-panel">
+    <div class="s-hero">
+      <span class="tag">SECCIÓN 5.1 · FIDELIZACIÓN</span>
+      <h2>Fidelización vs. Retención</h2>
+      <p>La OIT (2016) afirma que la finalidad de la comercialización es crear lealtad del cliente. García y Gutiérrez (2013) definen la fidelidad como la fuerza de la relación entre consumidores y empresa.</p>
+    </div>
+    <div class="info-grid">
+      <div class="ic" style="border-color:rgba(74,222,128,0.3)">
+        <h3 style="color:var(--success)">✅ Fidelización (objetivo real)</h3>
+        <ul>
+          <li>El cliente CREE en la marca específica</li>
+          <li>La recomienda activamente a otros</li>
+          <li>Elige quedarse aunque pueda cambiar</li>
+          <li>Vínculo emocional genuino con la empresa</li>
+          <li>Resultado: cliente habitual y embajador</li>
+        </ul>
+      </div>
+      <div class="ic" style="border-color:rgba(248,113,113,0.3)">
+        <h3 style="color:var(--danger)">⚠️ Retención (estrategia incorrecta)</h3>
+        <ul>
+          <li>El cliente se queda POR OBLIGACIÓN</li>
+          <li>Plazos forzosos y penalizaciones</li>
+          <li>Se irá en cuanto pueda hacerlo</li>
+          <li>No genera recomendación orgánica</li>
+          <li>Resultado: cliente atrapado, no leal</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="ic">
+        <h3>📊 Dimensión Comportamental</h3>
+        <ul>
+          <li>Decisión de comprar el mismo producto en el tiempo</li>
+          <li>Medición: frecuencia de compra</li>
+          <li>Medición: volumen y porcentaje de compra</li>
+          <li>Medición: tiempo de permanencia con la marca</li>
+        </ul>
+      </div>
+      <div class="ic">
+        <h3>💛 Dimensión Afectiva</h3>
+        <ul>
+          <li>Vínculo emocional del consumidor con la marca</li>
+          <li>Medición: nivel de afecto hacia la empresa</li>
+          <li>Medición: confianza en la marca</li>
+          <li>Medición: nivel de compromiso con la empresa</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-quiz" class="tab-panel">
+    <div class="s-hero"><span class="tag">+150 XP DISPONIBLES</span><h2>Quiz Rápido — Bloque 4</h2><p>Responde antes de las misiones para acumular XP extra.</p></div>
+    <div id="quiz-container"></div>
+    <div class="nav-row"><button class="btn-nav" onclick="goToMissions()">Ir a Misiones 🎮</button></div>
+  </div>
+
+  <div class="nav-row" id="content-nav">
+    <button class="btn-nav sec" onclick="showScreen('screen-intro')">← Inicio</button>
+    <button class="btn-nav" onclick="goToMissions()">Ir a Misiones 🎮</button>
+  </div>
+</div>
+
+<!-- ===== MISSIONS ===== -->
+<div id="screen-missions" class="screen">
+  <div class="m-header">
+    <div class="ey">🏆 CMO Startup — Imperio Comercial</div>
+    <h2 id="missionTitle">MISIÓN 1</h2>
+  </div>
+
+  <!-- M1: 7Ps DRAG DROP -->
+  <div id="mission-1" class="m-panel active">
+    <div class="m-title">🎯 Maestro de las 7 Ps</div>
+    <p class="m-desc">Arrastra cada tarjeta a la categoría correcta de la mezcla de mercadotecnia. Clasifica las 7 Ps para ganar 250 XP.</p>
+    <div class="dd-wrap">
+      <div class="chip-pool-box"><h4>🃏 Conceptos a clasificar</h4><div id="chipPool"></div></div>
+      <div class="drop-zones-col">
+        <div class="dz" id="zone-clasicas" ondragover="allowDrop(event)" ondrop="dropChip(event,'clasicas')"><h4>📦 4 Ps Clásicas</h4><div class="dz-chips"></div></div>
+        <div class="dz" id="zone-extendidas" ondragover="allowDrop(event)" ondrop="dropChip(event,'extendidas')"><h4>➕ 3 Ps Extendidas (Servicios)</h4><div class="dz-chips"></div></div>
+      </div>
+    </div>
+    <div id="m1-result"></div>
+    <div class="nav-row">
+      <button class="btn-nav sec" onclick="showContent()">← Estudiar</button>
+      <button class="btn-nav" onclick="checkM1()">✅ Verificar Misión 1</button>
+    </div>
+  </div>
+
+  <!-- M2: CHANNELS -->
+  <div id="mission-2" class="m-panel">
+    <div class="m-title">🚚 Arquitecto de Canales</div>
+    <p class="m-desc">Tu startup lanza 3 productos distintos. Elige el canal de distribución correcto para cada uno y gana 300 XP.</p>
+    <div class="m2-progress" id="m2progress">Productos resueltos: 0 / 3</div>
+    <div class="prod-tabs">
+      <button class="pt active" onclick="switchProd('p1',this)">🥤 Bebida energética</button>
+      <button class="pt" onclick="switchProd('p2',this)">🔩 Maquinaria CNC</button>
+      <button class="pt" onclick="switchProd('p3',this)">💆 Spa & Bienestar</button>
+    </div>
+    <div id="prod-p1" class="product-panel active">
+      <div class="prod-card">
+        <h4>🥤 Bebida Energética "PowerUp"</h4>
+        <p>Producto de consumo masivo con alta rotación. El cliente lo compra en tiendas de conveniencia, supermercados y farmacias. Se necesita el mayor alcance posible.</p>
+        <div class="routes" id="routes-p1">
+          <div class="route-opt" onclick="answerRoute('p1','ok',this)"><div class="rf"><div class="rn">Fabricante</div><div class="ra">→</div><div class="rn">Mayorista</div><div class="ra">→</div><div class="rn">Minorista</div><div class="ra">→</div><div class="rn">Consumidor</div></div><div class="rdesc">Canal largo para bienes de consumo masivo</div></div>
+          <div class="route-opt" onclick="answerRoute('p1','ko1',this)"><div class="rf"><div class="rn">Fabricante</div><div class="ra">→</div><div class="rn">Cliente Industrial</div></div><div class="rdesc">Canal directo industrial</div></div>
+          <div class="route-opt" onclick="answerRoute('p1','ko2',this)"><div class="rf"><div class="rn">Productor</div><div class="ra">→</div><div class="rn">Agente</div><div class="ra">→</div><div class="rn">Consumidor</div></div><div class="rdesc">Canal de servicios</div></div>
+        </div>
+        <div class="route-fb" id="fb-p1"></div>
+      </div>
+    </div>
+    <div id="prod-p2" class="product-panel">
+      <div class="prod-card">
+        <h4>🔩 Maquinaria CNC de Precisión</h4>
+        <p>Producto industrial de alto valor. Lo compran empresas manufactureras. Requiere demostración técnica, instalación y soporte especializado post-venta.</p>
+        <div class="routes" id="routes-p2">
+          <div class="route-opt" onclick="answerRoute('p2','ko1',this)"><div class="rf"><div class="rn">Fabricante</div><div class="ra">→</div><div class="rn">Mayorista</div><div class="ra">→</div><div class="rn">Minorista</div><div class="ra">→</div><div class="rn">Consumidor</div></div><div class="rdesc">Canal largo para consumo masivo</div></div>
+          <div class="route-opt" onclick="answerRoute('p2','ok',this)"><div class="rf"><div class="rn">Fabricante</div><div class="ra">→</div><div class="rn">Distribuidor</div><div class="ra">→</div><div class="rn">Cliente Industrial</div></div><div class="rdesc">Canal industrial con distribuidor especializado</div></div>
+          <div class="route-opt" onclick="answerRoute('p2','ko2',this)"><div class="rf"><div class="rn">Productor</div><div class="ra">→</div><div class="rn">Agente</div><div class="ra">→</div><div class="rn">Consumidor</div></div><div class="rdesc">Canal de servicios con agente</div></div>
+        </div>
+        <div class="route-fb" id="fb-p2"></div>
+      </div>
+    </div>
+    <div id="prod-p3" class="product-panel">
+      <div class="prod-card">
+        <h4>💆 Servicio Spa & Bienestar</h4>
+        <p>Servicio intangible, se consume en el momento. El cliente necesita ser guiado hacia el servicio por alguien que lo recomiende y programe la cita.</p>
+        <div class="routes" id="routes-p3">
+          <div class="route-opt" onclick="answerRoute('p3','ko1',this)"><div class="rf"><div class="rn">Fabricante</div><div class="ra">→</div><div class="rn">Mayorista</div><div class="ra">→</div><div class="rn">Minorista</div><div class="ra">→</div><div class="rn">Consumidor</div></div><div class="rdesc">Canal de bienes de consumo</div></div>
+          <div class="route-opt" onclick="answerRoute('p3','ko2',this)"><div class="rf"><div class="rn">Fabricante</div><div class="ra">→</div><div class="rn">Distribuidor</div><div class="ra">→</div><div class="rn">Cliente Industrial</div></div><div class="rdesc">Canal industrial</div></div>
+          <div class="route-opt" onclick="answerRoute('p3','ok',this)"><div class="rf"><div class="rn">Productor</div><div class="ra">→</div><div class="rn">Agente</div><div class="ra">→</div><div class="rn">Consumidor</div></div><div class="rdesc">Canal de servicios con agente intermediario</div></div>
+        </div>
+        <div class="route-fb" id="fb-p3"></div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-nav sec" onclick="prevMission()">← Misión 1</button>
+      <button class="btn-nav" id="btnNextM2" onclick="goNextM2()" style="display:none">Continuar → Misión 3</button>
+    </div>
+  </div>
+
+  <!-- M3: CIM STRATEGY -->
+  <div id="mission-3" class="m-panel">
+    <div class="m-title">📣 Estratega de Comunicación Integral</div>
+    <p class="m-desc">Tu startup tiene un presupuesto limitado de 5 unidades. Selecciona la mezcla óptima de herramientas CIM para maximizar el impacto. Necesitas al menos 3 herramientas distintas.</p>
+    <div class="budget-label">Presupuesto disponible: <span id="budgetLeft" style="color:var(--success);font-weight:700">5</span> / 5 unidades</div>
+    <div class="budget-bar-wrap"><div class="budget-bar" id="budgetBar" style="width:100%"></div></div>
+    <div class="cim-tools" id="cimTools"></div>
+    <div class="cim-mix-display"><h5>🎯 Mezcla seleccionada</h5><div id="mixDisplay" style="color:var(--muted);font-size:12px">Ninguna herramienta seleccionada aún...</div></div>
+    <div class="cim-fb" id="cim-fb"></div>
+    <div class="nav-row">
+      <button class="btn-nav sec" onclick="prevMission()">← Misión 2</button>
+      <button class="btn-nav" onclick="checkM3()">✅ Lanzar Campaña CIM</button>
+    </div>
+  </div>
+
+  <!-- MISSION FINAL: FIDELIZATION -->
+  <div id="mission-final" class="m-panel">
+    <div class="m-title">❤️ Guardián de la Fidelidad</div>
+    <p class="m-desc">Un cliente clave de tu startup está insatisfecho. Llevan 2 años con ustedes pero amenazan con irse. ¿Cómo los rescatas?</p>
+    <div class="client-card">
+      <h4>🚨 ALERTA: CLIENTE EN RIESGO</h4>
+      <p>Carlos, uno de tus mejores clientes (representa el 12% de tus ingresos), recibió una oferta de la competencia con 20% de descuento. Lleva 2 años contigo, pero siente que ya no se le valora. Su contrato vence en 30 días.</p>
+    </div>
+    <div style="color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;font-weight:700">¿Qué estrategia aplicas?</div>
+    <div class="fidel-opts" id="fidelOpts"></div>
+    <div class="mf-fb" id="mf-fb"></div>
+    <div class="nav-row">
+      <button class="btn-nav sec" onclick="prevMissionFinal()">← Misión 3</button>
+      <button class="btn-nav" id="btnFinish" onclick="showResults()" style="display:none">🏁 Ver Resultados</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESULTS ===== -->
+<div id="screen-results" class="screen">
+  <div class="r-trophy">🏆</div>
+  <div class="r-title">GURÚ<br>COMERCIAL</div>
+  <p class="r-sub">Completaste el Bloque 4: El Proceso de Comercialización y Clientes</p>
+  <div class="r-stats">
+    <div class="stat-pill">XP Total: <span id="finalXP">0</span></div>
+    <div class="stat-pill">Nivel: <span id="finalLevel">1</span></div>
+    <div class="stat-pill">Misiones: <span>4/4</span></div>
+  </div>
+  <div>
+    <button class="btn-cert" onclick="showCert()">🏅 VER CERTIFICADO</button>
+    <button class="btn-replay" onclick="replayGame()">↺ Jugar de nuevo</button>
+  </div>
+  <div id="cert-wrap">
+    <div id="certificate">
+      <div class="cc tl">📊</div>
+      <div class="cc br">📊</div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" alt="Logo IEU">
+      <div class="ct">CERTIFICADO</div>
+      <div class="cs">de logro academico · IVC Bloque 4</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Se certifica que</div>
+      <div class="cn" id="certName">Estudiante IEU</div>
+      <div class="cx">completo satisfactoriamente las actividades gamificadas del</div>
+      <div class="cc2">Introduccion a Ventas y Comercializacion<br>Bloque 4: El Proceso de Comercializacion</div>
+      <div class="cf">
+        <div><div class="cxp" id="certXP">0</div><div class="cfl">XP OBTENIDOS</div></div>
+        <div><div class="cfv" id="certDate">—</div><div class="cfl">FECHA</div></div>
+        <div><div class="cfv">IEU</div><div class="cfl">INSTITUCIÓN</div></div>
+      </div>
+    </div>
+    <div style="margin-top:13px"><button class="btn-dl" onclick="downloadCert()">⬇️ Descargar Certificado</button></div>
+  </div>
+  <div class="stripe"></div>
+</div>
+
+<script>
+// ===== STATE =====
+var xp = 0;
+var level = 1;
+var draggedId = null;
+var m1Dropped = {};
+var quizDone = {};
+var m2Solved = { p1: false, p2: false, p3: false };
+var m2SolvedCount = 0;
+var m3Selected = {};
+var m3Budget = 5;
+var mfDone = false;
+var touchZone = null;
+
+var MAX_XP = 800;
+
+// ===== XP =====
+function addXP(amt, label) {
+  xp += amt;
+  updateHUD();
+  showToast('+' + amt + ' XP — ' + label, 'xp');
+}
+
+function updateHUD() {
+  document.getElementById('xpVal').textContent = xp;
+  document.getElementById('progress-bar-fill').style.width = Math.min(xp / MAX_XP * 100, 100) + '%';
+  var lvlName;
+  if (xp < 150) { lvlName = 'APRENDIZ'; level = 1; }
+  else if (xp < 350) { lvlName = 'ESTRATEGA'; level = 2; }
+  else if (xp < 600) { lvlName = 'COMERCIAL'; level = 3; }
+  else { lvlName = 'GURU CMO'; level = 4; }
+  document.getElementById('lvlBadge').textContent = lvlName;
+}
+
+function markM(n) {
+  var el = document.getElementById('mb' + n);
+  el.classList.add('done');
+  el.textContent = n === 'final' ? '✓' : '✓';
+}
+
+// ===== TOAST =====
+var toastT;
+function showToast(msg, type) {
+  type = type || 'success';
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(toastT);
+  toastT = setTimeout(function() { t.className = ''; }, 3200);
+}
+
+// ===== SCREENS =====
+function showScreen(id) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startApp() {
+  showScreen('screen-content');
+  initQuiz();
+}
+
+function showContent() { showScreen('screen-content'); }
+
+function goToMissions() {
+  showScreen('screen-missions');
+  showMission(1);
+  initMissions();
+}
+
+function showMission(n) {
+  var panels = document.querySelectorAll('.m-panel');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  var pid = n === 'final' ? 'mission-final' : 'mission-' + n;
+  document.getElementById(pid).classList.add('active');
+  document.getElementById('missionTitle').textContent = n === 'final' ? 'MISIÓN FINAL' : 'MISIÓN ' + n;
+}
+
+function prevMission() {
+  var active = document.querySelector('.m-panel.active');
+  if (!active) return;
+  if (active.id === 'mission-2') showMission(1);
+  else if (active.id === 'mission-3') showMission(2);
+  else if (active.id === 'mission-final') showMission(3);
+}
+
+function prevMissionFinal() { showMission(3); }
+
+// ===== TABS =====
+function switchTab(id, btn) {
+  var btns = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  document.getElementById('content-nav').style.display = (id === 'quiz') ? 'none' : 'flex';
+}
+
+// ===== QUIZ =====
+var questions = [
+  { q: 'Segun Kotler y Armstrong, el marketing busca encontrar, atraer, mantener y cultivar clientes mediante:', opts: ['Publicidad masiva en medios', 'La creacion, entrega y comunicacion de valor superior', 'Reducir costos de produccion', 'Controlar el mercado de precios'], c: 1, exp: 'El objetivo del gerente de marketing es crear, entregar y comunicar valor superior para el cliente (Kotler y Armstrong, 2012).' },
+  { q: 'Cual es la diferencia clave entre retener y fidelizar a un cliente?', opts: ['Son sinonimos con el mismo resultado', 'Retener usa penalizaciones; fidelizar logra que el cliente crea en la marca', 'Fidelizar es mas barato que retener', 'Retener construye un vinculo emocional'], c: 1, exp: 'Retener implica plazos forzosos y penalizaciones. Fidelizar logra que el cliente crea en la marca y se quede porque quiere (OIT, 2016).' },
+  { q: 'En las 7 Ps, el elemento "Personas" se refiere a:', opts: ['Los clientes del mercado meta', 'El personal que interviene para que el cliente quede conforme', 'Las redes sociales donde se promueve', 'Los accionistas de la empresa'], c: 1, exp: 'Personas = todo el personal clave que interviene en el servicio. NO confundir con Promocion (Fernandez, 2015).' },
+  { q: 'La CIM (Comunicacion Integral de Marketing) tiene como objetivo principal:', opts: ['Reducir el presupuesto de publicidad', 'Coordinar todas las herramientas de comunicacion para maximizar impacto al menor costo', 'Eliminar intermediarios del canal', 'Controlar los precios del mercado'], c: 1, exp: 'Clow y Baack (2010): integracion de todas las herramientas para maximizar impacto sobre clientes a costo minimo.' },
+  { q: 'Para un servicio de consultoria, el canal de distribucion mas adecuado es:', opts: ['Fabricante → Mayorista → Minorista → Consumidor', 'Fabricante → Cliente Industrial', 'Productor → Agente → Consumidor', 'Productor → Distribuidor → Mayorista'], c: 2, exp: 'Los servicios usan: Productor → (Agente) → Consumidor. Son intangibles y se consumen en el momento de produccion.' },
+  { q: 'La dimension afectiva de la fidelizacion de marca incluye:', opts: ['Frecuencia de compra y volumen', 'Afecto, confianza y nivel de compromiso con la marca', 'Precio pagado y descuentos obtenidos', 'Numero de visitas a la tienda'], c: 1, exp: 'Garcia y Gutierrez (2013): la dimension afectiva mide el vinculo emocional: afecto, confianza y compromiso con la marca.' }
+];
+
+function initQuiz() {
+  var c = document.getElementById('quiz-container');
+  if (c.innerHTML !== '') return;
+  var html = '';
+  for (var i = 0; i < questions.length; i++) {
+    var q = questions[i];
+    html += '<div class="mq" id="cq' + i + '"><h4>⚡ Pregunta ' + (i+1) + '</h4>';
+    html += '<p class="mq-q">' + q.q + '</p><div class="mq-opts">';
+    for (var j = 0; j < q.opts.length; j++) {
+      html += '<button class="mq-opt" onclick="answerQ(' + i + ',' + j + ')">' + q.opts[j] + '</button>';
+    }
+    html += '</div><div class="mq-fb" id="fb' + i + '"></div></div>';
+  }
+  c.innerHTML = html;
+}
+
+function answerQ(qi, oi) {
+  if (quizDone[qi]) return;
+  quizDone[qi] = true;
+  var q = questions[qi];
+  var opts = document.querySelectorAll('#cq' + qi + ' .mq-opt');
+  for (var i = 0; i < opts.length; i++) opts[i].disabled = true;
+  var fb = document.getElementById('fb' + qi);
+  if (oi === q.c) {
+    opts[oi].classList.add('correct');
+    fb.className = 'mq-fb show ok';
+    fb.textContent = '✅ Correcto. ' + q.exp;
+    addXP(25, 'Respuesta correcta');
+  } else {
+    opts[oi].classList.add('wrong');
+    opts[q.c].classList.add('correct');
+    fb.className = 'mq-fb show ko';
+    fb.textContent = '❌ Incorrecto. ' + q.exp;
+  }
+}
+
+// ===== MISSION 1: DRAG & DROP =====
+var chips = [
+  { id: 'c1', text: '📦 Producto', zone: 'clasicas' },
+  { id: 'c2', text: '💰 Precio', zone: 'clasicas' },
+  { id: 'c3', text: '🗺️ Plaza', zone: 'clasicas' },
+  { id: 'c4', text: '📢 Promocion', zone: 'clasicas' },
+  { id: 'c5', text: '👥 Personas', zone: 'extendidas' },
+  { id: 'c6', text: '⚙️ Procesos', zone: 'extendidas' },
+  { id: 'c7', text: '🏢 Pruebas Fisicas', zone: 'extendidas' },
+  { id: 'c8', text: 'Personal de atencion', zone: 'extendidas' },
+  { id: 'c9', text: 'Flujo de trabajo', zone: 'extendidas' },
+  { id: 'c10', text: 'Valor monetario', zone: 'clasicas' },
+  { id: 'c11', text: 'Canales de distribucion', zone: 'clasicas' },
+  { id: 'c12', text: 'Tangibles de imagen', zone: 'extendidas' }
+];
+
+function initMission1() {
+  var pool = document.getElementById('chipPool');
+  if (pool.children.length > 0) return;
+  for (var i = 0; i < chips.length; i++) {
+    (function(chip) {
+      var el = document.createElement('div');
+      el.className = 'chip';
+      el.id = 'chip-' + chip.id;
+      el.textContent = chip.text;
+      el.draggable = true;
+      el.ondragstart = function() { draggedId = chip.id; el.classList.add('dragging'); };
+      el.ondragend = function() { el.classList.remove('dragging'); };
+      el.addEventListener('touchstart', function() { draggedId = chip.id; }, { passive: true });
+      pool.appendChild(el);
+    })(chips[i]);
+  }
+}
+
+function allowDrop(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+
+document.addEventListener('dragleave', function(e) {
+  if (e.target.classList && e.target.classList.contains('dz')) {
+    e.target.classList.remove('drag-over');
+  }
+});
+
+function dropChip(e, zone) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!draggedId) return;
+  var el = document.getElementById('chip-' + draggedId);
+  if (!el) return;
+  m1Dropped[draggedId] = zone;
+  e.currentTarget.querySelector('.dz-chips').appendChild(el);
+  draggedId = null;
+}
+
+function checkM1() {
+  var correct = 0;
+  for (var i = 0; i < chips.length; i++) {
+    var c = chips[i];
+    var el = document.getElementById('chip-' + c.id);
+    if (m1Dropped[c.id] === c.zone) {
+      correct++;
+      el.classList.add('ok');
+      el.classList.remove('ko');
+    } else if (m1Dropped[c.id]) {
+      el.classList.add('ko');
+      el.classList.remove('ok');
+    }
+  }
+  var total = chips.length;
+  document.getElementById('m1-result').textContent = 'Resultado: ' + correct + '/' + total + ' correctos';
+  if (correct >= Math.ceil(total * 0.65)) {
+    var earned = correct * Math.round(250 / total);
+    addXP(earned, 'Mision 1 — 7 Ps clasificadas');
+    markM(1);
+    showToast('🎯 Mision 1 Cumplida!', 'success');
+    setTimeout(function() { showMission(2); }, 1200);
+  } else {
+    var hint = '';
+    for (var i = 0; i < chips.length; i++) {
+      if (m1Dropped[chips[i].id] && m1Dropped[chips[i].id] !== chips[i].zone) {
+        if (chips[i].id === 'c5') {
+          hint = 'Pista: Personas es el personal clave del servicio — no es Promocion. Va en las 3 Ps extendidas.';
+          break;
+        }
+      }
+    }
+    showToast(hint || 'Solo ' + correct + '/' + total + ' — revisa las 3 Ps extendidas de servicios', 'error');
+  }
+}
+
+// ===== MISSION 2: CHANNELS =====
+function initMission2() { /* static HTML */ }
+
+function switchProd(id, btn) {
+  var btns = document.querySelectorAll('.pt');
+  var panels = document.querySelectorAll('.product-panel');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  btn.classList.add('active');
+  document.getElementById('prod-' + id).classList.add('active');
+}
+
+function answerRoute(prod, ans, el) {
+  if (m2Solved[prod]) return;
+  var opts = document.querySelectorAll('#routes-' + prod + ' .route-opt');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var fb = document.getElementById('fb-' + prod);
+  var feedbacks = {
+    p1ok: '🚚 Correcto! El canal Fabricante → Mayorista → Minorista → Consumidor es ideal para bienes de consumo masivo. Cada etapa añade valor: el mayorista gestiona grandes volumenes y el minorista acerca el producto al cliente final.',
+    p1ko: '❌ Ese canal no es el adecuado para bebidas de consumo masivo. Necesitas intermediarios que lleven el producto a miles de puntos de venta. El canal correcto incluye Mayorista y Minorista.',
+    p2ok: '🏭 Correcto! Para maquinaria industrial el canal Fabricante → Distribuidor → Cliente Industrial funciona porque el distribuidor tiene expertise tecnico, da demostraciones y ofrece soporte especializado.',
+    p2ko: '❌ La maquinaria CNC no va por canales de consumo masivo ni de servicios. Necesita distribuidores tecnicos especializados que puedan dar soporte y capacitacion al cliente industrial.',
+    p3ok: '💆 Correcto! Los servicios usan el canal Productor → Agente → Consumidor. El agente (recepcionista, plataforma digital, promotor) facilita el acceso al servicio intangible que se consume en el momento.',
+    p3ko: '❌ Los servicios son intangibles y se consumen al momento de producirse. No usan canales de bienes fisicos. El canal correcto es Productor → Agente → Consumidor.'
+  };
+  if (ans === 'ok') {
+    el.classList.add('selected-ok');
+    fb.className = 'route-fb show ok';
+    fb.textContent = feedbacks[prod + 'ok'];
+    m2Solved[prod] = true;
+    m2SolvedCount++;
+    addXP(100, 'Canal correcto para ' + prod);
+    document.getElementById('m2progress').textContent = 'Productos resueltos: ' + m2SolvedCount + ' / 3';
+    if (m2SolvedCount >= 3) {
+      markM(2);
+      showToast('🚚 Mision 2 Cumplida! +300 XP totales', 'success');
+      document.getElementById('btnNextM2').style.display = 'inline-block';
+    }
+  } else {
+    el.classList.add('selected-ko');
+    fb.className = 'route-fb show ko';
+    fb.textContent = feedbacks[prod + 'ko'];
+    // re-enable after wrong answer so they can try again
+    setTimeout(function() {
+      for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'auto';
+      el.style.pointerEvents = 'none';
+    }, 1000);
+  }
+}
+
+function goNextM2() {
+  if (m2SolvedCount < 3) { showToast('Resuelve los 3 productos primero', 'error'); return; }
+  showMission(3);
+}
+
+// ===== MISSION 3: CIM =====
+var cimDefs = [
+  { id: 't1', icon: '📺', name: 'Publicidad', cost: 2, desc: 'Alcance masivo al mercado meta via medios', reach: 'Alto alcance' },
+  { id: 't2', icon: '🤝', name: 'Ventas Personales', cost: 2, desc: 'Contacto directo, persuasion y cierre de venta', reach: 'Alta conversion' },
+  { id: 't3', icon: '📰', name: 'Relaciones Publicas', cost: 1, desc: 'Mejora imagen interna y externa de la empresa', reach: 'Credibilidad' },
+  { id: 't4', icon: '📱', name: 'Redes Sociales', cost: 1, desc: 'Dialogo con el cliente en su idioma y plataforma', reach: 'Engagement' },
+  { id: 't5', icon: '🎁', name: 'Promocion de Ventas', cost: 1, desc: 'Incentivos y descuentos para impulsar la compra', reach: 'Conversion rapida' },
+  { id: 't6', icon: '📧', name: 'Email Marketing', cost: 1, desc: 'Comunicacion directa y personalizada al cliente', reach: 'Personalizacion' }
+];
+
+function initMission3() {
+  var c = document.getElementById('cimTools');
+  if (c.children.length > 0) return;
+  for (var i = 0; i < cimDefs.length; i++) {
+    (function(tool) {
+      var el = document.createElement('div');
+      el.className = 'cim-tool';
+      el.id = 'tool-' + tool.id;
+      el.innerHTML = '<div class="ticon">' + tool.icon + '</div>' +
+        '<div class="tname">' + tool.name + '</div>' +
+        '<div class="tcost">Costo: ' + tool.cost + ' ud.</div>' +
+        '<div class="tdesc">' + tool.desc + '</div>' +
+        '<div class="tcount" id="tc-' + tool.id + '"></div>';
+      el.onclick = function() { toggleCIM(tool, el); };
+      c.appendChild(el);
+    })(cimDefs[i]);
+  }
+}
+
+function toggleCIM(tool, el) {
+  var fb = document.getElementById('cim-fb');
+  fb.className = 'cim-fb';
+  if (m3Selected[tool.id]) {
+    delete m3Selected[tool.id];
+    m3Budget += tool.cost;
+    el.classList.remove('selected');
+    document.getElementById('tc-' + tool.id).textContent = '';
+  } else {
+    if (m3Budget < tool.cost) {
+      showToast('Presupuesto insuficiente para ' + tool.name, 'error');
+      return;
+    }
+    m3Budget -= tool.cost;
+    m3Selected[tool.id] = tool;
+    el.classList.add('selected');
+    document.getElementById('tc-' + tool.id).textContent = '✓ Seleccionada';
+  }
+  document.getElementById('budgetLeft').textContent = m3Budget;
+  document.getElementById('budgetBar').style.width = (m3Budget / 5 * 100) + '%';
+  updateMixDisplay();
+}
+
+function updateMixDisplay() {
+  var keys = Object.keys(m3Selected);
+  var disp = document.getElementById('mixDisplay');
+  if (keys.length === 0) {
+    disp.textContent = 'Ninguna herramienta seleccionada aun...';
+    disp.style.color = 'var(--muted)';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < keys.length; i++) {
+    var t = m3Selected[keys[i]];
+    html += '<span style="display:inline-block;background:rgba(232,68,10,0.15);border:1px solid var(--primary);border-radius:12px;padding:3px 10px;font-size:11px;font-weight:600;margin:3px;color:var(--secondary)">' + t.icon + ' ' + t.name + '</span>';
+  }
+  disp.innerHTML = html;
+  disp.style.color = '';
+}
+
+function checkM3() {
+  var keys = Object.keys(m3Selected);
+  var fb = document.getElementById('cim-fb');
+  if (keys.length < 3) {
+    fb.className = 'cim-fb show ko';
+    fb.textContent = 'La CIM efectiva requiere al menos 3 herramientas distintas. Recuerda: el objetivo es coordinar e integrar TODAS las vias de comunicacion para maximizar el impacto (Clow y Baack, 2010).';
+    return;
+  }
+  var hasPublicidad = m3Selected['t1'];
+  var hasPersonal = m3Selected['t2'];
+  var hasRP = m3Selected['t3'];
+  var budgetUsed = 5 - m3Budget;
+  fb.className = 'cim-fb show ok';
+  var msg = '📣 Campana CIM lanzada con exito! Tu mezcla de ' + keys.length + ' herramientas usa ' + budgetUsed + '/5 unidades de presupuesto. ';
+  if (hasPublicidad && hasPersonal && hasRP) {
+    msg += 'Excelente combinacion: Publicidad para alcance masivo + Ventas Personales para persuasion directa + Relaciones Publicas para imagen. Esto garantiza que el cliente perciba el mensaje, se hable en su idioma y se genere lealtad.';
+    addXP(300, 'Mision 3 — Campana CIM optima!');
+  } else {
+    msg += 'Buena estrategia. Para una CIM optima considera incluir Publicidad (alcance masivo), Ventas Personales (persuasion) y Relaciones Publicas (imagen). Recuerda que la CIM busca maximizar impacto al menor costo.';
+    addXP(200, 'Mision 3 — Campana CIM completada');
+  }
+  fb.textContent = msg;
+  markM(3);
+  showToast('📣 Mision 3 Cumplida!', 'success');
+  setTimeout(function() { showMission('final'); }, 1500);
+}
+
+// ===== MISSION FINAL =====
+var fidelOptions = [
+  { id: 'f1', icon: '⛓️', title: 'Retener: Clausula de permanencia', body: 'Activar la clausula contractual que obliga a Carlos a permanecer 12 meses mas con penalizacion del 30% si cancela antes.', correct: false },
+  { id: 'f2', icon: '💛', title: 'Fidelizar: Programa de lealtad personalizado', body: 'Llamar a Carlos, reconocer su lealtad de 2 anos, ofrecerle un plan VIP con beneficios exclusivos, descuento especial y un gestor de cuenta dedicado.', correct: true },
+  { id: 'f3', icon: '💸', title: 'Retener: Igualar el precio de la competencia', body: 'Ofrecer exactamente el mismo 20% de descuento de la competencia sin ninguna accion adicional de relacionamiento.', correct: false },
+  { id: 'f4', icon: '🤷', title: 'No hacer nada', body: 'Si Carlos quiere irse, que se vaya. Siempre hay nuevos clientes en el mercado. No tiene sentido invertir en clientes que amenazan con irse.', correct: false }
+];
+
+function initMissionFinal() {
+  var c = document.getElementById('fidelOpts');
+  if (c.children.length > 0) return;
+  for (var i = 0; i < fidelOptions.length; i++) {
+    (function(opt) {
+      var el = document.createElement('div');
+      el.className = 'fo';
+      el.id = 'fo-' + opt.id;
+      el.innerHTML = '<h5>' + opt.icon + ' ' + opt.title + '</h5><p>' + opt.body + '</p>';
+      el.onclick = function() { answerFidel(opt, el); };
+      c.appendChild(el);
+    })(fidelOptions[i]);
+  }
+}
+
+function answerFidel(opt, el) {
+  if (mfDone) return;
+  mfDone = true;
+  var opts = document.querySelectorAll('.fo');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var fb = document.getElementById('mf-fb');
+  if (opt.correct) {
+    el.classList.add('chosen-ok');
+    fb.className = 'mf-fb show ok';
+    fb.textContent = '❤️ Excelente decision de FIDELIZACION! Un programa de lealtad personalizado actua en las dos dimensiones: Comportamental (Carlos seguira comprando) y Afectiva (Carlos siente que la empresa lo valora y genera confianza). La fidelizacion logra que el cliente crea en la marca y la recomiende — muy diferente a retenerlo con penalizaciones. Carlos no solo se queda, sino que se convierte en embajador de tu startup.';
+    addXP(150, 'Mision Final — Guardian de la Fidelidad!');
+    markM('final');
+    markM(4);
+    showToast('❤️ Mision Final Cumplida! Eres Guru Comercial!', 'success');
+  } else {
+    el.classList.add('chosen-ko');
+    fb.className = 'mf-fb show ko';
+    var msg = '';
+    if (opt.id === 'f1') {
+      msg = 'Esa es RETENCION, no fidelizacion. Obligar a Carlos con penalizaciones solo genera resentimiento. Cuando el contrato venza, se ira definitivamente y hablara mal de la empresa. La fidelizacion busca que el cliente QUIERA quedarse.';
+    } else if (opt.id === 'f3') {
+      msg = 'Igualar precios sin acompanarlo de un vinculo emocional es solo retencion economica temporal. Carlos tomara la decision basandose solo en precio, sin lealtad real. La proxima oferta de la competencia se lo llevara.';
+    } else {
+      msg = 'No actuar es un error grave. Carlos representa el 12% de tus ingresos. Adquirir un cliente nuevo cuesta 5 veces mas que retener uno existente. La fidelizacion requiere accion proactiva: reconocer al cliente, generar vinculo emocional y demostrarle que es valioso.';
+    }
+    fb.textContent = '❌ ' + msg;
+    addXP(50, 'Analisis de fidelizacion realizado');
+    markM('final');
+    markM(4);
+    showToast('Reflexiona sobre la diferencia: retener vs fidelizar', 'error');
+  }
+  document.getElementById('btnFinish').style.display = 'inline-block';
+}
+
+function showResults() {
+  showScreen('screen-results');
+  document.getElementById('finalXP').textContent = xp;
+  document.getElementById('finalLevel').textContent = level;
+}
+
+// ===== CERTIFICATE =====
+function showCert() {
+  var w = document.getElementById('cert-wrap');
+  w.classList.add('visible');
+  var name = (document.getElementById('studentName').value.trim() || 'Estudiante IEU').toUpperCase();
+  document.getElementById('certName').textContent = name;
+  document.getElementById('certXP').textContent = xp;
+  var now = new Date();
+  document.getElementById('certDate').textContent = now.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+  w.scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadCert() {
+  if (typeof html2canvas !== 'undefined') {
+    html2canvas(document.getElementById('certificate'), { backgroundColor: '#0d0804', scale: 2 }).then(function(canvas) {
+      var link = document.createElement('a');
+      link.download = 'certificado_IVC_bloque4.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  } else {
+    showToast('Descarga no disponible en este entorno', 'error');
+  }
+}
+
+// ===== REPLAY =====
+function replayGame() {
+  xp = 0; level = 1; draggedId = null; m1Dropped = {};
+  quizDone = {}; m2Solved = { p1: false, p2: false, p3: false };
+  m2SolvedCount = 0; m3Selected = {}; m3Budget = 5; mfDone = false;
+  updateHUD();
+  var mbs = ['mb1','mb2','mb3','mb4'];
+  for (var i = 0; i < mbs.length; i++) {
+    var mb = document.getElementById(mbs[i]);
+    mb.classList.remove('done');
+    mb.textContent = i === 3 ? 'F' : (i+1).toString();
+  }
+  document.getElementById('chipPool').innerHTML = '';
+  document.getElementById('cimTools').innerHTML = '';
+  document.getElementById('fidelOpts').innerHTML = '';
+  document.getElementById('quiz-container').innerHTML = '';
+  document.getElementById('cert-wrap').classList.remove('visible');
+  document.getElementById('studentName').value = '';
+  document.getElementById('m1-result').textContent = '';
+  document.getElementById('m2progress').textContent = 'Productos resueltos: 0 / 3';
+  document.getElementById('btnNextM2').style.display = 'none';
+  document.getElementById('btnFinish').style.display = 'none';
+  document.getElementById('budgetLeft').textContent = '5';
+  document.getElementById('budgetBar').style.width = '100%';
+  document.getElementById('mixDisplay').textContent = 'Ninguna herramienta seleccionada aun...';
+  document.getElementById('cim-fb').className = 'cim-fb';
+  document.getElementById('mf-fb').className = 'mf-fb';
+  var rfbs = ['fb-p1','fb-p2','fb-p3'];
+  for (var i = 0; i < rfbs.length; i++) { var el = document.getElementById(rfbs[i]); if(el) el.className = 'route-fb'; }
+  var ropts = document.querySelectorAll('.route-opt');
+  for (var i = 0; i < ropts.length; i++) { ropts[i].classList.remove('selected-ok','selected-ko'); ropts[i].style.pointerEvents = 'auto'; }
+  document.getElementById('content-nav').style.display = 'flex';
+  showScreen('screen-intro');
+}
+
+function initMissions() {
+  initMission1();
+  initMission2();
+  initMission3();
+  initMissionFinal();
+}
+
+// ===== TOUCH DRAG =====
+document.addEventListener('touchmove', function(e) {
+  if (!draggedId) return;
+  var touch = e.touches[0];
+  var el = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (el) {
+    var zone = el.closest ? el.closest('.dz') : null;
+    if (touchZone && touchZone !== zone) touchZone.classList.remove('drag-over');
+    if (zone) { zone.classList.add('drag-over'); touchZone = zone; }
+  }
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+  if (!draggedId) return;
+  var touch = e.changedTouches[0];
+  var el = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (el) {
+    var zone = el.closest ? el.closest('.dz') : null;
+    if (zone) {
+      var zid = zone.id.replace('zone-', '');
+      var chipEl = document.getElementById('chip-' + draggedId);
+      if (chipEl) {
+        m1Dropped[draggedId] = zid;
+        zone.querySelector('.dz-chips').appendChild(chipEl);
+      }
+    }
+  }
+  if (touchZone) { touchZone.classList.remove('drag-over'); touchZone = null; }
+  draggedId = null;
+});
+</script>
+</body>
+</html>
