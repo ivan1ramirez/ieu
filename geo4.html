@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aprende sobre integracion en Asia, Africa y el Mundo Arabe con este simulador interactivo de geopolitica global. ASEAN, OCS, Union Africana, CCG y mas.">
+<meta name="keywords" content="ASEAN, OCS, Union Africana, integracion regional, geopolitica, Asia Central, SAARC, Liga Arabe, CCG, CEDEAO">
+<title>GCI · Bloque 4 | Gran Ruta de la Seda 2.0</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;900&display=swap');
+:root{
+  --bg:#0D0804;--p:#E8440A;--s:#FF8040;--a:#FFB347;
+  --surf:#1a1008;--surf2:#251608;--txt:#f5ede3;--mu:#a08060;
+  --ok:#4ade80;--ko:#f87171;--card:rgba(232,68,10,0.07);--bdr:rgba(232,68,10,0.25);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(232,68,10,0.14) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,8,4,0.94);border-bottom:2px solid var(--p);backdrop-filter:blur(12px);padding:8px 18px;display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+#hud img{height:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(232,68,10,0.5))}
+.ht{font-family:'Bebas Neue';font-size:15px;color:var(--s);letter-spacing:1px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.xpb{display:flex;align-items:center;gap:4px}
+.xpl{color:var(--a);font-weight:700;font-size:10px;letter-spacing:1px}
+.xpv{color:var(--p);font-weight:900;font-size:17px;font-family:'Bebas Neue'}
+#pbw{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;max-width:160px;min-width:50px}
+#pbf{height:100%;background:linear-gradient(90deg,var(--p),var(--a));border-radius:3px;transition:width .6s;width:0%}
+.lvlb{background:linear-gradient(135deg,var(--p),var(--a));color:#000;font-weight:900;font-size:10px;padding:3px 9px;border-radius:20px;letter-spacing:1px;white-space:nowrap}
+.mbs{display:flex;gap:4px}
+.mb{width:22px;height:22px;border-radius:50%;border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:10px;background:var(--surf);transition:all .3s}
+.mb.done{border-color:var(--p);background:rgba(232,68,10,0.2)}
+
+/* SCREENS */
+.scr{min-height:100vh;display:none;padding-top:56px;position:relative;z-index:1}
+.scr.on{display:flex;flex-direction:column}
+
+/* TOAST */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surf);border:1px solid var(--bdr);border-radius:50px;padding:10px 24px;font-weight:700;font-size:13px;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:999;pointer-events:none;white-space:nowrap}
+#toast.on{transform:translateX(-50%) translateY(0)}
+#toast.ok{border-color:var(--ok);color:var(--ok);background:rgba(74,222,128,0.1)}
+#toast.ko{border-color:var(--ko);color:var(--ko);background:rgba(248,113,113,0.1)}
+#toast.xp{border-color:var(--a);color:var(--a);background:rgba(255,179,71,0.1)}
+
+/* INTRO */
+#si{align-items:center;justify-content:center;text-align:center;padding:78px 22px 0}
+.il{height:52px;object-fit:contain;margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(232,68,10,0.4))}
+.ie{color:var(--s);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:9px}
+.it{font-family:'Bebas Neue';font-size:clamp(48px,9vw,96px);line-height:.92;background:linear-gradient(135deg,#fff 20%,var(--s) 60%,var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
+.is{color:var(--mu);font-size:13px;max-width:500px;margin:0 auto 22px;line-height:1.65}
+.nw{margin-bottom:24px}
+.nw label{display:block;color:var(--mu);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.nw input{background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:10px 15px;color:var(--txt);font-family:'Outfit';font-size:14px;width:100%;max-width:310px;outline:none;transition:border-color .2s}
+.nw input:focus{border-color:var(--p)}
+.nw input::placeholder{color:var(--mu)}
+.mpr{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.mpc{background:var(--card);border:1px solid var(--bdr);border-radius:11px;padding:12px 15px;text-align:left;min-width:150px;max-width:188px;transition:transform .2s,border-color .2s}
+.mpc:hover{transform:translateY(-4px);border-color:var(--p)}
+.mpc .ico{font-size:23px;margin-bottom:5px}
+.mpc .mt{font-weight:700;font-size:11px;color:var(--s);margin-bottom:2px}
+.mpc .md{color:var(--mu);font-size:10px;line-height:1.4}
+.bst{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;border:none;padding:13px 44px;border-radius:50px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 0 28px rgba(232,68,10,0.4)}
+.bst:hover{transform:scale(1.05);box-shadow:0 0 48px rgba(232,68,10,0.6)}
+.stripe{width:100%;background:linear-gradient(90deg,var(--p),var(--s),var(--a));height:6px;margin-top:48px}
+
+/* CONTENT */
+#sc{padding:66px 17px 34px;max-width:940px;margin:0 auto;width:100%}
+.tnav{display:flex;gap:3px;background:var(--surf);border:1px solid var(--bdr);border-radius:11px;padding:4px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+.tnav::-webkit-scrollbar{display:none}
+.tb{flex:1;min-width:58px;padding:7px 10px;background:transparent;border:none;color:var(--mu);font-family:'Outfit';font-weight:600;font-size:10px;border-radius:7px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tb.on{background:var(--p);color:#fff}
+.tp{display:none}
+.tp.on{display:block}
+.sh{background:linear-gradient(135deg,var(--surf),var(--surf2));border:1px solid var(--bdr);border-radius:13px;padding:20px 24px;margin-bottom:16px}
+.sh .tag{display:inline-block;background:var(--p);color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;padding:2px 9px;border-radius:20px;margin-bottom:8px}
+.sh h2{font-family:'Bebas Neue';font-size:32px;color:var(--s);margin-bottom:6px;line-height:1}
+.sh p{color:var(--mu);font-size:12px;line-height:1.7}
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:11px;margin-bottom:14px}
+.ic{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:15px}
+.ic h3{color:var(--a);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.ic ul{list-style:none}
+.ic ul li{padding:4px 0;font-size:11px;color:var(--txt);border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.5}
+.ic ul li:last-child{border-bottom:none}
+.ic ul li::before{content:'▸ ';color:var(--p)}
+.blk-card{background:var(--card);border:1px solid var(--bdr);border-radius:11px;padding:15px 18px;margin-bottom:11px;transition:border-color .2s}
+.blk-card:hover{border-color:var(--s)}
+.blk-card h4{font-weight:700;font-size:13px;color:var(--s);margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.blk-card p{font-size:11px;color:var(--mu);line-height:1.6}
+.blk-card .pill{display:inline-block;background:rgba(232,68,10,0.15);border:1px solid var(--p);color:var(--s);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;margin-right:4px;margin-top:5px}
+.nr{display:flex;gap:9px;margin-top:20px;justify-content:flex-end}
+.bn{background:var(--p);color:#fff;border:none;padding:9px 22px;border-radius:7px;font-family:'Outfit';font-weight:700;font-size:12px;cursor:pointer;transition:background .2s}
+.bn:hover{background:var(--s)}
+.bn.sec{background:var(--surf);border:1px solid var(--bdr);color:var(--mu)}
+.bn.sec:hover{border-color:var(--p);color:var(--txt)}
+
+/* MINI QUIZ */
+.mq{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:15px 18px;margin-top:14px}
+.mq h4{color:var(--a);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.mq-q{font-size:13px;color:var(--txt);margin-bottom:10px;font-weight:500;line-height:1.5}
+.mq-os{display:flex;flex-direction:column;gap:6px}
+.mq-o{background:rgba(255,255,255,0.03);border:1px solid var(--bdr);border-radius:7px;padding:9px 12px;cursor:pointer;font-size:11px;transition:all .2s;text-align:left;color:var(--txt)}
+.mq-o:hover{border-color:var(--s);background:rgba(255,128,64,0.06)}
+.mq-o.ok{border-color:var(--ok);background:rgba(74,222,128,0.08);color:var(--ok)}
+.mq-o.ko{border-color:var(--ko);background:rgba(248,113,113,0.08);color:var(--ko)}
+.mq-o:disabled{cursor:default}
+.mq-fb{margin-top:8px;font-size:11px;padding:8px;border-radius:6px;display:none;line-height:1.5}
+.mq-fb.on{display:block}
+.mq-fb.ok{background:rgba(74,222,128,0.08);color:var(--ok);border:1px solid rgba(74,222,128,0.3)}
+.mq-fb.ko{background:rgba(248,113,113,0.08);color:var(--ko);border:1px solid rgba(248,113,113,0.3)}
+
+/* MISSIONS */
+#sm{padding:66px 17px 34px;max-width:860px;margin:0 auto;width:100%}
+.mh{text-align:center;margin-bottom:24px}
+.mh .ey{color:var(--s);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:5px}
+.mh h2{font-family:'Bebas Neue';font-size:48px;color:var(--txt);line-height:1}
+.mp{display:none}
+.mp.on{display:block}
+.mt2{font-family:'Bebas Neue';font-size:26px;color:var(--s);margin-bottom:4px}
+.md2{color:var(--mu);font-size:12px;margin-bottom:18px;line-height:1.5}
+
+/* M1 TRUE/FALSE */
+.tf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:16px}
+.tf-card{background:var(--surf);border:1px solid var(--bdr);border-radius:11px;padding:16px;transition:border-color .2s}
+.tf-card .fact{font-size:13px;color:var(--txt);font-weight:500;margin-bottom:10px;line-height:1.5;min-height:48px}
+.tf-btns{display:flex;gap:7px}
+.tf-btn{flex:1;padding:8px;border-radius:7px;font-family:'Outfit';font-weight:700;font-size:12px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.tf-btn.v{background:rgba(74,222,128,0.1);border-color:rgba(74,222,128,0.4);color:var(--ok)}
+.tf-btn.v:hover{background:rgba(74,222,128,0.2)}
+.tf-btn.f{background:rgba(248,113,113,0.1);border-color:rgba(248,113,113,0.4);color:var(--ko)}
+.tf-btn.f:hover{background:rgba(248,113,113,0.2)}
+.tf-btn:disabled{cursor:default;opacity:.6}
+.tf-fb{margin-top:9px;font-size:11px;padding:8px;border-radius:6px;display:none;line-height:1.5}
+.tf-fb.on{display:block}
+.tf-fb.ok{background:rgba(74,222,128,0.08);color:var(--ok);border:1px solid rgba(74,222,128,0.3)}
+.tf-fb.ko{background:rgba(248,113,113,0.08);color:var(--ko);border:1px solid rgba(248,113,113,0.3)}
+.tf-card.answered{border-color:var(--bdr)}
+.tf-card.answered-ok{border-color:var(--ok)}
+.tf-card.answered-ko{border-color:var(--ko)}
+#m1score{text-align:center;font-size:12px;color:var(--mu);margin-bottom:12px;min-height:16px}
+
+/* M2 MATCH */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:560px){.match-wrap{grid-template-columns:1fr}}
+.match-left{display:flex;flex-direction:column;gap:8px}
+.match-right{display:flex;flex-direction:column;gap:8px}
+.org-chip{background:var(--surf);border:2px solid var(--bdr);border-radius:9px;padding:11px 14px;cursor:pointer;transition:all .2s;font-weight:700;font-size:12px;color:var(--txt)}
+.org-chip:hover{border-color:var(--s);background:rgba(255,128,64,0.06)}
+.org-chip.selected{border-color:var(--p);background:rgba(232,68,10,0.1);color:var(--s)}
+.org-chip.matched-ok{border-color:var(--ok);background:rgba(74,222,128,0.07);color:var(--ok);cursor:default}
+.org-chip.matched-ko{border-color:var(--ko);background:rgba(248,113,113,0.07);color:var(--ko)}
+.def-chip{background:var(--card);border:2px solid var(--bdr);border-radius:9px;padding:11px 14px;cursor:pointer;transition:all .2s;font-size:11px;color:var(--mu);line-height:1.4}
+.def-chip:hover{border-color:var(--s);color:var(--txt)}
+.def-chip.target{border-color:var(--a);background:rgba(255,179,71,0.08);color:var(--a)}
+.def-chip.matched-ok{border-color:var(--ok);background:rgba(74,222,128,0.07);color:var(--ok);cursor:default}
+.def-chip.matched-ko{border-color:var(--ko);background:rgba(248,113,113,0.07);cursor:default}
+#m2fb{padding:12px;border-radius:9px;font-size:12px;line-height:1.6;margin-bottom:12px;display:none}
+#m2fb.on{display:block}
+#m2fb.ok{background:rgba(74,222,128,0.08);color:var(--ok);border:1px solid rgba(74,222,128,0.3)}
+#m2fb.ko{background:rgba(248,113,113,0.08);color:var(--ko);border:1px solid rgba(248,113,113,0.3)}
+#m2prog{font-size:11px;color:var(--mu);margin-bottom:12px}
+
+/* M3 SCENARIO */
+.scenario{background:linear-gradient(135deg,rgba(232,68,10,0.1),rgba(255,128,64,0.05));border:1px solid var(--p);border-radius:12px;padding:18px;margin-bottom:16px}
+.scenario h4{color:var(--p);font-family:'Bebas Neue';font-size:24px;margin-bottom:8px}
+.scenario p{font-size:12px;color:var(--mu);line-height:1.6}
+.scenario .hl{color:var(--s);font-weight:700}
+.m3-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
+.m3o{background:var(--surf);border:2px solid var(--bdr);border-radius:10px;padding:14px;cursor:pointer;transition:all .25s}
+.m3o:hover{border-color:var(--s);transform:translateY(-2px)}
+.m3o.ok{border-color:var(--ok);background:rgba(74,222,128,0.07)}
+.m3o.ko{border-color:var(--ko);background:rgba(248,113,113,0.07)}
+.m3o h5{font-size:12px;font-weight:700;margin-bottom:4px;color:var(--txt)}
+.m3o p{font-size:11px;color:var(--mu);line-height:1.5}
+#m3fb{padding:13px;border-radius:9px;font-size:12px;line-height:1.7;margin-bottom:12px;display:none}
+#m3fb.on{display:block}
+#m3fb.ok{background:rgba(74,222,128,0.08);color:var(--ok);border:1px solid rgba(74,222,128,0.3)}
+#m3fb.ko{background:rgba(248,113,113,0.08);color:var(--ko);border:1px solid rgba(248,113,113,0.3)}
+
+/* RESULTS */
+#sr{align-items:center;justify-content:center;text-align:center;padding:74px 22px 0}
+.rtr{font-size:72px;margin-bottom:12px;animation:bounce 1s ease infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-11px)}}
+.rtit{font-family:'Bebas Neue';font-size:clamp(40px,8vw,76px);background:linear-gradient(135deg,var(--s),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.rsub{color:var(--mu);font-size:13px;margin-bottom:20px}
+.rstats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.sp{background:var(--card);border:1px solid var(--bdr);border-radius:50px;padding:8px 20px;font-size:12px}
+.sp span{color:var(--p);font-weight:800;font-family:'Bebas Neue';font-size:18px}
+.bcert{background:linear-gradient(135deg,var(--p),var(--a));color:#000;font-family:'Bebas Neue';font-size:18px;letter-spacing:2px;border:none;padding:11px 34px;border-radius:50px;cursor:pointer;transition:transform .2s;box-shadow:0 0 26px rgba(232,68,10,0.4);margin:6px}
+.bcert:hover{transform:scale(1.04)}
+.brep{background:transparent;color:var(--mu);border:1px solid var(--bdr);font-family:'Outfit';font-size:12px;font-weight:600;padding:10px 26px;border-radius:50px;cursor:pointer;margin:6px;transition:all .2s}
+.brep:hover{border-color:var(--s);color:var(--s)}
+#cw{display:none;margin:22px auto;max-width:680px}
+#cw.on{display:block}
+#cert{background:linear-gradient(135deg,#1a0f05,#0d0804);border:3px solid var(--p);border-radius:14px;padding:34px;text-align:center;position:relative;overflow:hidden}
+#cert::before{content:'';position:absolute;inset:7px;border:1px solid rgba(232,68,10,0.3);border-radius:9px;pointer-events:none}
+.cc2{position:absolute;font-size:60px;opacity:.05}
+.cc2.tl{top:7px;left:7px}.cc2.br{bottom:7px;right:7px}
+#cert img{height:42px;object-fit:contain;margin-bottom:12px}
+.ctt{font-family:'Bebas Neue';font-size:40px;color:var(--p);letter-spacing:4px;margin-bottom:3px}
+.cst{font-size:10px;color:var(--mu);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.cna{font-family:'Bebas Neue';font-size:30px;color:var(--a);margin-bottom:5px}
+.ctx{font-size:11px;color:var(--mu);line-height:1.6;max-width:360px;margin:0 auto 16px}
+.cco{font-weight:700;font-size:13px;color:var(--s);margin-bottom:16px}
+.cft{display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--bdr);padding-top:14px}
+.cfv{font-weight:700;color:var(--txt);font-size:11px}
+.cfl{font-size:9px;color:var(--mu);letter-spacing:1px;text-transform:uppercase}
+.cxp{font-family:'Bebas Neue';font-size:32px;color:var(--p)}
+.bdl{background:var(--surf);color:var(--s);border:1px solid var(--p);font-family:'Outfit';font-size:11px;font-weight:700;padding:8px 22px;border-radius:50px;cursor:pointer;margin:6px;transition:all .2s}
+.bdl:hover{background:var(--p);color:#fff}
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" alt="Logo Universidad IEU, institucion educativa privada mexicana especializada en negocios internacionales y geopolitica">
+  <div class="ht">GCI · BLOQUE 4 · GRAN RUTA DE LA SEDA 2.0</div>
+  <div class="xpb"><span class="xpl">XP</span><span class="xpv" id="xpv">0</span></div>
+  <div id="pbw"><div id="pbf"></div></div>
+  <div class="lvlb" id="lvlb">ANALISTA JR</div>
+  <div class="mbs">
+    <div class="mb" id="mb1" title="Mision 1">1</div>
+    <div class="mb" id="mb2" title="Mision 2">2</div>
+    <div class="mb" id="mb3" title="Mision 3">3</div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<!-- INTRO -->
+<div id="si" class="scr on">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" class="il" alt="Universidad IEU logo institucional">
+  <div class="ie">Geografia del Comercio Internacional</div>
+  <div class="it">GRAN RUTA<br>DE LA SEDA<br>2.0</div>
+  <p class="is">Eres un analista geopolitico digital. Viaja por los bloques de integracion mas dinamicos de Asia, Medio Oriente y Africa. Gana influencia para convertirte en Arquitecto de Integracion Mundial.</p>
+  <div class="nw">
+    <label>Tu nombre (para el certificado)</label>
+    <input type="text" id="stn" placeholder="Ej. Alejandro Reyes Mora" maxlength="50">
+  </div>
+  <div class="mpr">
+    <div class="mpc"><div class="ico">🌏</div><div class="mt">Mision 1</div><div class="md">Tablero de la Diversidad — Verdadero o Falso sobre Asia y Africa</div></div>
+    <div class="mpc"><div class="ico">🧩</div><div class="mt">Mision 2</div><div class="md">Puzzle de los Bloques — Empareja organismos con su caracter distintivo</div></div>
+    <div class="mpc"><div class="ico">🛢️</div><div class="mt">Mision 3</div><div class="md">Dilema del Mundo Arabe — Elige el bloque correcto ante una crisis energetica</div></div>
+  </div>
+  <button class="bst" onclick="startApp()">🗺️ INICIAR MISION</button>
+  <div class="stripe"></div>
+</div>
+
+<!-- CONTENT -->
+<div id="sc" class="scr">
+  <div class="tnav">
+    <button class="tb on" onclick="swTab('asia',this)">🌏 Asia</button>
+    <button class="tb" onclick="swTab('central',this)">⚙️ Asia Central</button>
+    <button class="tb" onclick="swTab('meridional',this)">🌾 Asia Meridional</button>
+    <button class="tb" onclick="swTab('arabe',this)">☪️ Mundo Arabe</button>
+    <button class="tb" onclick="swTab('africa',this)">🌍 Africa</button>
+    <button class="tb" onclick="swTab('quiz',this)">⚡ Quiz</button>
+  </div>
+
+  <!-- ASIA -->
+  <div id="tp-asia" class="tp on">
+    <div class="sh"><span class="tag">SECCION 4.1 y 4.2 · SUDESTE ASIATICO</span><h2>Asia: Diversidad e Integracion</h2><p>Asia es el continente mas extenso (30% superficie terrestre) y poblado (60% de la poblacion mundial). El Sudeste Asiatico actua como enlace estrategico entre Asia Oriental y Meridional.</p></div>
+    <div class="ig">
+      <div class="ic"><h3>🌏 Asia: Datos clave</h3><ul><li>60% de la poblacion mundial</li><li>48 paises en el continente asiatico</li><li>Megaciudades: Tokio, Seoul, Shanghai, Delhi, Mumbai</li><li>Asia Oriental: ~25% de la poblacion mundial</li><li>Asia Central: Region de gran relevancia geopolitica</li><li>Recursos estrategicos: petroleo, gas, tierras raras</li></ul></div>
+      <div class="ic"><h3>🤝 ASEAN (1967)</h3><ul><li>Fundada por Filipinas, Indonesia, Malasia, Tailandia y Singapur</li><li>No implica cesion de soberania — cooperacion pragmatica</li><li>Cooperacion flexible y adaptable a cada Estado</li><li>Plan Maestro de Conectividad ASEAN 2025</li><li>Modelo de regionalismo abierto y pragmatico</li><li>Principal fuerza cohesionadora del continente</li></ul></div>
+      <div class="ic"><h3>🌊 APEC (1989)</h3><ul><li>21 economias de la Cuenca del Pacifico</li><li>Fundado por Australia en 1989</li><li>Incluye a Mexico, China, EUA, Japon, Canada</li><li>Espacio de dialogo — NO es un TLC</li><li>Complementa los esfuerzos de la ASEAN</li><li>Cooperacion economica transpacifica</li></ul></div>
+      <div class="ic"><h3>🌍 Africa: Datos clave</h3><ul><li>54 paises — mayor numero de Estados del planeta</li><li>Superficie: 30.3 millones de km2</li><li>Habla ~1/3 de las lenguas del mundo</li><li>Africa Subsahariana: region con mayores desigualdades</li><li>Recursos energeticos: Libia y Nigeria tienen grandes reservas</li><li>Poblacion joven: promedio de vida cercano a 49 anos</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ASIA CENTRAL -->
+  <div id="tp-central" class="tp">
+    <div class="sh"><span class="tag">SECCION 4.3 · ASIA CENTRAL</span><h2>Asia Central: El Nuevo Gran Juego</h2><p>Kazajstan, Kirguistan, Tayikistan, Turkmenistan y Uzbekistan. Puente natural entre Europa, Rusia, China y Asia del Sur. Rica en petroleo, gas, uranio y tierras raras estrategicas.</p></div>
+    <div class="blk-card"><h4>🔴 OCS — Organizacion de Cooperacion de Shanghai (1996)</h4><p>Liderada por China y Rusia. Agenda original: lucha contra terrorismo, separatismo y extremismo ("tres fuerzas del mal"). Ha evolucionado hacia cooperacion economica e infraestructura. Vehiculo principal de la Iniciativa de la Franja y la Ruta. <span class="pill">China</span><span class="pill">Rusia</span><span class="pill">India</span><span class="pill">Pakistan</span><span class="pill">Kazajstan</span></p></div>
+    <div class="blk-card"><h4>🇷🇺 Union Economica Euroasiatica (UEE)</h4><p>Armenia, Bielorrusia, Kazajstan, Kirguistan y Federacion Rusa. Libre circulacion de mercancias, servicios, capitales y mano de obra. Politicas coordinadas en sectores estrategicos. Fuerte influencia rusa en la arquitectura de integracion regional.</p></div>
+    <div class="blk-card"><h4>⚛️ Tratado de Semipalatinsk (2006)</h4><p>Zona Libre de Armas Nucleares de Asia Central. Uno de los mayores logros diplomaticos de la region. Declaracion de autonomia en entorno dominado por potencias con arsenales nucleares. Prohibe almacenamiento y desarrollo de armas nucleares.</p></div>
+    <div class="ic" style="margin-bottom:14px"><h3>💎 Recursos estrategicos</h3><ul><li>Turkmenistan y Kazajstan: grandes reservas de gas y petroleo</li><li>Uzbekistan: produccion de uranio</li><li>Kazajstan y Kirguistan: metales industriales, oro y tierras raras</li><li>Tierras raras: 17 minerales para energia renovable, telecom y defensa</li><li>China adquirio activos de Petrokazajistan — campo de Kumkol</li></ul></div>
+  </div>
+
+  <!-- ASIA MERIDIONAL -->
+  <div id="tp-meridional" class="tp">
+    <div class="sh"><span class="tag">SECCION 4.4 · ASIA MERIDIONAL</span><h2>Asia Meridional: Potencial Bloqueado</h2><p>India, Pakistan, Bangladesh, Sri Lanka, Nepal, Butan, Maldivas y Afganistan. ~20% de la poblacion mundial. Nivel de integracion historicamente bajo por tensiones politicas heredadas de la particion de 1947.</p></div>
+    <div class="ig">
+      <div class="ic"><h3>🏛️ SAARC (1985)</h3><ul><li>Asociacion para la Cooperacion Regional</li><li>Toma de decisiones por CONSENSO — limita la accion</li><li>Tensiones India-Pakistan bloquean iniciativas</li><li>Comercio intrarregional: solo 5-7% del total</li><li>UE: 45% | ASEAN: 22% | SAARC: 5-7%</li><li>Afganistan se incorporo en 2007</li></ul></div>
+      <div class="ic"><h3>⚡ SASEC (2001)</h3><ul><li>Programa de Cooperacion Subregional — Banco Asiatico</li><li>Motor REAL de integracion sudasiatica</li><li>Proyectos tecnicos: carreteras, aduanas, electricidad</li><li>Corredor Economico Este-Oeste: India-Bangladesh-Nepal</li><li>Digitalizacion de aduanas fronterizas</li><li>Myanmar se incorporo en 2017</li></ul></div>
+    </div>
+    <div class="blk-card"><h4>🌐 Iniciativa One South Asia — Banco Mundial</h4><p>Cooperacion tecnica para reducir costos comerciales. Redes electricas transfronterizas, energias renovables, economia digital. Segun el Banco Mundial, el comercio intrarregional podria ser 3 veces mayor reduciendo barreras. Potencial de aumentar comercio en 44,000 millones de dolares y triplicar capacidad de energia limpia hacia 2040.</p></div>
+  </div>
+
+  <!-- MUNDO ARABE -->
+  <div id="tp-arabe" class="tp">
+    <div class="sh"><span class="tag">SECCION 4.5 · MUNDO ARABE</span><h2>Mundo Arabe: Identidad sin Unidad</h2><p>Tres pilares de identidad: lengua arabe, historia compartida y religion islamica. Sin embargo, esta homogeneidad cultural contrasta con profunda desintegracion politica y economica.</p></div>
+    <div class="ig">
+      <div class="ic"><h3>📜 Liga Arabe (1945)</h3><ul><li>Organismo regional en funcionamiento mas antiguo del mundo</li><li>22 miembros — muy heterogeneos</li><li>Principio de unanimidad — sin mecanismos vinculantes</li><li>Capacidad operativa limitada: intereses nacionales sobre regionales</li><li>Impulso del Area Arabe de Libre Comercio (GAFTA)</li><li>Mas concertacion politica que integracion real</li></ul></div>
+      <div class="ic"><h3>🛢️ CCG (1981)</h3><ul><li>Arabia Saudita, Kuwait, Bahrein, Catar, EAU y Oman</li><li>Bloque de integracion mas avanzado de la region</li><li>Homogeneidad politica: 6 monarquias similares</li><li>Union aduanera, libre circulacion de ciudadanos</li><li>Escudo de la Peninsula: fuerza militar conjunta</li><li>Crisis 2017: bloqueo a Catar — resuelto en 2021</li></ul></div>
+    </div>
+    <div class="blk-card"><h4>⚠️ Cuatro factores que limitan la integracion arabe</h4><p>1. Rivalidades historicas y disputas territoriales (Marruecos-Argelia) &nbsp;|&nbsp; 2. Heterogeneidad politica (monarquias vs republicas en transicion) &nbsp;|&nbsp; 3. Dependencia de alianzas externas con EUA, Francia, China &nbsp;|&nbsp; 4. Instituciones regionales debiles sin mecanismos vinculantes</p></div>
+    <div class="blk-card" style="border-color:rgba(255,179,71,0.3)"><h4>🔗 Recurso Externo Recomendado</h4><p>Para visualizar dinamicamente las rivalidades regionales: <a href="https://www.cfr.org/global-conflict-tracker" target="_blank" rel="noopener noreferrer" style="color:var(--s);text-decoration:underline">Council on Foreign Relations — Global Conflict Tracker</a> (cfr.org). Permite explorar conflictos activos en Libia, Yemen, Siria y la disputa Marruecos-Argelia.</p></div>
+  </div>
+
+  <!-- AFRICA -->
+  <div id="tp-africa" class="tp">
+    <div class="sh"><span class="tag">SECCION 4.6 · AFRICA</span><h2>Africa: Multiples Alianzas</h2><p>La integracion africana surgio tras la descolonizacion, buscando integrar economias fragmentadas. La OUA (1963) evoluciono hacia la Union Africana (2002), un paso hacia estructuras supranacionales.</p></div>
+    <div class="ig">
+      <div class="ic"><h3>🌍 Union Africana (2002)</h3><ul><li>Sucesora de la OUA — modelo mas supranacional</li><li>Comision, Parlamento y Consejo de Paz y Seguridad</li><li>55 Estados miembros</li><li>Busca gobernanza regional y prevencion de conflictos</li><li>Zona de Libre Comercio Continental Africana (AfCFTA)</li></ul></div>
+      <div class="ic"><h3>🇬🇭 CEDEAO (1975)</h3><ul><li>Comunidad Economica de los Estados de Africa Occidental</li><li>Libre circulacion de bienes y personas</li><li>Amplio su agenda hacia temas de seguridad</li><li>Intervencion en crisis y guerras civiles de la region</li><li>Modelo que combina economia y seguridad</li></ul></div>
+    </div>
+    <div class="blk-card"><h4>🌐 Alianzas Sur-Sur: China, India y Brasil</h4><p>El comercio con China paso de 10,000 millones de dolares en los anos 80 a mas de 55,000 millones en 2006. Estas alianzas dinamizan el desarrollo pero generan nuevas dependencias por recursos primarios. Sudafrica se incorporo al grupo BRICS. Zona de Libre Comercio Tripartita (2015): COMESA + SADC + CAD.</p></div>
+    <div class="blk-card"><h4>🚧 Barreras persistentes a la integracion africana</h4><p>Renuencia a ceder soberania hacia estructuras supranacionales &nbsp;|&nbsp; Conflictos armados y fuga de cerebros &nbsp;|&nbsp; Escasez de recursos financieros para proyectos regionales &nbsp;|&nbsp; Modelos economicos extractivos heredados del colonialismo &nbsp;|&nbsp; Superposicion institucional que complica politicas continentales</p></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="tp-quiz" class="tp">
+    <div class="sh"><span class="tag">+150 XP DISPONIBLES</span><h2>Quiz Rapido — Bloque 4</h2><p>Responde antes de las misiones para ganar XP adicional.</p></div>
+    <div id="qc"></div>
+    <div class="nr"><button class="bn" onclick="goMissions()">Ir a Misiones 🎮</button></div>
+  </div>
+
+  <div class="nr" id="cnav">
+    <button class="bn sec" onclick="showSc('si')">← Inicio</button>
+    <button class="bn" onclick="goMissions()">Ir a Misiones 🎮</button>
+  </div>
+</div>
+
+<!-- MISSIONS -->
+<div id="sm" class="scr">
+  <div class="mh"><div class="ey">🌐 Corresponsal — Gran Ruta de la Seda 2.0</div><h2 id="mtit">MISION 1</h2></div>
+
+  <!-- M1 T/F -->
+  <div id="m1" class="mp on">
+    <div class="mt2">🌏 El Tablero de la Diversidad</div>
+    <p class="md2">Determina si cada afirmacion sobre Asia y Africa es VERDADERA o FALSA para ganar XP. Feedback inmediato al responder.</p>
+    <div class="tf-grid" id="tfgrid"></div>
+    <div id="m1score"></div>
+    <div class="nr">
+      <button class="bn sec" onclick="showSc('sc')">← Estudiar</button>
+      <button class="bn" onclick="checkM1()">Verificar Mision 1 ✅</button>
+    </div>
+  </div>
+
+  <!-- M2 MATCH -->
+  <div id="m2" class="mp">
+    <div class="mt2">🧩 El Puzzle de los Bloques</div>
+    <p class="md2">Selecciona un organismo (izquierda) y luego su caracteristica distintiva (derecha). Haz clic en ambos para emparejarlos.</p>
+    <div id="m2prog">Emparejados: 0 / 4</div>
+    <div class="match-wrap">
+      <div class="match-left" id="orgs"></div>
+      <div class="match-right" id="defs"></div>
+    </div>
+    <div id="m2fb"></div>
+    <div class="nr">
+      <button class="bn sec" onclick="prevM()">← Mision 1</button>
+      <button class="bn" id="bm2next" onclick="goM3()" style="display:none">Continuar → Mision 3</button>
+    </div>
+  </div>
+
+  <!-- M3 SCENARIO -->
+  <div id="m3" class="mp">
+    <div class="mt2">🛢️ El Dilema del Mundo Arabe</div>
+    <p class="md2">Como analista geopolitico, debes recomendar el bloque mas adecuado ante una crisis energetica. Elige con sabiduria.</p>
+    <div class="scenario">
+      <h4>⚡ CRISIS ENERGETICA REGIONAL</h4>
+      <p>Los precios del crudo se desplomaron y la region del Golfo Persico necesita coordinar una respuesta. Seis estados arabes exportadores de petroleo buscan <span class="hl">estabilizar el mercado energetico y negociar una postura comun</span>. ¿A que organismo recurres como analista?</p>
+    </div>
+    <div class="m3-opts" id="m3opts"></div>
+    <div id="m3fb"></div>
+    <div class="nr">
+      <button class="bn sec" onclick="prevM()">← Mision 2</button>
+      <button class="bn" id="bm3fin" onclick="showResults()" style="display:none">🏁 Ver Resultados</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="sr" class="scr">
+  <div class="rtr">🏆</div>
+  <div class="rtit">ARQUITECTO<br>MUNDIAL</div>
+  <p class="rsub">Has completado el Bloque 4: Integracion Asiatica, del Medio Oriente y del Resto del Mundo</p>
+  <div class="rstats">
+    <div class="sp">XP Total: <span id="fxp">0</span></div>
+    <div class="sp">Nivel: <span id="flvl">1</span></div>
+    <div class="sp">Misiones: <span>3/3</span></div>
+  </div>
+  <div>
+    <button class="bcert" onclick="showCert()">🏅 VER CERTIFICADO</button>
+    <button class="brep" onclick="replayApp()">↺ Jugar de nuevo</button>
+  </div>
+  <div id="cw">
+    <div id="cert">
+      <div class="cc2 tl">🌏</div>
+      <div class="cc2 br">🌏</div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" alt="Logo IEU">
+      <div class="ctt">CERTIFICADO</div>
+      <div class="cst">de logro academico · GCI Bloque 4</div>
+      <div style="font-size:10px;color:var(--mu);margin-bottom:5px">Se certifica que</div>
+      <div class="cna" id="cna">Estudiante IEU</div>
+      <div class="ctx">completo satisfactoriamente las actividades gamificadas del</div>
+      <div class="cco">Geografia del Comercio Internacional<br>Bloque 4: Integracion Asiatica, Medio Oriente y Africa</div>
+      <div class="cft">
+        <div><div class="cxp" id="cxp">0</div><div class="cfl">XP OBTENIDOS</div></div>
+        <div><div class="cfv" id="cdt">—</div><div class="cfl">FECHA</div></div>
+        <div><div class="cfv">IEU</div><div class="cfl">INSTITUCION</div></div>
+      </div>
+    </div>
+    <div style="margin-top:12px"><button class="bdl" onclick="dlCert()">⬇️ Descargar Certificado</button></div>
+  </div>
+  <div class="stripe"></div>
+</div>
+
+<script>
+// ===== STATE =====
+var xp = 0;
+var qDone = {};
+var m1Done = {};
+var m1Score = 0;
+var m2Matched = 0;
+var m2SelOrg = null;
+var m2Pairs = {};
+var m3Done = false;
+var toastT;
+
+// ===== XP =====
+function addXP(n, lbl) {
+  xp += n;
+  updateHUD();
+  toast('+' + n + ' XP — ' + lbl, 'xp');
+}
+function updateHUD() {
+  document.getElementById('xpv').textContent = xp;
+  document.getElementById('pbf').style.width = Math.min(xp / 700 * 100, 100) + '%';
+  var lbl;
+  if (xp < 150) lbl = 'ANALISTA JR';
+  else if (xp < 350) lbl = 'ESTRATEGA';
+  else if (xp < 550) lbl = 'ARQUITECTO';
+  else lbl = 'MAESTRO';
+  document.getElementById('lvlb').textContent = lbl;
+}
+function markM(n) {
+  var el = document.getElementById('mb' + n);
+  el.classList.add('done');
+  el.textContent = 'v';
+}
+
+// ===== TOAST =====
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'on ' + (type || 'ok');
+  clearTimeout(toastT);
+  toastT = setTimeout(function() { t.className = ''; }, 3000);
+}
+
+// ===== SCREENS =====
+function showSc(id) {
+  var all = document.querySelectorAll('.scr');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('on');
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0, 0);
+}
+function startApp() { showSc('sc'); initQuiz(); }
+function goMissions() { showSc('sm'); showM(1); initMissions(); }
+function showResults() { showSc('sr'); document.getElementById('fxp').textContent = xp; document.getElementById('flvl').textContent = xp < 150 ? 1 : xp < 350 ? 2 : xp < 550 ? 3 : 4; }
+
+// ===== TABS =====
+function swTab(id, btn) {
+  var bs = document.querySelectorAll('.tb');
+  var ps = document.querySelectorAll('.tp');
+  for (var i = 0; i < bs.length; i++) bs[i].classList.remove('on');
+  for (var i = 0; i < ps.length; i++) ps[i].classList.remove('on');
+  btn.classList.add('on');
+  document.getElementById('tp-' + id).classList.add('on');
+  document.getElementById('cnav').style.display = (id === 'quiz') ? 'none' : 'flex';
+}
+
+// ===== MISSIONS =====
+function showM(n) {
+  var ps = document.querySelectorAll('.mp');
+  for (var i = 0; i < ps.length; i++) ps[i].classList.remove('on');
+  document.getElementById('m' + n).classList.add('on');
+  document.getElementById('mtit').textContent = 'MISION ' + n;
+}
+function prevM() {
+  var a = document.querySelector('.mp.on');
+  if (!a) return;
+  if (a.id === 'm2') showM(1);
+  else if (a.id === 'm3') showM(2);
+}
+function goM3() { showM(3); }
+
+// ===== QUIZ =====
+var qs = [
+  { q: 'Asia alberga aproximadamente el 60% de la poblacion mundial.', opts: ['Verdadero', 'Falso', '30% solamente', 'No se menciona en el texto'], c: 0, exp: 'Correcto. Asia concentra cerca del 60% de la poblacion mundial y el 30% de la superficie terrestre (Garcia Lopez, 2018).' },
+  { q: 'La ASEAN implica cesion de soberania por parte de sus Estados miembros.', opts: ['Verdadero', 'Falso — usa cooperacion pragmatica', 'Solo ceden soberania economica', 'Depende del tratado'], c: 1, exp: 'La ASEAN NO implica cesion de soberania. Su particularidad es la cooperacion pragmatica y flexible que reafirma la soberania estatal.' },
+  { q: 'La OCS (Organizacion de Cooperacion de Shanghai) se enfoco originalmente en:', opts: ['Comercio libre entre Asia Central', 'Seguridad: terrorismo, separatismo y extremismo', 'Migracion y derechos humanos', 'Infraestructura digital'], c: 1, exp: 'La agenda fundacional de la OCS se centro en seguridad — lucha contra las "tres fuerzas del mal": terrorismo, separatismo y extremismo.' },
+  { q: 'El CCG es mas avanzado que la Liga Arabe en integracion porque:', opts: ['Tiene mas miembros y presupuesto', 'Sus miembros tienen modelos politicos similares y dependencia comun del crudo', 'Cuenta con un ejercito propio mas grande', 'Fue fundado antes que la Liga Arabe'], c: 1, exp: 'El CCG es mas cohesionado por la homogeneidad de sus 6 monarquias y la dependencia comun del sector energetico, facilitando la cooperacion.' },
+  { q: 'La Union Africana fue creada en el ano:', opts: ['1963', '1975', '2002', '1945'], c: 2, exp: 'La Union Africana fue creada en 2002 como sucesora de la Organizacion de la Unidad Africana (OUA), avanzando hacia un modelo supranacional.' },
+  { q: 'SASEC difiere de SAARC principalmente porque:', opts: ['Tiene mas presupuesto del Banco Mundial', 'Se enfoca en proyectos tecnicos de conectividad, no en resolver disputas politicas', 'Solo incluye a India y China', 'Usa el principio de unanimidad'], c: 1, exp: 'SASEC (Banco Asiatico de Desarrollo) ejecuta proyectos concretos de infraestructura y energia, sin resolver disputas entre Estados — por eso es considerado el motor real de integracion sudasiatica.' }
+];
+
+function initQuiz() {
+  var c = document.getElementById('qc');
+  if (c.innerHTML !== '') return;
+  var h = '';
+  for (var i = 0; i < qs.length; i++) {
+    h += '<div class="mq" id="q' + i + '"><h4>Pregunta ' + (i+1) + '</h4>';
+    h += '<p class="mq-q">' + qs[i].q + '</p><div class="mq-os">';
+    for (var j = 0; j < qs[i].opts.length; j++) {
+      h += '<button class="mq-o" onclick="ansQ(' + i + ',' + j + ')">' + qs[i].opts[j] + '</button>';
+    }
+    h += '</div><div class="mq-fb" id="qf' + i + '"></div></div>';
+  }
+  c.innerHTML = h;
+}
+
+function ansQ(qi, oi) {
+  if (qDone[qi]) return;
+  qDone[qi] = true;
+  var q = qs[qi];
+  var os = document.querySelectorAll('#q' + qi + ' .mq-o');
+  for (var i = 0; i < os.length; i++) os[i].disabled = true;
+  var fb = document.getElementById('qf' + qi);
+  if (oi === q.c) {
+    os[oi].classList.add('ok');
+    fb.className = 'mq-fb on ok';
+    fb.textContent = 'Correcto. ' + q.exp;
+    addXP(25, 'Respuesta correcta');
+  } else {
+    os[oi].classList.add('ko');
+    os[q.c].classList.add('ok');
+    fb.className = 'mq-fb on ko';
+    fb.textContent = 'Incorrecto. ' + q.exp;
+  }
+}
+
+// ===== MISSION 1: TRUE/FALSE =====
+var tfFacts = [
+  { id: 'tf1', fact: 'Asia alberga aproximadamente el 60% de la poblacion mundial y ocupa el 30% de la superficie terrestre.', ans: true, exp: 'Correcto. Asia es el continente mas extenso y poblado del planeta.' },
+  { id: 'tf2', fact: 'Africa es el continente con mayor numero de Estados en el mundo, con 54 paises.', ans: true, exp: 'Correcto. Africa lidera con 54 paises, seguida de Asia con 48, Europa 45, America 35 y Oceania 14.' },
+  { id: 'tf3', fact: 'Asia Central es codiciada principalmente por sus avances tecnologicos en inteligencia artificial.', ans: false, exp: 'Falso. Asia Central es estrategica por sus abundantes reservas de petroleo, gas natural, minerales y tierras raras, no por IA.' },
+  { id: 'tf4', fact: 'Tokio, Seoul y Shanghai son ejemplos de metropolis que funcionan como polos de atraccion economica en Asia.', ans: true, exp: 'Correcto. Estas megaciudades son centros de dinamismo economico y cultural en el continente asiatico.' },
+  { id: 'tf5', fact: 'En Africa se habla aproximadamente la mitad de las lenguas del mundo.', ans: false, exp: 'Falso. En Africa se habla aproximadamente UN TERCIO (1/3) de las lenguas del mundo, no la mitad.' },
+  { id: 'tf6', fact: 'La ASEAN, a diferencia de la Union Europea, no implica cesion de soberania por parte de sus miembros.', ans: true, exp: 'Correcto. La caracteristica distintiva de la ASEAN es la cooperacion pragmatica y flexible que reafirma la soberania.' }
+];
+
+function initM1() {
+  var g = document.getElementById('tfgrid');
+  if (g.innerHTML !== '') return;
+  var h = '';
+  for (var i = 0; i < tfFacts.length; i++) {
+    var f = tfFacts[i];
+    h += '<div class="tf-card" id="tfc' + i + '">';
+    h += '<p class="fact">' + f.fact + '</p>';
+    h += '<div class="tf-btns">';
+    h += '<button class="tf-btn v" onclick="ansTF(' + i + ',true)">✓ Verdadero</button>';
+    h += '<button class="tf-btn f" onclick="ansTF(' + i + ',false)">✗ Falso</button>';
+    h += '</div>';
+    h += '<div class="tf-fb" id="tff' + i + '"></div>';
+    h += '</div>';
+  }
+  g.innerHTML = h;
+}
+
+function ansTF(idx, val) {
+  if (m1Done[idx] !== undefined) return;
+  m1Done[idx] = val;
+  var f = tfFacts[idx];
+  var card = document.getElementById('tfc' + idx);
+  var fb = document.getElementById('tff' + idx);
+  var btns = card.querySelectorAll('.tf-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
+  if (val === f.ans) {
+    card.className = 'tf-card answered-ok';
+    fb.className = 'tf-fb on ok';
+    fb.textContent = f.exp;
+    m1Score++;
+    addXP(20, 'Dato clasificado correctamente');
+  } else {
+    card.className = 'tf-card answered-ko';
+    fb.className = 'tf-fb on ko';
+    fb.textContent = 'Incorrecto. ' + f.exp;
+  }
+}
+
+function checkM1() {
+  var answered = Object.keys(m1Done).length;
+  if (answered < tfFacts.length) {
+    toast('Responde todos los enunciados primero', 'ko');
+    return;
+  }
+  document.getElementById('m1score').textContent = 'Resultado: ' + m1Score + '/' + tfFacts.length + ' correctos';
+  if (m1Score >= 4) {
+    addXP(m1Score * 15, 'Mision 1 — Tablero de la Diversidad');
+    markM(1);
+    toast('Mision 1 Cumplida!', 'ok');
+    setTimeout(function() { showM(2); }, 1100);
+  } else {
+    toast('Necesitas al menos 4 correctas. ' + m1Score + '/' + tfFacts.length, 'ko');
+  }
+}
+
+// ===== MISSION 2: MATCH =====
+var orgsData = [
+  { id: 'o1', name: 'ASEAN', defId: 'd1' },
+  { id: 'o2', name: 'OCS', defId: 'd2' },
+  { id: 'o3', name: 'SAARC', defId: 'd3' },
+  { id: 'o4', name: 'Union Africana', defId: 'd4' }
+];
+var defsData = [
+  { id: 'd1', text: 'Cooperacion pragmatica y flexible sin cesion de soberania. Referente de regionalismo abierto asiatico.' },
+  { id: 'd2', text: 'Liderada por China y Rusia. Enfocada originalmente en seguridad y ahora en infraestructura y economia.' },
+  { id: 'd3', text: 'Toma de decisiones por consenso. Tensiones India-Pakistan bloquean iniciativas regionales.' },
+  { id: 'd4', text: 'Modelo hacia la supranacionalidad: Parlamento, Comision y Consejo de Paz y Seguridad (2002).' }
+];
+
+function initM2() {
+  var oc = document.getElementById('orgs');
+  var dc = document.getElementById('defs');
+  if (oc.children.length > 0) return;
+  var shuffledDefs = defsData.slice().sort(function() { return Math.random() - 0.5; });
+  for (var i = 0; i < orgsData.length; i++) {
+    (function(org) {
+      var el = document.createElement('div');
+      el.className = 'org-chip';
+      el.id = 'org-' + org.id;
+      el.textContent = org.name;
+      el.onclick = function() { selectOrg(org.id, el); };
+      oc.appendChild(el);
+    })(orgsData[i]);
+  }
+  for (var i = 0; i < shuffledDefs.length; i++) {
+    (function(def) {
+      var el = document.createElement('div');
+      el.className = 'def-chip';
+      el.id = 'def-' + def.id;
+      el.textContent = def.text;
+      el.onclick = function() { selectDef(def.id, el); };
+      dc.appendChild(el);
+    })(shuffledDefs[i]);
+  }
+}
+
+function selectOrg(oid, el) {
+  if (el.classList.contains('matched-ok')) return;
+  var prev = document.querySelector('.org-chip.selected');
+  if (prev) prev.classList.remove('selected');
+  el.classList.add('selected');
+  m2SelOrg = oid;
+}
+
+function selectDef(did, el) {
+  if (!m2SelOrg) { toast('Primero selecciona un organismo', 'ko'); return; }
+  if (el.classList.contains('matched-ok')) return;
+  var orgEl = document.getElementById('org-' + m2SelOrg);
+  var orgObj = null;
+  for (var i = 0; i < orgsData.length; i++) {
+    if (orgsData[i].id === m2SelOrg) { orgObj = orgsData[i]; break; }
+  }
+  if (!orgObj) return;
+  var fb = document.getElementById('m2fb');
+  if (orgObj.defId === did) {
+    orgEl.classList.remove('selected');
+    orgEl.classList.add('matched-ok');
+    el.classList.add('matched-ok');
+    orgEl.style.pointerEvents = 'none';
+    el.style.pointerEvents = 'none';
+    m2Matched++;
+    document.getElementById('m2prog').textContent = 'Emparejados: ' + m2Matched + ' / 4';
+    addXP(50, orgObj.name + ' emparejado correctamente');
+    fb.className = 'm2fb on ok';
+    fb.textContent = 'Correcto! ' + orgObj.name + ': ' + el.textContent.substring(0, 80) + '...';
+    if (m2Matched >= 4) {
+      markM(2);
+      toast('Mision 2 Cumplida!', 'ok');
+      document.getElementById('bm2next').style.display = 'inline-block';
+    }
+  } else {
+    orgEl.classList.add('matched-ko');
+    el.classList.add('matched-ko');
+    fb.className = 'm2fb on ko';
+    var hint = '';
+    if (m2SelOrg === 'o1') hint = 'Recuerda: la ASEAN prioriza la flexibilidad nacional sin ceder soberania, a diferencia de la UE.';
+    else if (m2SelOrg === 'o2') hint = 'La OCS fue fundada por China y Rusia con foco en seguridad. Ha evolucionado hacia infraestructura.';
+    else if (m2SelOrg === 'o3') hint = 'La SAARC usa el principio de consenso, lo que permite que las tensiones India-Pakistan bloqueen todo.';
+    else hint = 'La Union Africana (2002) creo un Parlamento y un Consejo de Paz — modelo mas supranacional.';
+    fb.textContent = 'Incorrecto. ' + hint;
+    setTimeout(function() {
+      orgEl.classList.remove('matched-ko', 'selected');
+      el.classList.remove('matched-ko');
+    }, 1200);
+  }
+  m2SelOrg = null;
+}
+
+// ===== MISSION 3: SCENARIO =====
+var m3Opts = [
+  { id: 'a', title: 'Liga Arabe (1945)', body: 'Organismo mas antiguo, 22 miembros heterogeneos. Principio de unanimidad y sin mecanismos vinculantes.', correct: false },
+  { id: 'b', title: 'Consejo de Cooperacion del Golfo (CCG)', body: 'Seis monarquias arabes con modelos politicos similares y economias dependientes del sector energetico. Union aduanera y Escudo de la Peninsula.', correct: true },
+  { id: 'c', title: 'ASEAN', body: 'Bloque del Sudeste Asiatico. Cooperacion pragmatica sin cesion de soberania. No tiene competencia en el Golfo Persico.', correct: false },
+  { id: 'd', title: 'Union Africana', body: 'Organizacion continental africana con 55 miembros. No tiene jurisdiccion ni interes directo en el mercado petrolero arabe.', correct: false }
+];
+
+function initM3() {
+  var c = document.getElementById('m3opts');
+  if (c.children.length > 0) return;
+  for (var i = 0; i < m3Opts.length; i++) {
+    (function(opt) {
+      var el = document.createElement('div');
+      el.className = 'm3o';
+      el.innerHTML = '<h5>' + opt.title + '</h5><p>' + opt.body + '</p>';
+      el.onclick = function() { ansM3(opt, el); };
+      c.appendChild(el);
+    })(m3Opts[i]);
+  }
+}
+
+function ansM3(opt, el) {
+  if (m3Done) return;
+  m3Done = true;
+  var opts = document.querySelectorAll('.m3o');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var fb = document.getElementById('m3fb');
+  if (opt.correct) {
+    el.classList.add('ok');
+    fb.className = 'm3fb on ok';
+    fb.textContent = 'Excelente analisis! El CCG es la respuesta correcta. Los 6 paises comparten modelos politicos similares (monarquias) y economias profundamente dependientes del sector energetico. Esta homogeneidad facilita la cooperacion para estabilizar precios del crudo. Nota clave: aunque la lengua arabe y la religion islamica son pilares de identidad compartida, NO garantizan proyectos politicos conjuntos en toda la region arabe.';
+    addXP(300, 'Mision 3 — Dilema del Mundo Arabe resuelto!');
+    markM(3);
+    toast('Mision 3 Cumplida! Eres Arquitecto de Integracion!', 'ok');
+  } else {
+    el.classList.add('ko');
+    fb.className = 'm3fb on ko';
+    var msg = '';
+    if (opt.id === 'a') msg = 'La Liga Arabe tiene capacidad operativa muy limitada — principio de unanimidad y sin mecanismos vinculantes. No es el instrumento adecuado para estabilizar mercados energeticos.';
+    else if (opt.id === 'c') msg = 'La ASEAN es el bloque del Sudeste Asiatico. No tiene competencia ni jurisdiccion sobre el mercado petroleo del Golfo Persico.';
+    else msg = 'La Union Africana opera en el continente africano. No tiene relacion directa con la estabilidad energetica del Golfo Persico.';
+    fb.textContent = 'Incorrecto. ' + msg + ' El CCG es el bloque mas avanzado por la homogeneidad de sus monarquias y dependencia comun del crudo.';
+    addXP(60, 'Analisis geopolitico completado');
+    markM(3);
+  }
+  document.getElementById('bm3fin').style.display = 'inline-block';
+}
+
+// ===== CERTIFICATE =====
+function showCert() {
+  var w = document.getElementById('cw');
+  w.classList.add('on');
+  var name = (document.getElementById('stn').value.trim() || 'Estudiante IEU').toUpperCase();
+  document.getElementById('cna').textContent = name;
+  document.getElementById('cxp').textContent = xp;
+  document.getElementById('cdt').textContent = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+  w.scrollIntoView({ behavior: 'smooth' });
+}
+
+function dlCert() {
+  if (typeof html2canvas !== 'undefined') {
+    html2canvas(document.getElementById('cert'), { backgroundColor: '#0d0804', scale: 2 }).then(function(c) {
+      var a = document.createElement('a');
+      a.download = 'certificado_GCI_bloque4.png';
+      a.href = c.toDataURL('image/png');
+      a.click();
+    });
+  } else {
+    toast('Descarga no disponible en este entorno', 'ko');
+  }
+}
+
+// ===== REPLAY =====
+function replayApp() {
+  xp = 0; qDone = {}; m1Done = {}; m1Score = 0;
+  m2Matched = 0; m2SelOrg = null; m2Pairs = {};
+  m3Done = false;
+  updateHUD();
+  var mbs = ['mb1','mb2','mb3'];
+  for (var i = 0; i < mbs.length; i++) {
+    var mb = document.getElementById(mbs[i]);
+    mb.classList.remove('done');
+    mb.textContent = i + 1;
+  }
+  document.getElementById('qc').innerHTML = '';
+  document.getElementById('tfgrid').innerHTML = '';
+  document.getElementById('m1score').textContent = '';
+  document.getElementById('orgs').innerHTML = '';
+  document.getElementById('defs').innerHTML = '';
+  document.getElementById('m3opts').innerHTML = '';
+  document.getElementById('m2fb').className = 'm2fb';
+  document.getElementById('m3fb').className = 'm3fb';
+  document.getElementById('m2prog').textContent = 'Emparejados: 0 / 4';
+  document.getElementById('bm2next').style.display = 'none';
+  document.getElementById('bm3fin').style.display = 'none';
+  document.getElementById('cw').classList.remove('on');
+  document.getElementById('stn').value = '';
+  document.getElementById('cnav').style.display = 'flex';
+  showSc('si');
+}
+
+function initMissions() {
+  initM1();
+  initM2();
+  initM3();
+}
+</script>
+</body>
+</html>
