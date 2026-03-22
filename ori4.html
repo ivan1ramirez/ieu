@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SPA educativa IEU: México en organismos y tratados internacionales — ALADI, T-MEC, APEC, OPEP+. Aprende con misiones gamificadas en 60 minutos.">
+<title>ORI · Bloque 4 | México en el Mundo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --bg: #0D0804;
+  --primary: #E8440A;
+  --secondary: #FF8040;
+  --amber: #FFB347;
+  --surface: #1a1008;
+  --surface2: #251608;
+  --text: #f5ede3;
+  --muted: #a08060;
+  --success: #4ade80;
+  --danger: #f87171;
+  --card: rgba(232,68,10,0.07);
+  --border: rgba(232,68,10,0.25);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(232,68,10,0.15) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,8,4,0.93);border-bottom:2px solid var(--primary);backdrop-filter:blur(12px);padding:9px 20px;display:flex;align-items:center;gap:14px;font-size:13px;flex-wrap:wrap}
+#hud img{height:30px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(232,68,10,0.5))}
+.hud-title{font-family:'Bebas Neue';font-size:17px;color:var(--secondary);letter-spacing:1px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xp-block{display:flex;align-items:center;gap:6px}
+.xp-label{color:var(--amber);font-weight:700;font-size:11px;letter-spacing:1px}
+.xp-val{color:var(--primary);font-weight:900;font-size:18px;font-family:'Bebas Neue'}
+.lvl-badge{background:linear-gradient(135deg,var(--primary),var(--amber));color:#000;font-weight:900;font-size:11px;padding:3px 10px;border-radius:20px;letter-spacing:1px;white-space:nowrap}
+#progress-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;max-width:180px;min-width:60px}
+#progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--amber));border-radius:3px;transition:width .6s ease;width:0%}
+.mission-badges{display:flex;gap:5px}
+.m-badge{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .3s;background:var(--surface)}
+.m-badge.done{border-color:var(--primary);background:rgba(232,68,10,0.2)}
+
+/* SCREENS */
+.screen{min-height:100vh;display:none;padding-top:62px;position:relative;z-index:1}
+.screen.active{display:flex;flex-direction:column}
+
+/* TOAST */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--border);border-radius:50px;padding:11px 26px;font-weight:700;font-size:13px;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:999;pointer-events:none;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.success{border-color:var(--success);color:var(--success);background:rgba(74,222,128,0.1)}
+#toast.error{border-color:var(--danger);color:var(--danger);background:rgba(248,113,113,0.1)}
+#toast.xp{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.1)}
+
+/* ===== INTRO ===== */
+#screen-intro{align-items:center;justify-content:center;text-align:center;padding:80px 24px 0}
+.intro-logo{height:56px;object-fit:contain;margin-bottom:24px;filter:drop-shadow(0 0 20px rgba(232,68,10,0.4))}
+.intro-eyebrow{color:var(--secondary);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+.intro-title{font-family:'Bebas Neue';font-size:clamp(52px,9vw,100px);line-height:.92;background:linear-gradient(135deg,#fff 25%,var(--secondary) 65%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:18px}
+.intro-sub{color:var(--muted);font-size:15px;max-width:520px;margin:0 auto 28px;line-height:1.65}
+.name-wrap{margin-bottom:28px}
+.name-wrap label{display:block;color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.name-wrap input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 16px;color:var(--text);font-family:'Outfit';font-size:14px;width:100%;max-width:340px;outline:none;transition:border-color .2s}
+.name-wrap input:focus{border-color:var(--primary)}
+.name-wrap input::placeholder{color:var(--muted)}
+.missions-preview{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.mp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;text-align:left;min-width:170px;max-width:210px;transition:transform .2s,border-color .2s}
+.mp-card:hover{transform:translateY(-4px);border-color:var(--primary)}
+.mp-card .icon{font-size:26px;margin-bottom:6px}
+.mp-card .mtitle{font-weight:700;font-size:12px;color:var(--secondary);margin-bottom:3px}
+.mp-card .mdesc{color:var(--muted);font-size:11px;line-height:1.4}
+.btn-start{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;border:none;padding:15px 48px;border-radius:50px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 0 30px rgba(232,68,10,0.4)}
+.btn-start:hover{transform:scale(1.05);box-shadow:0 0 50px rgba(232,68,10,0.6)}
+.intro-stripe{width:100%;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--amber));height:6px;margin-top:56px}
+
+/* ===== CONTENT SCREEN ===== */
+#screen-content{padding:74px 20px 40px;max-width:960px;margin:0 auto;width:100%}
+.tab-nav{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:5px;margin-bottom:24px;overflow-x:auto;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;min-width:70px;padding:9px 12px;background:transparent;border:none;color:var(--muted);font-family:'Outfit';font-weight:600;font-size:12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab-btn.active{background:var(--primary);color:#fff}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+.section-hero{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:16px;padding:24px 28px;margin-bottom:20px}
+.section-hero .org-tag{display:inline-block;background:var(--primary);color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;padding:3px 11px;border-radius:20px;margin-bottom:10px}
+.section-hero h2{font-family:'Bebas Neue';font-size:38px;color:var(--secondary);margin-bottom:8px;line-height:1}
+.section-hero p{color:var(--muted);font-size:13px;line-height:1.7}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-bottom:18px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+.info-card h3{color:var(--amber);font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.info-card ul{list-style:none}
+.info-card ul li{padding:5px 0;font-size:12px;color:var(--text);border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.5}
+.info-card ul li:last-child{border-bottom:none}
+.info-card ul li::before{content:'▸ ';color:var(--primary)}
+
+.rights-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+@media(max-width:580px){.rights-grid{grid-template-columns:1fr}}
+.rights-col{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.rights-col.derechos{border-color:rgba(74,222,128,0.3)}
+.rights-col.obligaciones{border-color:rgba(248,113,113,0.3)}
+.rights-col h3{font-size:13px;font-weight:700;margin-bottom:10px}
+.rights-col.derechos h3{color:var(--success)}
+.rights-col.obligaciones h3{color:var(--danger)}
+.rights-col ul{list-style:none}
+.rights-col ul li{font-size:12px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);line-height:1.4;color:var(--muted)}
+.rights-col ul li::before{content:'• '}
+
+.timeline{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.tl-item{display:flex;gap:14px;align-items:flex-start;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;border-left:3px solid var(--primary)}
+.tl-year{background:var(--primary);color:#fff;font-weight:800;font-size:11px;padding:3px 8px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.tl-body .tl-title{font-weight:600;font-size:13px;color:var(--secondary)}
+.tl-body .tl-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+.nav-row{display:flex;gap:10px;margin-top:24px;justify-content:flex-end}
+.btn-nav{background:var(--primary);color:#fff;border:none;padding:10px 26px;border-radius:8px;font-family:'Outfit';font-weight:700;font-size:13px;cursor:pointer;transition:background .2s}
+.btn-nav:hover{background:var(--secondary)}
+.btn-nav.secondary{background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.btn-nav.secondary:hover{border-color:var(--primary);color:var(--text)}
+
+/* CONTENT QUIZ */
+.mini-quiz{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-top:18px}
+.mini-quiz h4{color:var(--amber);font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.quiz-q{font-size:14px;color:var(--text);margin-bottom:12px;font-weight:500;line-height:1.5}
+.quiz-options{display:flex;flex-direction:column;gap:7px}
+.quiz-opt{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;transition:all .2s;text-align:left;color:var(--text)}
+.quiz-opt:hover{border-color:var(--secondary);background:rgba(255,128,64,0.06)}
+.quiz-opt.correct{border-color:var(--success);background:rgba(74,222,128,0.08);color:var(--success)}
+.quiz-opt.wrong{border-color:var(--danger);background:rgba(248,113,113,0.08);color:var(--danger)}
+.quiz-opt:disabled{cursor:default}
+.quiz-feedback{margin-top:10px;font-size:12px;padding:9px;border-radius:7px;display:none;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+.quiz-feedback.ko{background:rgba(248,113,113,0.08);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+
+/* ===== MISSIONS SCREEN ===== */
+#screen-missions{padding:74px 20px 40px;max-width:880px;margin:0 auto;width:100%}
+.mission-header{text-align:center;margin-bottom:28px}
+.mission-header .eyebrow{color:var(--secondary);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.mission-header h2{font-family:'Bebas Neue';font-size:52px;color:var(--text);line-height:1}
+.mission-panel{display:none}
+.mission-panel.active{display:block}
+.m-title{font-family:'Bebas Neue';font-size:30px;color:var(--secondary);margin-bottom:5px}
+.m-desc{color:var(--muted);font-size:13px;margin-bottom:22px;line-height:1.5}
+
+/* MISSION 1 - DRAG & DROP */
+.classify-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+@media(max-width:600px){.classify-wrap{grid-template-columns:1fr}}
+.chip-pool{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+.chip-pool h4{color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.drop-zones{display:flex;flex-direction:column;gap:10px}
+.drop-zone{background:var(--card);border:2px dashed var(--border);border-radius:10px;padding:12px;min-height:72px;transition:border-color .2s,background .2s}
+.drop-zone.drag-over{border-color:var(--primary);background:rgba(232,68,10,0.1)}
+.drop-zone h4{font-size:11px;color:var(--secondary);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.zone-chips{display:flex;flex-wrap:wrap;gap:4px}
+.drag-chip{display:inline-flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:5px 12px;font-size:11px;font-weight:600;cursor:grab;margin:3px;transition:all .2s;user-select:none}
+.drag-chip:hover{border-color:var(--secondary);background:rgba(255,128,64,0.1)}
+.drag-chip.dragging{opacity:.4}
+.drag-chip.placed-correct{border-color:var(--success);background:rgba(74,222,128,0.1);color:var(--success);cursor:default}
+.drag-chip.placed-wrong{border-color:var(--danger);background:rgba(248,113,113,0.1);color:var(--danger)}
+#m1-result{text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px;min-height:20px}
+
+/* MISSION 2 - T-MEC SIMULATOR */
+.scenario-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:18px}
+.scenario-box h4{color:var(--amber);font-size:13px;font-weight:700;margin-bottom:8px}
+.scenario-box p{font-size:13px;color:var(--muted);line-height:1.6}
+.scenario-box .hl{color:var(--secondary);font-weight:600}
+.step-label{color:var(--amber);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;font-weight:700}
+.options-stack{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.sim-opt{background:rgba(255,255,255,0.03);border:2px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all .25s;position:relative}
+.sim-opt:hover{border-color:var(--secondary);background:rgba(255,128,64,0.05)}
+.sim-opt.selected-correct{border-color:var(--success);background:rgba(74,222,128,0.08)}
+.sim-opt.selected-wrong{border-color:var(--danger);background:rgba(248,113,113,0.08)}
+.sim-opt h5{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--text)}
+.sim-opt p{font-size:12px;color:var(--muted);line-height:1.5}
+.sim-opt .opt-tag{position:absolute;top:10px;right:12px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px}
+.sim-opt.selected-correct .opt-tag{background:var(--success);color:#000;display:block}
+.sim-opt.selected-wrong .opt-tag{background:var(--danger);color:#000;display:block}
+.opt-tag{display:none}
+.sim-feedback{padding:14px;border-radius:10px;font-size:13px;line-height:1.6;margin-bottom:14px;display:none}
+.sim-feedback.show{display:block}
+.sim-feedback.ok{background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+.sim-feedback.ko{background:rgba(248,113,113,0.08);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+
+/* MISSION 3 - OPEC+ CRISIS */
+.crisis-board{background:linear-gradient(135deg,rgba(232,68,10,0.12),rgba(255,128,64,0.05));border:1px solid var(--primary);border-radius:14px;padding:22px;margin-bottom:20px}
+.crisis-board h4{color:var(--primary);font-family:'Bebas Neue';font-size:28px;margin-bottom:10px}
+.crisis-board .crisis-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.crisis-stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.cstat{background:rgba(0,0,0,0.3);border-radius:10px;padding:10px 16px;text-align:center}
+.cstat .cv{font-family:'Bebas Neue';font-size:26px;color:var(--primary)}
+.cstat .cl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+@media(max-width:560px){.actions-grid{grid-template-columns:1fr}}
+.action-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .25s}
+.action-card:hover{border-color:var(--secondary);transform:translateY(-3px)}
+.action-card.chosen-correct{border-color:var(--success);background:rgba(74,222,128,0.06)}
+.action-card.chosen-wrong{border-color:var(--danger);background:rgba(248,113,113,0.06)}
+.action-card h5{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.action-card p{font-size:12px;color:var(--muted);line-height:1.5}
+.m3-feedback{display:none;padding:16px;border-radius:10px;font-size:13px;line-height:1.7;margin-bottom:14px}
+.m3-feedback.show{display:block}
+.m3-feedback.ok{background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+.m3-feedback.ko{background:rgba(248,113,113,0.08);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+.m3-outcome{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;display:none}
+.m3-outcome.show{display:block}
+.m3-outcome h5{color:var(--amber);font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.m3-outcome p{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ===== RESULTS ===== */
+#screen-results{align-items:center;justify-content:center;text-align:center;padding:80px 24px 0}
+.results-trophy{font-size:76px;margin-bottom:14px;animation:bounce 1s ease infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+.results-title{font-family:'Bebas Neue';font-size:clamp(44px,8vw,80px);background:linear-gradient(135deg,var(--secondary),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+.results-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.stat-pill{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:10px 24px;font-size:13px}
+.stat-pill span{color:var(--primary);font-weight:800;font-family:'Bebas Neue';font-size:20px}
+.btn-cert{background:linear-gradient(135deg,var(--primary),var(--amber));color:#000;font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;border:none;padding:13px 38px;border-radius:50px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 0 30px rgba(232,68,10,0.4);margin:7px}
+.btn-cert:hover{transform:scale(1.04)}
+.btn-replay{background:transparent;color:var(--muted);border:1px solid var(--border);font-family:'Outfit';font-size:13px;font-weight:600;padding:11px 30px;border-radius:50px;cursor:pointer;margin:7px;transition:border-color .2s,color .2s}
+.btn-replay:hover{border-color:var(--secondary);color:var(--secondary)}
+#cert-wrap{display:none;margin:26px auto;max-width:700px}
+#cert-wrap.visible{display:block}
+#certificate{background:linear-gradient(135deg,#1a0f05,#0d0804);border:3px solid var(--primary);border-radius:16px;padding:38px;text-align:center;position:relative;overflow:hidden}
+#certificate::before{content:'';position:absolute;inset:8px;border:1px solid rgba(232,68,10,0.3);border-radius:10px;pointer-events:none}
+.cert-corner{position:absolute;font-size:70px;opacity:.05}
+.cert-corner.tl{top:8px;left:8px}
+.cert-corner.br{bottom:8px;right:8px}
+#certificate img{height:46px;object-fit:contain;margin-bottom:14px}
+.cert-title{font-family:'Bebas Neue';font-size:44px;color:var(--primary);letter-spacing:4px;margin-bottom:3px}
+.cert-subtitle{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.cert-student{font-family:'Bebas Neue';font-size:34px;color:var(--amber);margin-bottom:6px}
+.cert-text{font-size:12px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto 20px}
+.cert-course{font-weight:700;font-size:15px;color:var(--secondary);margin-bottom:20px}
+.cert-footer{display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--border);padding-top:18px}
+.cf-val{font-weight:700;color:var(--text);font-size:13px}
+.cf-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.cert-xp-big{font-family:'Bebas Neue';font-size:36px;color:var(--primary)}
+.btn-download{background:var(--surface);color:var(--secondary);border:1px solid var(--primary);font-family:'Outfit';font-size:12px;font-weight:700;padding:9px 26px;border-radius:50px;cursor:pointer;margin:7px;transition:all .2s}
+.btn-download:hover{background:var(--primary);color:#fff}
+.results-stripe{width:100%;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--amber));height:6px;margin-top:56px}
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div id="hud">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" alt="Logo Universidad IEU, institución educativa privada de México con enfoque en negocios y comercio internacional">
+  <div class="hud-title">ORI · BLOQUE 4 · EMBAJADOR DEL COMERCIO</div>
+  <div class="xp-block"><span class="xp-label">XP</span><span class="xp-val" id="xp-display">0</span></div>
+  <div id="progress-bar-wrap"><div id="progress-bar-fill"></div></div>
+  <div class="lvl-badge" id="lvl-badge">NIV 1</div>
+  <div class="mission-badges">
+    <div class="m-badge" id="mb1" title="Misión 1: Rompecabezas de Alianzas">1</div>
+    <div class="m-badge" id="mb2" title="Misión 2: Simulador T-MEC">2</div>
+    <div class="m-badge" id="mb3" title="Misión 3: Crisis Energética OPEP+">3</div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<!-- ===== INTRO ===== -->
+<div id="screen-intro" class="screen active">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" class="intro-logo" alt="Universidad IEU - Institución educativa líder en México">
+  <div class="intro-eyebrow">Organismos y Regulación Internacional</div>
+  <div class="intro-title">MÉXICO<br>EN EL<br>MUNDO</div>
+  <p class="intro-sub">Eres el nuevo Jefe de Negociación Comercial de México. Consolida la posición del país, diversifica mercados y defiende la soberanía ante crisis globales.</p>
+  <div class="name-wrap">
+    <label>Tu nombre (para el certificado)</label>
+    <input type="text" id="student-name" placeholder="Ej. Carlos Méndez Ríos" maxlength="50">
+  </div>
+  <div class="missions-preview">
+    <div class="mp-card"><div class="icon">🧩</div><div class="mtitle">Misión 1</div><div class="mdesc">Rompecabezas de Alianzas — Clasifica organismos y zonas de influencia de México</div></div>
+    <div class="mp-card"><div class="icon">🚗</div><div class="mtitle">Misión 2</div><div class="mdesc">Simulador T-MEC — Decide las reglas automotrices correctas y gana 200 XP</div></div>
+    <div class="mp-card"><div class="icon">🛢️</div><div class="mtitle">Misión 3</div><div class="mdesc">Crisis OPEP+ — Negocia el recorte de barriles como México lo hizo en 2020</div></div>
+  </div>
+  <button class="btn-start" onclick="startJourney()">🌎 INICIAR MISIÓN</button>
+  <div class="intro-stripe"></div>
+</div>
+
+<!-- ===== CONTENT SCREEN ===== -->
+<div id="screen-content" class="screen">
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('derechos',this)">⚖️ Derechos y Oblig.</button>
+    <button class="tab-btn" onclick="switchTab('latam',this)">🌎 ALADI / G-3</button>
+    <button class="tab-btn" onclick="switchTab('europa',this)">🇪🇺 Europa & UE</button>
+    <button class="tab-btn" onclick="switchTab('pacifico',this)">🌊 Cuenca Pacífico</button>
+    <button class="tab-btn" onclick="switchTab('opep',this)">🛢️ G-77 & OPEP</button>
+    <button class="tab-btn" onclick="switchTab('tmec',this)">🤝 T-MEC</button>
+    <button class="tab-btn" onclick="switchTab('quiz-c',this)">⚡ Quiz</button>
+  </div>
+
+  <!-- TAB DERECHOS -->
+  <div id="tab-derechos" class="tab-panel active">
+    <div class="section-hero">
+      <span class="org-tag">BLOQUE 4 · 6.1</span>
+      <h2>Obligaciones y Derechos en la Globalización</h2>
+      <p>Al integrarse en la red global, México ha asumido compromisos que equilibran beneficios comerciales con responsabilidades legislativas, laborales y ambientales.</p>
+    </div>
+    <div class="rights-grid">
+      <div class="rights-col derechos">
+        <h3>✅ Derechos de México</h3>
+        <ul>
+          <li>Acceso preferencial a mercados sin aranceles (T-MEC, TLC-UE, Alianza del Pacífico)</li>
+          <li>Protección de inversiones extranjeras directas</li>
+          <li>Participación en foros globales: ONU, OMC, OCDE</li>
+          <li>Cooperación tecnológica y educativa internacional</li>
+          <li>Protección consular de ciudadanos en el extranjero</li>
+          <li>Regulación y defensa del medio ambiente</li>
+        </ul>
+      </div>
+      <div class="rights-col obligaciones">
+        <h3>⚠️ Obligaciones de México</h3>
+        <ul>
+          <li>Evitar prácticas desleales: dumping o subsidios ilegales</li>
+          <li>Garantizar derechos laborales y salarios dignos</li>
+          <li>Cumplir normas ambientales (Acuerdo de París)</li>
+          <li>Respetar derechos humanos universales</li>
+          <li>Regular inversión extranjera con responsabilidad social</li>
+          <li>Fortalecer el combate al narcotráfico y lavado de dinero</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>💡 ¿Qué es el Multilateralismo?</h3>
+        <ul>
+          <li>Cooperación entre 3 o más países para un objetivo común</li>
+          <li>México es miembro activo: ONU, OEA, OCDE, OMC, FMI</li>
+          <li>Instrumento clave de política exterior mexicana</li>
+          <li>Fortalece relaciones diplomáticas y comerciales globales</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>⛔ ¿Qué es el Dumping?</h3>
+        <ul>
+          <li>Práctica comercial desleal internacional</li>
+          <li>Empresas exportan a precio inferior al de producción</li>
+          <li>Distorsiona la competencia en mercados importadores</li>
+          <li>La OMC y los TLCs obligan a México a evitarlo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB LATAM -->
+  <div id="tab-latam" class="tab-panel">
+    <div class="section-hero">
+      <span class="org-tag">SECCIÓN 6.2 Y 6.3</span>
+      <h2>México en ALADI, Mercosur, Grupo Andino y G-3</h2>
+      <p>México fortalece sus lazos latinoamericanos sin comprometer su autonomía comercial, usando acuerdos estratégicos con diferentes niveles de integración.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🌎 ALADI (desde 1980)</h3>
+        <ul>
+          <li>Miembro fundador desde su creación</li>
+          <li>Asociación Latinoamericana de Integración</li>
+          <li>Acuerdos de complementación económica regional</li>
+          <li>Facilita comercio de bienes y servicios en Latam</li>
+          <li>18 países miembros de América Latina</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>🇧🇷 MERCOSUR (Acuerdos ACE)</h3>
+        <ul>
+          <li>México NO es miembro pleno del bloque</li>
+          <li>ACE 54: acuerdo con Argentina, Brasil y Uruguay</li>
+          <li>ACE 55: regula sector automotriz específicamente</li>
+          <li>En 2006 se exploró ser Estado Asociado, no se concretó</li>
+          <li>Comercio bilateral activo con Brasil y Argentina</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>🏔️ Grupo Andino / CAN</h3>
+        <ul>
+          <li>México no es miembro de la Comunidad Andina</li>
+          <li>TLC bilateral vigente con Colombia</li>
+          <li>TLC bilateral vigente con Perú</li>
+          <li>Relaciones comerciales con Bolivia y Ecuador</li>
+          <li>Flujos de inversión fortalecidos</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>🤝 Grupo de los Tres (G-3)</h3>
+        <ul>
+          <li>Fundado en 1989: México, Colombia y Venezuela</li>
+          <li>Tratado en vigor desde 1995</li>
+          <li>Venezuela sale en 2006 para enfocarse en MERCOSUR</li>
+          <li>Hoy funciona como TLC bilateral México-Colombia</li>
+          <li>Origen: Grupo Contadora (1983) — paz centroamericana</li>
+        </ul>
+      </div>
+    </div>
+    <div class="section-hero" style="background:rgba(232,68,10,0.05)">
+      <span class="org-tag">BENEFICIOS G-3</span>
+      <h2 style="font-size:26px">¿Qué ganó México con el G-3?</h2>
+      <p>Eliminación gradual de aranceles · Normas para protección de inversión extranjera · Fortalecimiento de relaciones económicas · Oportunidades en manufactura, agricultura y automotriz</p>
+    </div>
+  </div>
+
+  <!-- TAB EUROPA -->
+  <div id="tab-europa" class="tab-panel">
+    <div class="section-hero">
+      <span class="org-tag">SECCIÓN 6.4 · ACUERDO GLOBAL</span>
+      <h2>México y la Unión Europea</h2>
+      <p>La UE es el <strong>tercer socio comercial</strong> de México, tras EUA y China. El Acuerdo Global (2000) fue modernizado significativamente en 2025 para incluir comercio digital, inversión y desarrollo sustentable.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">2000</div><div class="tl-body"><div class="tl-title">Firma del Acuerdo Global</div><div class="tl-desc">Mecanismos de cooperación en comercio, desarrollo y diálogo político entre México y la UE.</div></div></div>
+      <div class="tl-item"><div class="tl-year">2013</div><div class="tl-body"><div class="tl-title">Inicio del proceso de modernización</div><div class="tl-desc">Ambas partes identifican la necesidad de actualizar el acuerdo ante la evolución digital y económica.</div></div></div>
+      <div class="tl-item"><div class="tl-year">2017</div><div class="tl-body"><div class="tl-title">Mayor impulso a la modernización</div><div class="tl-desc">Se priorizan temas de vanguardia: comercio digital, inversión, desarrollo sustentable.</div></div></div>
+      <div class="tl-item"><div class="tl-year">2021</div><div class="tl-body"><div class="tl-title">Modernización post-COVID</div><div class="tl-desc">Esfuerzo para impulsar la recuperación económica. Nuevas áreas: servicios, alimentos, bebidas, e-commerce.</div></div></div>
+      <div class="tl-item"><div class="tl-year">2025</div><div class="tl-body"><div class="tl-title">Modernización significativa concretada</div><div class="tl-desc">Elimina barreras en sectores estratégicos, diversifica mercados y consolida la alianza México-UE.</div></div></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>💼 Sectores con inversión europea</h3>
+        <ul><li>Sector automotriz</li><li>Industria farmacéutica</li><li>Sector financiero y bancario</li><li>Energías renovables</li><li>Digitalización económica</li><li>Innovación tecnológica</li></ul>
+      </div>
+      <div class="info-card">
+        <h3>🌍 Cooperación multilateral</h3>
+        <ul><li>Valores democráticos compartidos</li><li>Colaboración activa en ONU y G20</li><li>Derechos humanos y cambio climático</li><li>Políticas migratorias coordinadas</li><li>Apoyo a transparencia y Estado de Derecho</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB PACÍFICO -->
+  <div id="tab-pacifico" class="tab-panel">
+    <div class="section-hero">
+      <span class="org-tag">SECCIÓN 6.5 · CUENCA DEL PACÍFICO</span>
+      <h2>México y los Organismos del Pacífico</h2>
+      <p>La Cuenca del Pacífico concentra el mayor dinamismo comercial del planeta. México diseñó dos vertientes: <strong>presencia diplomática-financiera en Asia</strong> y <strong>participación activa en foros multilaterales</strong> de la región.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🌏 APEC (desde 1993)</h3>
+        <ul>
+          <li>Foro de Cooperación Económica Asia-Pacífico</li>
+          <li>21 economías miembros — NO es TLC</li>
+          <li>Plataforma de cooperación económica e integración</li>
+          <li>Diversificación de mercados más allá de EUA y Canadá</li>
+          <li>Atrae inversión de Japón, Corea del Sur y China</li>
+          <li>Transferencia tecnológica en sectores estratégicos</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>📋 CPTPP</h3>
+        <ul>
+          <li>Tratado Integral y Progresista de Asociación Transpacífico</li>
+          <li>Firmado por 11 países: México, Japón, Canadá, Australia, Vietnam y más</li>
+          <li>Acceso a nuevos mercados con aranceles reducidos</li>
+          <li>Diversifica exportaciones más allá de EUA</li>
+          <li>Fortalece manufactura y agroindustria en Asia</li>
+          <li>Reto: competir con países de bajos costos de producción</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>🤝 Alianza del Pacífico</h3>
+        <ul>
+          <li>México, Chile, Colombia y Perú</li>
+          <li>Integración profunda: bienes, servicios, capitales, personas</li>
+          <li>Plataforma para negociar con el Sudeste Asiático (ASEAN)</li>
+          <li>Cooperación con Singapur e Indonesia en tecnología</li>
+          <li>Energías renovables como área de colaboración clave</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>💡 ¿Sabías que?</h3>
+        <ul>
+          <li>El G-20 reúne a las 20 economías más importantes del mundo</li>
+          <li>México es miembro del G-20</li>
+          <li>El G-20 coordina políticas sobre economía, finanzas y desarrollo global</li>
+          <li>México debe fortalecer infraestructura portuaria en el Pacífico</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB OPEP -->
+  <div id="tab-opep" class="tab-panel">
+    <div class="section-hero">
+      <span class="org-tag">SECCIONES 6.6 Y 6.7</span>
+      <h2>México y el G-77 / OPEP</h2>
+      <p>México dejó el G-77 en 1994 al unirse a la OCDE, pero actúa como <strong>puente diplomático</strong>. Con la OPEP, mantiene política energética independiente participando en <strong>OPEP+ desde 2016</strong>.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🌐 Grupo de los 77 (G-77)</h3>
+        <ul>
+          <li>Coalición de países en desarrollo (1964)</li>
+          <li>Actualmente: 134 miembros en la ONU</li>
+          <li>México sale en 1994 al integrarse a la OCDE</li>
+          <li>Sigue como puente entre países en desarrollo y avanzados</li>
+          <li>Participó en Cumbre G77+China en 2023 (invitado por Cuba)</li>
+          <li>Temas compartidos: clima, finanzas, salud y tecnología</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>🛢️ OPEP y México</h3>
+        <ul>
+          <li>OPEP creada en 1960 para coordinar políticas petroleras</li>
+          <li>México NO es miembro formal de la OPEP</li>
+          <li>En 1975, PEMEX descubrió Sonda de Campeche — temor a represalias de EUA</li>
+          <li>PEMEX garantiza política energética soberana</li>
+          <li>OPEP+ creada en 2016 (incluye Rusia y México)</li>
+          <li>Crisis COVID-2020: México negoció recorte menor al exigido</li>
+        </ul>
+      </div>
+    </div>
+    <div class="section-hero" style="background:rgba(232,68,10,0.05)">
+      <span class="org-tag">HISTORIA OPEP+</span>
+      <h2 style="font-size:22px">Momentos clave de México con la OPEP</h2>
+      <p><strong style="color:var(--secondary)">Años 70:</strong> México se beneficia del embargo sin pertenecer al bloque.<br><strong style="color:var(--secondary)">Años 80-90:</strong> Reduce producción voluntariamente para estabilizar precios.<br><strong style="color:var(--secondary)">1998:</strong> Acuerdo con Arabia Saudita y Venezuela para frenar caída de precios.<br><strong style="color:var(--secondary)">2016:</strong> Ingresa al grupo OPEP+ junto con Rusia.<br><strong style="color:var(--secondary)">2020 (COVID):</strong> Resiste recorte masivo y negocia cantidad menor — hito diplomático.</p>
+    </div>
+  </div>
+
+  <!-- TAB T-MEC -->
+  <div id="tab-tmec" class="tab-panel">
+    <div class="section-hero">
+      <span class="org-tag">SECCIÓN 6.8 · VIGENTE DESDE 1 JULIO 2020</span>
+      <h2>Del TLCAN al T-MEC</h2>
+      <p>El TLCAN (1994) transformó a México en una economía competitiva. El T-MEC (firmado 2018, vigor 2020) lo modernizó para responder a los retos del siglo XXI: digital, laboral y automotriz.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🚗 Reglas de Origen Automotriz</h3>
+        <ul>
+          <li>Contenido regional: de 62.5% (TLCAN) a 75% (T-MEC)</li>
+          <li>40-45% del valor del vehículo producido por trabajadores con salario ≥ $16 USD/hora</li>
+          <li>Aumento de costos de producción para México</li>
+          <li>Mayor contenido nacional en cadenas de valor</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>💻 Comercio Digital e IP</h3>
+        <ul>
+          <li>Prohíbe aranceles sobre software, música, libros, videojuegos</li>
+          <li>Protege el libre flujo de datos entre los tres países</li>
+          <li>Mayores garantías de propiedad intelectual</li>
+          <li>Primer TLC de México con capítulo de comercio digital</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>👷 Protección Laboral</h3>
+        <ul>
+          <li>México garantiza libertad sindical y negociación colectiva</li>
+          <li>Mecanismo de respuesta rápida ante violaciones laborales</li>
+          <li>Inspecciones en empresas mexicanas por EUA y Canadá</li>
+          <li>Eliminación del trabajo infantil forzado</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>🌽 Sector Agropecuario</h3>
+        <ul>
+          <li>Se mantienen preferencias arancelarias: aguacates, tomates, cerveza</li>
+          <li>Normas para evitar barreras injustificadas en agricultura</li>
+          <li>Énfasis en comercio justo y transparente</li>
+          <li>Protección ante dumping en productos agrícolas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB QUIZ -->
+  <div id="tab-quiz-c" class="tab-panel">
+    <div class="section-hero"><span class="org-tag">+150 XP DISPONIBLES</span><h2>Quiz Rápido — Bloque 4</h2><p>Responde correctamente para acumular XP antes de las misiones.</p></div>
+    <div id="content-quizzes-b4"></div>
+    <div class="nav-row"><button class="btn-nav" onclick="goToMissions()">Ir a Misiones 🎮</button></div>
+  </div>
+
+  <div class="nav-row" id="content-nav-b4">
+    <button class="btn-nav secondary" onclick="showScreen('screen-intro')">← Inicio</button>
+    <button class="btn-nav" onclick="goToMissions()">Ir a Misiones 🎮</button>
+  </div>
+</div>
+
+<!-- ===== MISSIONS SCREEN ===== -->
+<div id="screen-missions" class="screen">
+  <div class="mission-header">
+    <div class="eyebrow">🌎 Embajador del Comercio Global</div>
+    <h2 id="mission-title-h">MISIÓN 1</h2>
+  </div>
+
+  <!-- MISSION 1: DRAG & DROP -->
+  <div id="mission-1" class="mission-panel active">
+    <div class="m-title">🧩 El Rompecabezas de las Alianzas</div>
+    <p class="m-desc">Arrastra cada organismo o acuerdo a su "Zona de Influencia" correcta. Clasifica correctamente para ganar XP.</p>
+    <div class="classify-wrap">
+      <div class="chip-pool"><h4>📦 Organismos / Acuerdos</h4><div id="chip-pool-b4"></div></div>
+      <div class="drop-zones">
+        <div class="drop-zone" id="zone-latam" ondragover="allowDrop(event)" ondrop="dropChip(event,'LATAM')"><h4>🌎 Integración Latinoamericana</h4><div class="zone-chips"></div></div>
+        <div class="drop-zone" id="zone-pacifico" ondragover="allowDrop(event)" ondrop="dropChip(event,'PACIFICO')"><h4>🌊 Cuenca del Pacífico</h4><div class="zone-chips"></div></div>
+        <div class="drop-zone" id="zone-energia" ondragover="allowDrop(event)" ondrop="dropChip(event,'ENERGIA')"><h4>⚡ Energía / Multipolar</h4><div class="zone-chips"></div></div>
+      </div>
+    </div>
+    <div id="m1-result"></div>
+    <div class="nav-row">
+      <button class="btn-nav secondary" onclick="showContent()">← Estudiar</button>
+      <button class="btn-nav" onclick="checkMission1()">✅ Verificar Misión 1</button>
+    </div>
+  </div>
+
+  <!-- MISSION 2: T-MEC SIMULATOR -->
+  <div id="mission-2" class="mission-panel">
+    <div class="m-title">🚗 Simulador T-MEC</div>
+    <p class="m-desc">Una planta automotriz en el Bajío quiere exportar a EUA. Eres el negociador. ¿Qué regla de origen debe cumplir bajo el T-MEC?</p>
+    <div class="scenario-box">
+      <h4>🏭 Escenario: Planta Bajío Motors</h4>
+      <p>Bajío Motors produce 50,000 vehículos al año en Guanajuato. Quiere exportarlos libres de arancel a EUA bajo el acuerdo comercial vigente. Su actual contenido regional es del <span class="hl">63%</span> y sus trabajadores ganan en promedio <span class="hl">$12 USD/hora</span>. El director de planta te pregunta: ¿qué tenemos que cambiar?</p>
+    </div>
+    <div class="step-label">Elige la respuesta correcta:</div>
+    <div class="options-stack" id="sim-options"></div>
+    <div class="sim-feedback" id="sim-feedback"></div>
+    <div class="nav-row">
+      <button class="btn-nav secondary" onclick="prevMission()">← Misión 1</button>
+      <button class="btn-nav" id="btn-next-m2" onclick="checkM2andNext()" style="display:none">Continuar → Misión 3</button>
+    </div>
+  </div>
+
+  <!-- MISSION 3: OPEP+ CRISIS -->
+  <div id="mission-3" class="mission-panel">
+    <div class="m-title">🛢️ Crisis Energética OPEP+ 2020</div>
+    <p class="m-desc">Es abril de 2020. La pandemia de COVID-19 desplomó los precios del petróleo. La OPEP+ convoca una cumbre de emergencia.</p>
+    <div class="crisis-board">
+      <h4>🚨 ALERTA: CRISIS PETROLERA GLOBAL</h4>
+      <p class="crisis-desc">La pandemia redujo drásticamente la demanda de petróleo. Arabia Saudita y Rusia presionan a todos los miembros de la OPEP+ para un recorte masivo coordinado. México es el único país no-OPEP con capacidad de influir en el resultado. La OPEP+ exige a México un recorte de <strong>400,000 barriles diarios</strong>.</p>
+      <div class="crisis-stats">
+        <div class="cstat"><div class="cv">-60%</div><div class="cl">Caída precio petróleo</div></div>
+        <div class="cstat"><div class="cv">400K</div><div class="cl">Barriles que exigen recortar</div></div>
+        <div class="cstat"><div class="cv">100K</div><div class="cl">Lo que México negoció</div></div>
+      </div>
+    </div>
+    <div class="step-label">¿Qué decisión toma México?</div>
+    <div class="actions-grid" id="actions-grid-m3"></div>
+    <div class="m3-feedback" id="m3-feedback"></div>
+    <div class="m3-outcome" id="m3-outcome">
+      <h5>📜 Lo que pasó históricamente</h5>
+      <p>México resistió el recorte inicial de 400,000 barriles. Tras intensas negociaciones y la intervención del presidente Trump (quien prometió que EUA compensaría parte del recorte mexicano), México aceptó reducir solo 100,000 barriles diarios. Esta decisión marcó un hito diplomático: México demostró que tenía margen real de negociación dentro de la OPEP+, protegiendo sus ingresos petroleros sin comprometer su autonomía energética.</p>
+    </div>
+    <div class="nav-row">
+      <button class="btn-nav secondary" onclick="prevMission()">← Misión 2</button>
+      <button class="btn-nav" id="btn-finish-m3" onclick="finishMissions()" style="display:none">🏁 Ver Resultados</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESULTS SCREEN ===== -->
+<div id="screen-results" class="screen">
+  <div class="results-trophy">🏆</div>
+  <div class="results-title">DIPLOMÁTICO<br>DE ÉLITE</div>
+  <p class="results-sub">Has completado el Bloque 4: México en Organismos y Tratados Internacionales</p>
+  <div class="results-stats">
+    <div class="stat-pill">XP Total: <span id="final-xp">0</span></div>
+    <div class="stat-pill">Nivel: <span id="final-level">1</span></div>
+    <div class="stat-pill">Misiones: <span>3/3</span></div>
+  </div>
+  <div>
+    <button class="btn-cert" onclick="showCertificate()">🏅 VER CERTIFICADO</button>
+    <button class="btn-replay" onclick="replayGame()">↺ Jugar de nuevo</button>
+  </div>
+  <div id="cert-wrap">
+    <div id="certificate">
+      <div class="cert-corner tl">🌎</div>
+      <div class="cert-corner br">🌎</div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Universidad_IEU.svg/200px-Logo_Universidad_IEU.svg" alt="Logo IEU">
+      <div class="cert-title">CERTIFICADO</div>
+      <div class="cert-subtitle">de logro académico · ORI Bloque 4</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:7px">Se certifica que</div>
+      <div class="cert-student" id="cert-name">Estudiante IEU</div>
+      <div class="cert-text">completó satisfactoriamente las actividades gamificadas del</div>
+      <div class="cert-course">Participación de México en Organismos<br>y Tratados Internacionales — Bloque 4</div>
+      <div class="cert-footer">
+        <div><div class="cert-xp-big" id="cert-xp-val">0</div><div class="cf-label">XP OBTENIDOS</div></div>
+        <div><div class="cf-val" id="cert-date">—</div><div class="cf-label">FECHA</div></div>
+        <div><div class="cf-val">IEU</div><div class="cf-label">INSTITUCIÓN</div></div>
+      </div>
+    </div>
+    <div style="margin-top:14px"><button class="btn-download" onclick="downloadCert()">⬇️ Descargar Certificado</button></div>
+  </div>
+  <div class="results-stripe"></div>
+</div>
+
+<script>
+// === STATE ===
+let xp=0, level=1;
+const maxXP=700;
+let missions={m1:false,m2:false,m3:false};
+let draggedChipId=null, m1Dropped={};
+let quizAnswered={};
+let m2Answered=false, m3Answered=false;
+let touchStartZone=null;
+
+// === XP ===
+function addXP(amt, label){
+  xp+=amt; updateHUD();
+  showToast('+'+amt+' XP — '+label,'xp');
+}
+function updateHUD(){
+  document.getElementById('xp-display').textContent=xp;
+  document.getElementById('progress-bar-fill').style.width=Math.min(xp/maxXP*100,100)+'%';
+  level=xp<100?1:xp<250?2:xp<450?3:4;
+  const lbl=['','NIV 1','NIV 2','NIV 3','ÉLITE'];
+  document.getElementById('lvl-badge').textContent=lbl[level];
+}
+function markMission(n){
+  missions['m'+n]=true;
+  const mb=document.getElementById('mb'+n);
+  mb.classList.add('done'); mb.textContent='✓';
+}
+
+// === TOAST ===
+let toastT;
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show '+type;
+  clearTimeout(toastT); toastT=setTimeout(()=>{t.className=''},3200);
+}
+
+// === SCREENS ===
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function startJourney(){showScreen('screen-content');initContentQuiz();}
+function showContent(){showScreen('screen-content');}
+function goToMissions(){showScreen('screen-missions');showMission(1);initMissions();}
+function showMission(n){
+  document.querySelectorAll('.mission-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('mission-'+n).classList.add('active');
+  document.getElementById('mission-title-h').textContent='MISIÓN '+n;
+}
+function prevMission(){
+  const panels=document.querySelectorAll('.mission-panel');
+  for(let i=0;i<panels.length;i++){
+    if(panels[i].classList.contains('active')&&i>0){showMission(i);break;}
+  }
+}
+
+// === TABS ===
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('content-nav-b4').style.display=(id==='quiz-c')?'none':'flex';
+}
+
+// === CONTENT QUIZ ===
+const cQuestions=[
+  {q:'¿En qué año entró en vigor el T-MEC?',opts:['2018','2019','2020','2021'],c:2,exp:'El T-MEC fue firmado en 2018 pero entró en vigor el 1 de julio de 2020.'},
+  {q:'¿Por qué México no es miembro formal de la OPEP?',opts:['No es productor de petróleo','Temor a represalias de EUA en 1975','Decisión del Banco Mundial','Por pertenecer a la OCDE'],c:1,exp:'En 1975, tras descubrir enormes yacimientos en la Sonda de Campeche, México decidió no unirse por temor a represalias de EUA.'},
+  {q:'¿Qué son los ACE 54 y 55 de México?',opts:['Acuerdos con APEC','Acuerdos de Complementación Económica con MERCOSUR','Cláusulas del T-MEC','Tratados con la UE'],c:1,exp:'Los ACE 54 y 55 son Acuerdos de Complementación Económica entre México y los países del MERCOSUR, especialmente en el sector automotriz.'},
+  {q:'¿Cuál es el tercer socio comercial de México?',opts:['China','Japón','Unión Europea','Canadá'],c:2,exp:'La Unión Europea es el tercer socio comercial de México, detrás de Estados Unidos y China.'},
+  {q:'¿Qué grupo dejó México en 1994 al ingresar a la OCDE?',opts:['APEC','OPEP','G-77','ALADI'],c:2,exp:'México dejó de ser miembro activo del Grupo de los 77 (G-77) en 1994 cuando se integró a la OCDE.'},
+  {q:'¿Cuál es el contenido regional automotriz mínimo en el T-MEC para exportar sin arancel?',opts:['50%','62.5%','75%','80%'],c:2,exp:'El T-MEC elevó el requisito de contenido regional automotriz de 62.5% (TLCAN) a 75%.'},
+];
+
+function initContentQuiz(){
+  const c=document.getElementById('content-quizzes-b4');
+  if(c.innerHTML!=='')return;
+  c.innerHTML=cQuestions.map((q,i)=>`
+    <div class="mini-quiz" id="cq4-${i}">
+      <h4>⚡ Pregunta ${i+1}</h4>
+      <p class="quiz-q">${q.q}</p>
+      <div class="quiz-options">${q.opts.map((o,j)=>`<button class="quiz-opt" onclick="answerCQ4(${i},${j})">${o}</button>`).join('')}</div>
+      <div class="quiz-feedback" id="fb4-${i}"></div>
+    </div>`).join('');
+}
+
+function answerCQ4(qi,oi){
+  if(quizAnswered[qi])return;
+  quizAnswered[qi]=true;
+  const q=cQuestions[qi];
+  const opts=document.querySelectorAll(`#cq4-${qi} .quiz-opt`);
+  opts.forEach(o=>o.disabled=true);
+  const fb=document.getElementById('fb4-'+qi);
+  if(oi===q.c){opts[oi].classList.add('correct');fb.className='quiz-feedback show ok';fb.textContent='✅ ¡Correcto! '+q.exp;addXP(25,'Respuesta correcta');}
+  else{opts[oi].classList.add('wrong');opts[q.c].classList.add('correct');fb.className='quiz-feedback show ko';fb.textContent='❌ Incorrecto. '+q.exp;}
+}
+
+// === MISSION 1 CHIPS ===
+const chips=[
+  {id:'ch1',text:'ALADI',zone:'LATAM'},
+  {id:'ch2',text:'MERCOSUR ACE 55',zone:'LATAM'},
+  {id:'ch3',text:'G-3 (México-Colombia)',zone:'LATAM'},
+  {id:'ch4',text:'Grupo Andino / CAN',zone:'LATAM'},
+  {id:'ch5',text:'APEC',zone:'PACIFICO'},
+  {id:'ch6',text:'CPTPP',zone:'PACIFICO'},
+  {id:'ch7',text:'Alianza del Pacífico',zone:'PACIFICO'},
+  {id:'ch8',text:'OPEP+',zone:'ENERGIA'},
+  {id:'ch9',text:'G-77',zone:'ENERGIA'},
+  {id:'ch10',text:'G-20',zone:'ENERGIA'},
+  {id:'ch11',text:'Acuerdo Global UE',zone:'LATAM'},
+];
+
+function initMission1(){
+  const pool=document.getElementById('chip-pool-b4');
+  if(pool.children.length>0)return;
+  chips.forEach(c=>{
+    const el=document.createElement('div');
+    el.className='drag-chip'; el.id='chip-'+c.id; el.textContent=c.text;
+    el.draggable=true;
+    el.ondragstart=()=>{draggedChipId=c.id;el.classList.add('dragging');};
+    el.ondragend=()=>el.classList.remove('dragging');
+    el.addEventListener('touchstart',()=>{draggedChipId=c.id;},{passive:true});
+    pool.appendChild(el);
+  });
+}
+
+function allowDrop(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+document.addEventListener('dragleave',e=>{if(e.target.classList.contains('drop-zone'))e.target.classList.remove('drag-over');});
+
+function dropChip(e,zone){
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+  if(!draggedChipId)return;
+  const el=document.getElementById('chip-'+draggedChipId);
+  if(!el)return;
+  m1Dropped[draggedChipId]=zone;
+  e.currentTarget.querySelector('.zone-chips').appendChild(el);
+  draggedChipId=null;
+}
+
+function checkMission1(){
+  let correct=0,total=chips.length;
+  chips.forEach(c=>{
+    const el=document.getElementById('chip-'+c.id);
+    if(m1Dropped[c.id]===c.zone){correct++;el.classList.add('placed-correct');el.classList.remove('placed-wrong');}
+    else if(m1Dropped[c.id]){el.classList.add('placed-wrong');el.classList.remove('placed-correct');}
+  });
+  document.getElementById('m1-result').textContent=`Resultado: ${correct}/${total} correctos`;
+  if(correct>=Math.ceil(total*.65)){
+    addXP(correct*10,'Misión 1 — Alianzas clasificadas');
+    markMission(1);
+    showToast('🧩 ¡Misión 1 Cumplida!','success');
+    setTimeout(()=>showMission(2),1200);
+  } else {
+    let hint='';
+    chips.forEach(c=>{if(m1Dropped[c.id]&&m1Dropped[c.id]!==c.zone){
+      if(c.id==='ch5'||c.id==='ch6'||c.id==='ch7') hint='💡 Pista: APEC y CPTPP buscan diversificar más allá de EUA y Canadá → van en Cuenca del Pacífico.';
+      else if(c.id==='ch1'||c.id==='ch2'||c.id==='ch3') hint='💡 Pista: ALADI, MERCOSUR y G-3 son acuerdos de integración latinoamericana.';
+    }});
+    showToast(hint||`Solo ${correct}/${total} — ¡sigue intentando!`,'error');
+  }
+}
+
+// === MISSION 2 ===
+const simOpts=[
+  {id:'o1',title:'Aplicar las reglas antiguas del TLCAN',body:'Mantener el contenido regional actual del 63% y salarios de $12/hora. El acuerdo TLCAN sigue vigente, ¿no?',correct:false,tag:'❌ INCORRECTO'},
+  {id:'o2',title:'Cumplir las nuevas reglas del T-MEC',body:'Elevar el contenido regional al 75% y garantizar que al menos el 40-45% del valor del vehículo sea producido por trabajadores con salario ≥$16 USD/hora.',correct:true,tag:'✅ CORRECTO'},
+  {id:'o3',title:'Pedir una exención por ser empresa pequeña',body:'Solicitar al gobierno una prórroga o excepción especial para no cumplir los nuevos estándares.',correct:false,tag:'❌ INCORRECTO'},
+];
+
+function initMission2(){
+  const c=document.getElementById('sim-options');
+  if(c.children.length>0)return;
+  simOpts.forEach(o=>{
+    const el=document.createElement('div');
+    el.className='sim-opt'; el.id='sim-'+o.id;
+    el.innerHTML=`<span class="opt-tag">${o.tag}</span><h5>${o.title}</h5><p>${o.body}</p>`;
+    el.onclick=()=>answerSim(o,el);
+    c.appendChild(el);
+  });
+}
+
+function answerSim(o,el){
+  if(m2Answered)return; m2Answered=true;
+  const fb=document.getElementById('sim-feedback');
+  document.querySelectorAll('.sim-opt').forEach(s=>s.style.pointerEvents='none');
+  if(o.correct){
+    el.classList.add('selected-correct');
+    fb.className='sim-feedback show ok';
+    fb.innerHTML='🏆 <strong>¡Negociador Experto!</strong> Correcto. El T-MEC exige 75% de contenido regional y que al menos el 40-45% del valor del vehículo sea producido por trabajadores con salario ≥$16 USD/hora. El TLCAN fue reemplazado desde el 1 de julio de 2020.';
+    addXP(200,'Simulador T-MEC — Negociador Experto 🏅');
+    markMission(2);
+    showToast('🚗 ¡Misión 2 Cumplida!','success');
+    document.getElementById('btn-next-m2').style.display='inline-block';
+  } else {
+    el.classList.add('selected-wrong');
+    fb.className='sim-feedback show ko';
+    fb.innerHTML='❌ Incorrecto. '+(!o.correct&&o.id==='o1'?'El TLCAN fue reemplazado por el T-MEC el 1 de julio de 2020. Las reglas del TLCAN ya no aplican para nuevas exportaciones.':'Las exenciones no existen en el T-MEC para cumplimiento de reglas de origen. México debe adaptar su industria.)+' Reflexiona y avanza.';
+    addXP(20,'Intento realizado');
+    document.getElementById('btn-next-m2').style.display='inline-block';
+  }
+}
+
+function checkM2andNext(){
+  if(!m2Answered){showToast('Elige una opción primero','error');return;}
+  showMission(3);
+}
+
+// === MISSION 3 ===
+const actions=[
+  {id:'a1',icon:'🤝',title:'Resistir y negociar una cantidad menor',body:'Rechazar el recorte de 400,000 barriles exigido y proponer una reducción de solo 100,000 barriles, aprovechando la posición diplomática de México.',correct:true},
+  {id:'a2',icon:'✋',title:'Rechazar cualquier recorte completamente',body:'México mantiene soberanía energética. Negarse totalmente a cualquier tipo de reducción de producción y abandonar la cumbre.',correct:false},
+  {id:'a3',icon:'📋',title:'Aceptar el recorte completo de 400,000 barriles',body:'Ceder ante la presión de Arabia Saudita y Rusia y comprometerse a reducir 400,000 barriles diarios como se exige.',correct:false},
+  {id:'a4',icon:'🌍',title:'Salir de la OPEP+ y actuar de forma independiente',body:'Abandonar formalmente el grupo de cooperación y establecer la política petrolera de México de manera totalmente autónoma.',correct:false},
+];
+
+function initMission3(){
+  const c=document.getElementById('actions-grid-m3');
+  if(c.children.length>0)return;
+  actions.forEach(a=>{
+    const el=document.createElement('div');
+    el.className='action-card'; el.id='ac-'+a.id;
+    el.innerHTML=`<h5>${a.icon} ${a.title}</h5><p>${a.body}</p>`;
+    el.onclick=()=>answerM3(a,el);
+    c.appendChild(el);
+  });
+}
+
+function answerM3(a,el){
+  if(m3Answered)return; m3Answered=true;
+  document.querySelectorAll('.action-card').forEach(c=>c.style.pointerEvents='none');
+  const fb=document.getElementById('m3-feedback');
+  const out=document.getElementById('m3-outcome');
+  out.classList.add('show');
+  if(a.correct){
+    el.classList.add('chosen-correct');
+    fb.className='m3-feedback show ok';
+    fb.innerHTML='🌟 <strong>¡Diplomático de Élite desbloqueado!</strong> Esta fue exactamente la estrategia de México. Resistir el recorte masivo y negociar una cantidad menor demostró que México tenía margen de negociación real dentro de la OPEP+.';
+    addXP(150,'Misión 3 — Crisis OPEP+ resuelta 🌟');
+    markMission(3);
+    showToast('🛢️ ¡Misión 3 Cumplida!','success');
+  } else {
+    el.classList.add('chosen-wrong');
+    fb.className='m3-feedback show ko';
+    fb.innerHTML='❌ Esa no fue la decisión histórica de México. '+
+      (a.id==='a2'?'Un rechazo total podría haber provocado represalias comerciales y aislamiento diplomático.':
+       a.id==='a3'?'Aceptar el recorte completo habría causado pérdidas millonarias en ingresos petroleros para México.':
+       'Abandonar la OPEP+ hubiera dejado a México sin voz en decisiones globales de producción y precios.')+
+      ' Lee el resultado histórico abajo.';
+    addXP(40,'Análisis de crisis completado');
+    markMission(3);
+    document.getElementById('btn-finish-m3').style.display='inline-block';
+  }
+  document.getElementById('btn-finish-m3').style.display='inline-block';
+}
+
+function finishMissions(){showResults();}
+function showResults(){
+  showScreen('screen-results');
+  document.getElementById('final-xp').textContent=xp;
+  document.getElementById('final-level').textContent=level;
+}
+
+// === CERTIFICATE ===
+function showCertificate(){
+  const w=document.getElementById('cert-wrap');
+  w.classList.add('visible');
+  const name=(document.getElementById('student-name').value.trim()||'Estudiante IEU').toUpperCase();
+  document.getElementById('cert-name').textContent=name;
+  document.getElementById('cert-xp-val').textContent=xp;
+  document.getElementById('cert-date').textContent=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  w.scrollIntoView({behavior:'smooth'});
+}
+
+function downloadCert(){
+  if(typeof html2canvas!=='undefined'){
+    html2canvas(document.getElementById('certificate'),{backgroundColor:'#0d0804',scale:2}).then(c=>{
+      const l=document.createElement('a');
+      l.download='certificado_ORI_bloque4.png';
+      l.href=c.toDataURL('image/png');
+      l.click();
+    });
+  } else showToast('Descarga no disponible','error');
+}
+
+// === REPLAY ===
+function replayGame(){
+  xp=0;level=1;missions={m1:false,m2:false,m3:false};
+  draggedChipId=null;m1Dropped={};quizAnswered={};m2Answered=false;m3Answered=false;
+  updateHUD();
+  [1,2,3].forEach(n=>{const mb=document.getElementById('mb'+n);mb.classList.remove('done');mb.textContent=n;});
+  document.getElementById('chip-pool-b4').innerHTML='';
+  document.getElementById('sim-options').innerHTML='';
+  document.getElementById('actions-grid-m3').innerHTML='';
+  document.getElementById('content-quizzes-b4').innerHTML='';
+  document.getElementById('cert-wrap').classList.remove('visible');
+  document.getElementById('student-name').value='';
+  document.getElementById('m1-result').textContent='';
+  document.getElementById('sim-feedback').className='sim-feedback';
+  document.getElementById('btn-next-m2').style.display='none';
+  document.getElementById('m3-feedback').className='m3-feedback';
+  document.getElementById('m3-outcome').className='m3-outcome';
+  document.getElementById('btn-finish-m3').style.display='none';
+  showScreen('screen-intro');
+}
+
+function initMissions(){initMission1();initMission2();initMission3();}
+
+// === TOUCH DRAG ===
+document.addEventListener('touchmove',e=>{
+  if(!draggedChipId)return;
+  const touch=e.touches[0];
+  const el=document.elementFromPoint(touch.clientX,touch.clientY);
+  if(el){
+    const zone=el.closest('.drop-zone');
+    if(touchStartZone&&touchStartZone!==zone)touchStartZone.classList.remove('drag-over');
+    if(zone){zone.classList.add('drag-over');touchStartZone=zone;}
+  }
+},{passive:true});
+
+document.addEventListener('touchend',e=>{
+  if(!draggedChipId)return;
+  const touch=e.changedTouches[0];
+  const el=document.elementFromPoint(touch.clientX,touch.clientY);
+  if(el){
+    const zone=el.closest('.drop-zone');
+    if(zone){
+      const zoneId=zone.id.replace('zone-','').toUpperCase();
+      const chipEl=document.getElementById('chip-'+draggedChipId);
+      m1Dropped[draggedChipId]=zoneId;
+      zone.querySelector('.zone-chips').appendChild(chipEl);
+    }
+  }
+  if(touchStartZone){touchStartZone.classList.remove('drag-over');touchStartZone=null;}
+  draggedChipId=null;
+});
+</script>
+</body>
+</html>
