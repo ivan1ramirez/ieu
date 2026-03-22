@@ -881,7 +881,8 @@ function answerSim(o,el){
   } else {
     el.classList.add('selected-wrong');
     fb.className='sim-feedback show ko';
-    fb.innerHTML='❌ Incorrecto. '+(!o.correct&&o.id==='o1'?'El TLCAN fue reemplazado por el T-MEC el 1 de julio de 2020. Las reglas del TLCAN ya no aplican para nuevas exportaciones.':'Las exenciones no existen en el T-MEC para cumplimiento de reglas de origen. México debe adaptar su industria.)+' Reflexiona y avanza.';
+    var hint = o.id==='o1' ? 'El TLCAN fue reemplazado por el T-MEC el 1 de julio de 2020. Las reglas del TLCAN ya no aplican.' : 'Las exenciones no existen en el T-MEC. Mexico debe adaptar su industria a los nuevos estandares.';
+    fb.innerHTML='❌ Incorrecto. ' + hint + ' Reflexiona y avanza.';
     addXP(20,'Intento realizado');
     document.getElementById('btn-next-m2').style.display='inline-block';
   }
